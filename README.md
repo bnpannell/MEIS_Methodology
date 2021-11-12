@@ -1,2 +1,2 @@
 # MEIS_Methodology
-Contains R code for transforming raw data for import and processing by IMPLAN 
+Contains R code for transforming raw data to allow import and processing by IMPLAN 
