@@ -42,10 +42,8 @@ if(request$status_code == 200){
   file_url <- content(request)$file_url
 }
 temp_path = file.path(getwd(), "data", "temp")
-download_path = paste(temp_path, content(request)$file_name)
+download_path = file.path(temp_path, content(request)$file_name)
+print(download_path)
 download.file(file_url, destfile = download_path)
-unzip(download_path, exdir = paaath)   
-print(contents)
-
-#print(file_url)
+unzip(download_path, exdir = temp_path)   
 
