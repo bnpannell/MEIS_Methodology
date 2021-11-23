@@ -1,7 +1,13 @@
 library(httr)
 library(jsonlite)
 library(tidyverse)
- 
+
+#Todo Notes (BP, 11/23/2021) 
+#break out filter section into a parameter file so body doesn't have to be changed- only parameter file
+#figure out how to load in files and start organizing master R code document- write up USAspending API query as its own file
+#write up downloading and unziping as functions in their own R code file
+#Set directory in parameter file so that getwd() works correctly
+
 body = list(
   filters = list(
     prime_award_types = c("A", "B", "C", "D", "02", "03", "04", "05", "06", "10"),
