@@ -8,18 +8,31 @@ Select relevant master.R" file to run. The depreciated file may be used to repea
 
 
 ## Parameters File
+Update the parameters file to your desired specifications in order to prepare custom data for entry into IMPLAN. 
 ### USAspending.gov Filters
-Variables
+Variables marked "required" MUST have an accepted value entry or the USAspending API will not run. 
+#### Variables
 - awards: Optional.
   - Accepted Values:
     - "A" "B" "C" "D" "01" "02" "03" "04" "05" "06" "10"
-      - A-D denote Contract awards
-      - 01 - 05 denote Grant awards
-      - 06 & 10 denote Direct Payments
-- agency_type: Required 
+- agency_type: Required
+  - Accepted values:
+    - "awarding"
+    - "funding"
 - agency_tier: Required
+  - Accepted values:
+    - "toptier"
+    - "subtier" 
 - agency_name: Required
-- tier_name: Optional
+  - Accepted Format:
+    - ["Full Proper-case Name of Agency"]
+      -Example:
+        - "Department of Veterans Affairs" 
+- tier_name: Optional, Required if agency_name is for a subtier agency
+  - Accepted Format:
+    - ["Full Proper-case Name of Agency"]
+      - Example:
+        - "Department of Homeland Security"
 -
 For complete documentation of award types permitted in the filter see: https://fedspendingtransparency.github.io/whitepapers/types/ and https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md
 
