@@ -1,14 +1,14 @@
 # MEIS_Methodology
 Contains R code for transforming raw data to allow import and processing by IMPLAN 
 
-##How to Use This Repository
+## How to Use This Repository
 Fork repository, and Clone to a new local RStudio Project
 Edit Parameters file- see instructions below or [(link to Documentation)] for detailed explanations
 Select relevant master.R" file to run. The depreciated file may be used to repeat the FY 2020 study, but all subsequent years should use "run_analysis_master.R"
 
 
-##Parameters File
-###USAspending.gov Filters
+## Parameters File
+### USAspending.gov Filters
 Variables
 - awards: Optional.
   - Accepted Values:
