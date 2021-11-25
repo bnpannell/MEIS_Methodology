@@ -1,3 +1,6 @@
+#still requires cleanup BP 11/24/2021
+
+
 body = list(
   filters = list(
     prime_award_types = c("A", "B", "C", "D", "02", "03", "04", "05", "06", "10"),
@@ -15,6 +18,49 @@ body = list(
   ),
   file_format = "csv"
 )
+
+# Build required filters first
+body = list(
+  filters = list(
+    agencies = data.frame(
+      type = agencies_type,
+      tier = agencies_tier,
+      name = agencies_tier
+    ),
+    date_type = date_type,
+    date_range = list(start_date = date_range_start,
+                      end_date = date_range_end)
+  ))
+# Check for Optional Filters
+if(exists("awards")){
+  body$filters[["prime_award_types"]] <- awards
+}
+if(length(ls(pattern="recipient_locations"))>0){
+  location_list <- vector(mode="list", length = 0)
+  
+  for(locations in ls(pattern="recipient_locations")){
+    location_list[[gsub("recipient_locations_", "", locations)]] <- get(locations)
+  }
+  
+  body$filters[["recipient_locations"]] <- location_list
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 toJSON(body, pretty=T)

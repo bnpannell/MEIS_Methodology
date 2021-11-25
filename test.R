@@ -2,11 +2,6 @@ library(httr)
 library(jsonlite)
 library(tidyverse)
 
-#Todo Notes (BP, 11/23/2021) 
-#break out filter section into a parameter file so body doesn't have to be changed- only parameter file
-#figure out how to load in files and start organizing master R code document- write up USAspending API query as its own file
-#write up downloading and unziping as functions in their own R code file
-#Set directory in parameter file so that getwd() works correctly
 
 body = list(
   filters = list(
@@ -21,7 +16,7 @@ body = list(
                       end_date = "2020-09-30"),
     recipient_locations = data.frame(country = "USA",
                                      state = "CA",
-                                     district = "30")
+                                     district = "NULL")
   ),
   file_format = "csv"
 )
