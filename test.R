@@ -14,9 +14,9 @@ body = list(
     date_type = "action_date",
     date_range = list(start_date = "2019-10-01",
                       end_date = "2020-09-30"),
-    recipient_locations = data.frame(country = "USA",
-                                     state = "CA",
-                                     district = "NULL")
+    recipient_locations = data.frame(country = c("USA"),
+                                     state = c("CA", "OR")
+                                     )
   ),
   file_format = "csv"
 )
@@ -30,6 +30,7 @@ request <- POST(
   encode = "json",
   verbose()
 )
+
 Sys.sleep(5)
 if(request$status_code == 200){
   status_check <- GET(url = content(request)$status_url)

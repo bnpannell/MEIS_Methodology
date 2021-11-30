@@ -1,4 +1,6 @@
 ##DEPRECIATED## 
+## Clear Environment##
+rm(list = ls(all.names = TRUE))
 
 ##Set Working Directory##
 
@@ -6,7 +8,12 @@
 library(httr)
 library(jsonlite)
 library(tidyverse)
+
+
+
 ##Load Parameters##
+source("src/parameters.R")
 
 ##Load Scripts##
+source("src/2020_obtain_usaspending.R")
 

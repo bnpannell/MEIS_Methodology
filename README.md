@@ -9,17 +9,16 @@ Select relevant master.R" file to run. The depreciated file may be used to repea
 
 ## Parameters File
 Update the parameters file to your desired specifications in order to prepare custom data for entry into IMPLAN. 
+
 ### USAspending.gov Filters
-Variables marked "required" MUST have an accepted value entry or the USAspending API will not run. 
-#### Variables
-- awards: Optional.
-  - Accepted Values:
-    - "A" "B" "C" "D" "01" "02" "03" "04" "05" "06" "10"
-- agency_type: Required
+With the exception of 'tier_name,' variables under "Required" MUST have an accepted value entry or the USAspending API will not run.
+
+#### Required Variables
+- agency_type: 
   - Accepted values:
     - "awarding"
     - "funding"
-- agency_tier: Required
+- agency_tier: 
   - Accepted values:
     - "toptier"
     - "subtier" 
@@ -33,7 +32,39 @@ Variables marked "required" MUST have an accepted value entry or the USAspending
     - ["Full Proper-case Name of Agency"]
       - Example:
         - "Department of Homeland Security"
+- date_type:
+  - Accepted Values:
+    - "action_date"
+    - "last_modified_date"
+- date_range_start:
+  - Accepted Format: 
+    - Year-Month-Day or yyyy-mm-dd 
+- date_range_end:
+  - Accepted Format: 
+    - Year-Month-Day or yyyy-mm-dd 
+
+#### Optional Variables
+- awards: 
+  - Accepted Values:
+    - "A" (contract award)
+    - "B" (contract award)
+    - "C" (contract award)
+    - "D" (contract award)
+    - "01" (grant award)
+    - "02" (grant award)
+    - "03" (grant award)
+    - "04" (grant award)
+    - "05" (grant award)
+    - "06" (direct payment)
+    - "10" (direct payment)
+
 -
+
+Location variables
+Notes- can handle a list of countries, states, counties or districts. If listing multiple countries you cant list more states, if listing states you cant get specific counties or districts
+Counties and districts are mutually exclusing filters- you must pick one or the other and may have to run several seperate API queries to get data of interest
+
+
 For complete documentation of award types permitted in the filter see: https://fedspendingtransparency.github.io/whitepapers/types/ and https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md
 
 
