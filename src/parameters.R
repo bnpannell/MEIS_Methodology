@@ -1,6 +1,16 @@
 #This file stores parameters for he MEIS Methodology Script. 
 #For specific instructions on how to use this file, see README.md
 
+##General Global Variable Parameters##
+
+#need file naming conventions
+#Year of interest
+state = "CALIFORNIA"
+#anything else that doesn't fit into a category below 
+
+
+
+
 ##USAspending.gov Filter Parameters##
 
 ##THE FOLLOWING FILTERS ARE MANDATORY AND MUST HAVE A VALID VALUE FOR THE SCRIPT TO RUN
@@ -29,9 +39,10 @@ recipient_locations_state = c("CA")
 #recipient_locations_district = c() 
   
 
+##filter_by_ppp_location parameters##
 
-
-
+contract_columns = c("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "naics_code", "recipient_name")
+grant_columns = c("federal_action_obligation", "recipient_name", "recipient_county_name", "recipient_congressional_district", "business_types_description")
 
 
 
