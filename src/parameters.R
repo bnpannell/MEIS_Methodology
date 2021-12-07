@@ -41,8 +41,8 @@ recipient_locations_state = c("CA")
 
 ##filter_by_ppp_location parameters##
 
-contract_columns = c("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "naics_code", "recipient_name")
-grant_columns = c("federal_action_obligation", "recipient_name", "recipient_county_name", "recipient_congressional_district", "business_types_description")
+contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "naics_code", )
+grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "business_types_description")
 
 
 
