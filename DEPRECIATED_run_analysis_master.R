@@ -20,14 +20,15 @@ source("src/parameters.R")
 ##Load Scripts##
 #source("src/obtain_usaspending.R")
 source("src/filter_by_ppp_location.R") 
-##Load Data Sources from Temp as variable: if name contains Assistance? (for Grants) or if name contains Contracts? (for Contract data)
 
-contract_spending <- read.csv(file.path(getwd(), "data", "temp", "All_Contracts_PrimeTransactions_2021-11-30_H20M03S43_1.csv"))
-#grant_spending <- read.csv([some code]) 
+##Prepare to Load Data Sources from Temp as variable
+cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
+gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
 
-print(contract_spending)
+##Filter files, save new output
 
-filter.ppp(contract_spending, state, contract_columns)
+filter_ppp(cfile_name, state, contract_columns, c_out_name)
+filter_ppp(gfile_name, state, grant_columns, g_out_name)
 
 
 

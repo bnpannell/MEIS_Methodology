@@ -4,7 +4,8 @@
 ##General Global Variable Parameters##
 
 #need file naming conventions
-#Year of interest
+f_year = "2020" #Fiscal year of target data 
+year = "2021" #report output year
 state = "CALIFORNIA"
 #anything else that doesn't fit into a category below 
 
@@ -41,13 +42,14 @@ recipient_locations_state = c("CA")
 
 ##filter_by_ppp_location parameters##
 
-contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "naics_code", )
-grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "business_types_description")
+contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "naics_code")
+grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_code", "recipient_zip_last_4_code", "business_types_description")
 
+c_label <- "Contracts"
+g_label <- "Assistance" 
 
-
-
-
+c_out_name = paste0(year,"_all_contract_spending.csv")
+g_out_name = paste0(year,"_all_grant_spending.csv")
 
 
 
