@@ -1,7 +1,13 @@
 ## Pseudo code for file:
-#Load prenamed contracts data file from temp file, load in NAICS/IMPLAN crosswalk file from ?raw data? (grants/awards file has its own error checking code)
-
-contracts <- read.csv(file = "data/temp/2021_all_contract_spending.csv")
+#Load pre-named contracts data file from temp file, load in NAICS/IMPLAN crosswalk file from ?raw data? (grants/awards file has its own error checking code)
+##Load Libraries##
+library(httr)
+library(jsonlite)
+library(tidyverse)
+library(readxl) 
+library(dplyr)  
+library(openxlsx) 
+contracts <- read.csv(file = "data/temp/2021_all_contract_spending.csv") #un-hard code file path later 
 naics2implan <- read.xlsx(xlsxFile = "data/raw/2017_implan_online_naics_to_implan546.xlsx") %>%
   rename(naics_code = "2017NaicsCode", implan_code = "Implan546Index")
 
@@ -38,7 +44,7 @@ write.csv(contracts_mismatch_naics, paste("output/naics_code_errors.csv", sep = 
 
 #Run through file again? At same time?? Pull out data that matches one of the NAICS/IMPLAN codes of concern:
 
-naics_with_multi_implan_code <- naics2implan[unique(duplicated(naics2implan$naics_code)),]
+#naics_with_multi_implan_code <- naics2implan[unique(duplicated(naics2implan$naics_code)),]
 
 #NAICS code 335220 can be IMPLAN code 325, 326, 327 or 328
 #NAICS code 111191 can be IMPLAN code 1 or 2
