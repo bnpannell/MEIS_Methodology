@@ -3,7 +3,8 @@
 
 contracts <- read.csv(file = "data/temp/2021_all_contract_spending.csv") #un-hard code file path later 
 naics2implan <- read.xlsx(xlsxFile = "data/raw/2017_implan_online_naics_to_implan546.xlsx") %>%
-  rename(naics_code = "2017NaicsCode", implan_code = "Implan546Index")
+  rename(naics_code = "2017NaicsCode", implan_code = "Implan546Index") %>%
+  distinct(naics_code, implan_code, .keep_all = TRUE)
 
 contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
 
