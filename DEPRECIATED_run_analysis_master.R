@@ -19,16 +19,22 @@ source("src/parameters.R")
 
 ##Load Scripts##
 #source("src/obtain_usaspending.R")
-source("src/filter_by_ppp_location.R") 
+#source("src/split_usaspending.R")
+source("src/filter_usaspending.R") 
 
 ##Prepare to Load Data Sources from Temp as variable
 cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
 gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
 
+
+## Split out DOE data from original/regular data
+# print(split_usaspending(cfile_name, doe))
+
+
 ##Filter files, save new output
 
-filter_ppp(cfile_name, state, contract_columns, c_out_name)
-filter_ppp(gfile_name, state, grant_columns, g_out_name)
+filter_usaspending(cfile_name, state, doe_offices, contract_columns, c_out_name)
+filter_usaspending(gfile_name, state, doe_offices, grant_columns, g_out_name)
 
 
 
