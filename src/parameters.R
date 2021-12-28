@@ -60,6 +60,8 @@ c_out_name = paste0(year,"_all_contract_spending.csv")
 g_out_name = paste0(year,"_all_grant_spending.csv")
 
 
+##error_check_contracts_data parameters##
 
+n2i_dup <- c(111191, 111366, 332117, 335220)
 
 

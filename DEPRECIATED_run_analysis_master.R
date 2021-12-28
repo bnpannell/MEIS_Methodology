@@ -19,23 +19,21 @@ source("src/parameters.R")
 
 ##Load Scripts##
 #source("src/obtain_usaspending.R")
+source("src/filter_usaspending.R")
 #source("src/split_usaspending.R")
-source("src/filter_usaspending.R") 
 
 ##Prepare to Load Data Sources from Temp as variable
 cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
 gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
-
-
-## Split out DOE data from original/regular data
-# print(split_usaspending(cfile_name, doe))
-
 
 ##Filter files, save new output
 
 filter_usaspending(cfile_name, state, doe_offices, contract_columns, c_out_name)
 filter_usaspending(gfile_name, state, doe_offices, grant_columns, g_out_name)
 
+
+## Run error check on data
+source("src/error_check_contracts_data.R")
 
 
 #Questions: How to implement the fork of manual check for error files and manual fixes vs automated fixes?
@@ -51,3 +49,7 @@ filter_usaspending(gfile_name, state, doe_offices, grant_columns, g_out_name)
 #if "multi_implan_codes_fixes.R" exists in src file,
 #run file on multi_implan_codes and concat back to cleaned data file in ?temp folder?
 #else run multiplier_for_multi_implan_codes.R" from src file & concat back to cleaned data file 
+
+
+## Split out DOE data from original/regular data
+# print(split_usaspending(cfile_name, doe))
