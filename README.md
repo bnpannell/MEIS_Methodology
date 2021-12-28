@@ -46,17 +46,20 @@ With the exception of 'tier_name,' variables under "Required" MUST have an accep
 #### Optional Variables
 - awards: 
   - Accepted Values:
-    - "A" (contract award)
-    - "B" (contract award)
-    - "C" (contract award)
-    - "D" (contract award)
-    - "01" (grant award)
-    - "02" (grant award)
-    - "03" (grant award)
-    - "04" (grant award)
-    - "05" (grant award)
-    - "06" (direct payment)
-    - "10" (direct payment)
+    - Contract Type Awards:
+      - "A" 
+      - "B" 
+      - "C" 
+      - "D"
+    - Grant Type Awards:
+      - "01" 
+      - "02" 
+      - "03" 
+      - "04" 
+      - "05" 
+    - Direct Payments:  
+      - "06" 
+      - "10" 
 
 -
 
