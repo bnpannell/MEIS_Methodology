@@ -40,7 +40,7 @@ recipient_locations_state = c("CA")
 #recipient_locations_district = c() 
 
 
-##filter_by_ppp_location parameters##
+##filter_usaspending parameters##
 
 doe = "DEPARTMENT OF ENERGY (DOE)"
 doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE FORCE",
