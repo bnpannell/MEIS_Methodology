@@ -8,7 +8,15 @@ Select relevant master.R" file to run. The depreciated file may be used to repea
 
 
 ## Parameters File
-Update the parameters file to your desired specifications in order to prepare custom data for entry into IMPLAN. 
+Update the parameters file to your desired specifications in order to prepare custom defense spending data for entry into IMPLAN. 
+
+### General Global Variables
+
+
+#need file naming conventions
+f_year = "2020" #Fiscal year of target data 
+year = "2021" #report output year
+state = "CALIFORNIA"
 
 ### USAspending.gov Filters
 With the exception of 'tier_name,' variables under "Required" MUST have an accepted value entry or the USAspending API will not run.
@@ -65,10 +73,35 @@ With the exception of 'tier_name,' variables under "Required" MUST have an accep
 
 Location variables
 Notes- can handle a list of countries, states, counties or districts. If listing multiple countries you cant list more states, if listing states you cant get specific counties or districts
-Counties and districts are mutually exclusing filters- you must pick one or the other and may have to run several seperate API queries to get data of interest
-
+Counties and districts are mutually exclusing filters- you must pick one or the other and may have to run several separate API queries to get data of interest
+recipient_locations_country = c("USA")
+recipient_locations_state = c("CA")
+recipient_locations_county = c()
+recipient_locations_district
 
 For complete documentation of award types permitted in the filter see: https://fedspendingtransparency.github.io/whitepapers/types/ and https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md
 
+##filter_usaspending parameters##
 
+doe = "DEPARTMENT OF ENERGY (DOE)"
+doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE FORCE",
+                        "DEF ADVANCED RESEARCH PROJECTS AGCY", "DEPT OF COMMERCE NIST", "DOD SUPPLY ACTIVITY",
+                        "EM-ENVIRONMENTAL MGMT CON BUS CTR", "F59900 SAF FMBIB'", "IDAHO OPERATIONS OFFICE",
+                        "MISSILE DEFENSE AGENCY", "MISSILE DEFENSE AGENCY (MDA)", "NASA MARSHALL SPACE FLIGHT CENTER",
+                        "NNSA M&O CONTRACTING", "NNSA NAVAL REACTORS LAB FLD OFFICE", "NNSA NON-M&O CNTRACTING OPS DIV",
+                        "NNSA OFFICE OF THE ADMIN FUNDS", "NNSA OTHER FUNDS", "NNSA WEAPONS ACTIVITIES FUNDS",
+                        "NNSA-DEFENSE NUCLEAR NONPRO FUNDS", "OFFICE OF NAVAL RESEARCH")
+contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "naics_code")
+grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_code", "recipient_zip_last_4_code", "business_types_description")
+
+c_label <- "Contracts"
+g_label <- "Assistance" 
+
+c_out_name = paste0(year,"_all_contract_spending.csv")
+g_out_name = paste0(year,"_all_grant_spending.csv")
+
+
+##error_check_contracts_data parameters##
+
+n2i_dup <- c(111191, 111366, 332117, 335220)
 
