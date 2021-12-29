@@ -20,7 +20,6 @@ source("src/parameters.R")
 ##Load Scripts##
 #source("src/obtain_usaspending.R")
 source("src/filter_usaspending.R")
-#source("src/split_usaspending.R")
 
 ##Prepare to Load Data Sources from Temp as variable
 cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
@@ -52,4 +51,5 @@ source("src/error_check_contracts_data.R")
 
 
 ## Split out DOE data from original/regular data
+#source("src/split_usaspending.R")
 # print(split_usaspending(cfile_name, doe))
