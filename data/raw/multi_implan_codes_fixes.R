@@ -12,3 +12,7 @@ naics_to_implan <- naics_to_implan %>%
 naics_to_implan$implan_code[naics_to_implan$naics_code == 335220] <- 327
 naics_to_implan$implan_code[naics_to_implan$naics_code == 332117] <- 231
 naics_to_implan <- naics_to_implan[!duplicated(naics_to_implan), ] #delete duplicate rows
+
+
+
+

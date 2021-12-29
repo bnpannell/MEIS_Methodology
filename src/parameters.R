@@ -1,4 +1,5 @@
 #This file stores parameters for he MEIS Methodology Script. 
+#Comment out parameters that are not needed. 
 #For specific instructions on how to use this file, see README.md
 
 ##General Global Variable Parameters##

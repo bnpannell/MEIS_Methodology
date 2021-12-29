@@ -52,6 +52,9 @@ With the exception of 'tier_name,' variables under "Required" MUST have an accep
     - Year-Month-Day or yyyy-mm-dd 
 
 #### Optional Variables
+
+##### Award Type Variables
+
 - awards: 
   - Accepted Values:
     - Contract Type Awards:
@@ -69,15 +72,14 @@ With the exception of 'tier_name,' variables under "Required" MUST have an accep
       - "06" 
       - "10" 
 
--
+##### Location Variables
+The API can handle a list of countries or a list of states within one country or a list of counties within one country and state etc. 
+Counties and districts are mutually exclusive filters- you must pick one or the other. If you wish to aggregate data by both, it will require several separate API queries to get data of interest.
 
-Location variables
-Notes- can handle a list of countries, states, counties or districts. If listing multiple countries you cant list more states, if listing states you cant get specific counties or districts
-Counties and districts are mutually exclusing filters- you must pick one or the other and may have to run several separate API queries to get data of interest
-recipient_locations_country = c("USA")
+- recipient_locations_country = c()
 recipient_locations_state = c("CA")
 recipient_locations_county = c()
-recipient_locations_district
+recipient_locations_district = c() 
 
 For complete documentation of award types permitted in the filter see: https://fedspendingtransparency.github.io/whitepapers/types/ and https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md
 
