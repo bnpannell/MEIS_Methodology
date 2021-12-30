@@ -40,3 +40,6 @@ vignettes/*.pdf
 
 #Temp data folder
 /data/temp/
+
+#Output folder
+/output
