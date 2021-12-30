@@ -1,4 +1,4 @@
-#This file stores parameters for he MEIS Methodology Script. 
+#This file stores parameters for the MEIS Methodology Script. 
 #Comment out parameters that are not needed. 
 #For specific instructions on how to use this file, see README.md
 
@@ -8,6 +8,7 @@
 f_year = "2020" #Fiscal year of target data 
 year = "2021" #report output year
 state = "CALIFORNIA"
+
 #anything else that doesn't fit into a category below 
 
 
@@ -42,7 +43,6 @@ recipient_locations_state = c("CA")
 
 
 ##filter_usaspending parameters##
-
 doe = "DEPARTMENT OF ENERGY (DOE)"
 doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE FORCE",
                         "DEF ADVANCED RESEARCH PROJECTS AGCY", "DEPT OF COMMERCE NIST", "DOD SUPPLY ACTIVITY",
@@ -62,7 +62,6 @@ g_out_name = paste0(year,"_all_grant_spending.csv")
 
 
 ##error_check_contracts_data parameters##
-
 n2i_dup <- c(111191, 111366, 332117, 335220)
 
 

@@ -56,7 +56,14 @@ write.csv(contracts_mismatch_naics, paste("output/naics_code_errors.csv", sep = 
 
 #README instructions to manually fix "multi_implan_code" by altering "multi_implan_code_fixes.R" file in raw data and saving a copy to src folder?? - not temp because you would want the documentation
 
+
+## Create new column "fao_weighted" that distributes federal_action_obligation spending by the CewAvgRatio weight for each implan code
+contracts <- contracts %>%
+  mutate(fao_weighted = federal_action_obligation * CewAvgRatio)
+
 #Save contract data file with error lines REMOVED to temp folder "{YEAR}_cleaned_usaspending_contract_data"  {} = from parameters file 
 #Save cleaned data to "Output" folder - named "2021_cleaned_state_contracts"
 
-write.csv(contracts, paste("output/2021_cleaned_state_contracts.csv", sep = ''))
+#temp <- file.path(getwd(), "data", "temp/")
+
+write.csv(contracts, paste("data/temp/2021_cleaned_state_contracts.csv", sep = ''))

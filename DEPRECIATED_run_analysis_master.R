@@ -30,9 +30,8 @@ gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 filter_usaspending(cfile_name, state, doe_offices, contract_columns, c_out_name)
 filter_usaspending(gfile_name, state, doe_offices, grant_columns, g_out_name)
 
-
 ## Run error check on data
-source("src/error_check_contracts_data.R")
+source("src/error_check_and_weight_contracts.R")
 
 
 #Questions: How to implement the fork of manual check for error files and manual fixes vs automated fixes?
