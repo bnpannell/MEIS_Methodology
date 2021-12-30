@@ -2,8 +2,8 @@
 #Load pre-named contracts data file from temp file, load in NAICS/IMPLAN crosswalk file from ?raw data? (grants/awards file has its own error checking code)
 
 contracts <- read.csv(file = "data/temp/2021_all_contract_spending.csv") #un-hard code file path later 
-naics2implan <- read.xlsx(xlsxFile = "data/raw/2017_implan_online_naics_to_implan546.xlsx") %>%
-  rename(naics_code = "2017NaicsCode", implan_code = "Implan546Index") %>%
+naics2implan <- read.xlsx(xlsxFile = "data/raw/2012_2017_NAICS_to_IMPLAN.xlsx") %>%
+  rename(naics_code = "NaicsCode", implan_code = "Implan546Index") %>%
   distinct(naics_code, implan_code, .keep_all = TRUE)
 
 contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
@@ -39,14 +39,14 @@ write.csv(contracts_mismatch_naics, paste("output/naics_code_errors.csv", sep = 
 
 #Run through file again? At same time?? Pull out data that matches one of the NAICS/IMPLAN codes of concern:
 
-contracts_with_multi_implan_code <- contracts %>%
-  filter(naics_code %in% n2i_dup)
-contracts <- contracts %>%
-  filter(!(naics_code %in% n2i_dup))
+#contracts_with_multi_implan_code <- contracts %>%
+#  filter(naics_code %in% n2i_dup)
+#contracts <- contracts %>%
+#  filter(!(naics_code %in% n2i_dup))
 
 #Save to "Output" folder- named "multi_implan_codes"
 
-write.csv(contracts_with_multi_implan_code, paste("output/multi_implan_codes.csv", sep = ''))
+#write.csv(contracts_with_multi_implan_code, paste("output/multi_implan_codes.csv", sep = ''))
 
 #NAICS code 335220 can be IMPLAN code 325, 326, 327 or 328
 #NAICS code 111191 can be IMPLAN code 1 or 2
