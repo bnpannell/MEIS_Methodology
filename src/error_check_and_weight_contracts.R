@@ -1,7 +1,11 @@
-## Pseudo code for file:
-#Load pre-named contracts data file from temp file, load in NAICS/IMPLAN crosswalk file from ?raw data? (grants/awards file has its own error checking code)
+# If we don't make this a function should it go to the master R code line by line as written? 
 
-contracts <- read.csv(file = "data/temp/2021_all_contract_spending.csv") #un-hard code file path later 
+# Run hardcoded 2007 to 2017 NAICS code fixes first
+
+#Enter code here for that
+
+# Load in files, start first crosswalk error check of NAICS codes to IMPLAN codes
+contracts <- read.csv(file.path(getwd(), "data", "temp", c_out_name)) 
 naics2implan <- read.xlsx(xlsxFile = "data/raw/2012_2017_NAICS_to_IMPLAN.xlsx") %>%
   rename(naics_code = "NaicsCode", implan_code = "Implan546Index") %>%
   distinct(naics_code, implan_code, .keep_all = TRUE)
@@ -18,7 +22,7 @@ contracts <- contracts[!(is.na(contracts$naics_code)),]
 
 #Save to "Output" folder- named "no_naics_code"
 
-write.csv(contracts_no_naics, paste("output/no_naics_code.csv", sep = ''))
+write.csv(contracts_no_naics, paste("output/no_naics_code.csv", sep = '')) #should we use output variable defined above here? 
 
 #README instructions to manually fix "no_naics_code" by altering "no_naics_code_fixes" file in raw data and saving a copy to src folder?? - not temp because you would want the documentation
 
@@ -34,28 +38,7 @@ contracts <- contracts[!(is.na(contracts$implan_code)),]
 write.csv(contracts_mismatch_naics, paste("output/naics_code_errors.csv", sep = ''))
 
 #README instructions to manually fix "naics_code_errors" by altering "naics_code_fixes" file in raw data and saving a copy to src folder?? - not temp because you would want the documentation
-
-
-
-#Run through file again? At same time?? Pull out data that matches one of the NAICS/IMPLAN codes of concern:
-
-#contracts_with_multi_implan_code <- contracts %>%
-#  filter(naics_code %in% n2i_dup)
-#contracts <- contracts %>%
-#  filter(!(naics_code %in% n2i_dup))
-
-#Save to "Output" folder- named "multi_implan_codes"
-
-#write.csv(contracts_with_multi_implan_code, paste("output/multi_implan_codes.csv", sep = ''))
-
-#NAICS code 335220 can be IMPLAN code 325, 326, 327 or 328
-#NAICS code 111191 can be IMPLAN code 1 or 2
-#NAICS code 111366 can be IMPLAN code 4 or 5
-#NAICS code 332117 can be IMPLAN code 231 or 232
-#Save to "Output" folder- named "multi_implan_codes"
-
-#README instructions to manually fix "multi_implan_code" by altering "multi_implan_code_fixes.R" file in raw data and saving a copy to src folder?? - not temp because you would want the documentation
-
+# Run construction code fixes here?? Or before final output of "cleaned" data? 
 
 ## Create new column "fao_weighted" that distributes federal_action_obligation spending by the CewAvgRatio weight for each implan code
 contracts <- contracts %>%
@@ -66,4 +49,4 @@ contracts <- contracts %>%
 
 #temp <- file.path(getwd(), "data", "temp/")
 
-write.csv(contracts, paste("data/temp/2021_cleaned_state_contracts.csv", sep = ''))
+write.csv(contracts, file.path(getwd(), "data", "temp", year, "_cleaned_usaspending_contract_data"))

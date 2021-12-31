@@ -3,19 +3,18 @@
 
 1. Figure out how to handle NAICS errors
   - Ask Devin how to handle construction codes, hard code them if possible and emit them from error output that way
-  - Will need to loop through multiple NAICS to IMPLAN walk-throughs to catch older codes that are for some reason still in use
-    - May need to implement 2012 to 2017 NAICS crosswalks as well
+  - Add section to hard fix 2007 to 2017 NAICS code errors
+  - Maybe write "word search" style fix for construction codes for most accurate results
   
 2. Code means to fix the many to many IMPLAN NAICS crosswalk results
-  - Should be straight forwards, fingers crossed
+  - Implement in error check and weight code
   
 3. Double check no NAICS code industries repair code - this will just have to be hard coded. Don't see a way around it
 
-4. When are we going to run the DOE code that separates out money given to defense contracts with the DOE? We should probably put this step above the error
-   checking steps as this will further reduce the data size of our output. 
+4. DONE
    
 5. Start looking into how to process the Grants data (previously we have only been working with Contract data)
-  - Select needed data using simaler parameters to those used to filter contracts data - include DOE filtering here as well
+  - Select needed data using similar parameters to those used to filter contracts data - include DOE filtering here as well
   - Error check this data- it looks like it has different error outputs compared to the Contracts data use old code to help
   - Repair data- again using older code to help guide implementation of the new
 
@@ -34,4 +33,7 @@
 10. Finalize documentation repo and add in html links etc
 
 11. Get Devin and Tom to proof read, apply edits and get ready for publishing. 
+
+12. Priority goes to getting documentation ready for how we did it for 2021 data- then going into detail on how subsequent years will work
+    based on modifications and efficiences worked into new code 
 
