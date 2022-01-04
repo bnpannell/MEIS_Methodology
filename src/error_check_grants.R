@@ -1,15 +1,24 @@
 # Place holder for code to error check grants data
 
-# Load in files, start first crosswalk error check of grants data to IMPLAN codes
+# Load in grants data and grants-related implan crosswalk
 grants <- read.csv(file.path(getwd(), "data", "temp", g_out_name))
 btype2implan <- read.csv(file = "data/raw/business_type_to_implan546_crosswalk.csv", fileEncoding="UTF-8-BOM")
+
+#Prior to running crosswalk - pull out the VA direct payments/benefits data - this does not get matched with an IMPLAN code
+
+va_benefits <- grants %>%
+  filter(grants$assistance_type_code == 10)
+grants <- grants %>%
+  filter(!(grants$assistance_type_code == 10))
+
+# start first crosswalk error check of grants data to IMPLAN codes
 
 grants <- merge(grants, btype2implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE)
 
 #output <- file.path(getwd(), "output")
 
 
-#Run code and pull out data that do not have NAICS codes
+#Now pull out grants' errors that did not get matched with an IMPLAN code
 
 grants_no_implan <- grants[is.na(grants$implan_code),]
 grants <- grants[!(is.na(grants$implan_code)),]
