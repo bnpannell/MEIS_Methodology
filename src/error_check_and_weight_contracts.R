@@ -49,4 +49,4 @@ contracts <- contracts %>%
 
 #temp <- file.path(getwd(), "data", "temp/")
 
-write.csv(contracts, file.path(getwd(), "data", "temp", (year + "_cleaned_usaspending_contract_data")))
+write.csv(contracts, file.path(getwd(), "data", "temp", paste0(year, "_cleaned_usaspending_contract_data.csv")))
