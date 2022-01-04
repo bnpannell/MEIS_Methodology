@@ -4,51 +4,26 @@
 grants <- read.csv(file.path(getwd(), "data", "temp", g_out_name))
 btype2implan <- read.csv(file = "data/raw/business_type_to_implan546_crosswalk.csv", fileEncoding="UTF-8-BOM")
 
-#Prior to running crosswalk - pull out the VA direct payments/benefits data - this does not get matched with an IMPLAN code
+#Prior to running crosswalk - pull out the VA direct payments/benefits data - this does not get matched with an IMPLAN code - and write into CSV file
 
 va_benefits <- grants %>%
   filter(grants$assistance_type_code == 10)
 grants <- grants %>%
   filter(!(grants$assistance_type_code == 10))
 
+write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(year, "_cleaned_usaspending_va_benefit_data.csv")))
+
 # start first crosswalk error check of grants data to IMPLAN codes
 
 grants <- merge(grants, btype2implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE)
-
-#output <- file.path(getwd(), "output")
-
 
 #Now pull out grants' errors that did not get matched with an IMPLAN code
 
 grants_no_implan <- grants[is.na(grants$implan_code),]
 grants <- grants[!(is.na(grants$implan_code)),]
 
-#Save to "Output" folder- named "no_naics_code"
+#Save the grants' errors to "Output" folder - named "grants_no_implan_code" - and the grants data to "temp" folder - named "2021_cleaned_usaspending_grant_data"
 
 write.csv(grants_no_implan, paste("output/grants_no_implan_code.csv", sep = '')) #should we use output variable defined above here?
 
-
-
-# DOD GRANTS
-#DODGrants <- DODGrants21 %>%
-#  filter(primary_place_of_performance_state_name == "CALIFORNIA") %>%
-#  select("federal_action_obligation", "recipient_name", "recipient_county_name", "recipient_congressional_district", 
-#         "business_types_description") %>% #select needed columns
-#  rename(county = "recipient_county_name", district = "recipient_congressional_district")
-#DODGrants  <- merge(DODGrants, business_to_implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE) #merge with business to implan bridge
-#DODGrants <- DODGrants %>%
-#  select("federal_action_obligation", "county", "district", "implan_code") #select needed columns
-
-
-# VA GRANTS
-#VAGrants <- VAGrants21 %>%
-#  filter(primary_place_of_performance_state_name == "CALIFORNIA") %>%
-#  select("federal_action_obligation", "recipient_name", "recipient_county_name", "recipient_congressional_district", 
-#         "business_types_description") %>% #select needed columns
-# rename(county = "recipient_county_name", district = "recipient_congressional_district")
-#VAGrants  <- merge(VAGrants, business_to_implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE) #merge with business to implan bridge
-#VAGrants$implan_code[VAGrants$recipient_name == "UNIVERSITY OF CALIFORINA FULLERTON"] <- 531 #reassign some entries
-#VAGrants$implan_code[VAGrants$recipient_name == "THE UNIVERSITY CORPORATION LOS ANGELES"] <- 524
-#VAGrants$implan_code[VAGrants$recipient_name == "THE UNIVERSITY CORPORATION"] <- 524
-#VAGrants <- VAGrants %>%
-#  select("federal_action_obligation", "county", "district", "implan_code") #select needed columns
+write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_cleaned_usaspending_grant_data.csv")))
