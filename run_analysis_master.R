@@ -36,3 +36,6 @@ source("src/error_check_grants.R")
 ## Split out DOE data from original/regular data
 #source("src/split_usaspending.R")
 # print(split_usaspending(cfile_name, doe))
+
+## Merge the USAspending contracts and grants data into their respective IMPLAN codes, and aggregate
+aggregate_usaspending

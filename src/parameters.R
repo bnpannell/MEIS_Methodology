@@ -60,3 +60,5 @@ g_label <- "Assistance"
 c_out_name = paste0(year,"_all_contract_spending.csv")
 g_out_name = paste0(year,"_all_grant_spending.csv")
 
+
+##aggregate_usaspending parameters##
