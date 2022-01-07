@@ -27,12 +27,11 @@ gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 
 ##Filter files, save new output
 
-filter_usaspending(cfile_name, state, doe_offices, contract_columns, c_out_name)
-filter_usaspending(gfile_name, state, doe_offices, grant_columns, g_out_name)
+filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0("DEPRECIATED_", c_out_name))
+filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPRECIATED_", g_out_name))
 
 ## Run error check on data
-source("src/error_check_and_weight_contracts.R")
-source("src/error_check_grants.R")
+#source("src/DEPRECIATED_error_check.R")
 
 
 
