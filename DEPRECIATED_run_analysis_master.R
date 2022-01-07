@@ -31,8 +31,8 @@ filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0("DEP
 filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPRECIATED_", g_out_name))
 
 ## Run error check on data
-#source("src/DEPRECIATED_error_check.R")
-
+#source("src/DEPRECIATED_error_check_contracts.R")
+#source("src/DEPRECIATED_error_check_grants.R")
 
 
 
