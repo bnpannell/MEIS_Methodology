@@ -1,4 +1,4 @@
-# Place holder for code to error check grants data
+# This code checks grant data for errors and where possible, fixes them
 
 # Load in grants data and grants-related implan crosswalk
 grants <- read.csv(file.path(getwd(), "data", "temp", g_out_name))
@@ -22,8 +22,8 @@ grants <- merge(grants, btype2implan, by = ("business_types_description"), all.x
 grants_no_implan <- grants[is.na(grants$implan_code),]
 grants <- grants[!(is.na(grants$implan_code)),]
 
-#Save the grants' errors to "Output" folder - named "grants_no_implan_code" - and the grants data to "temp" folder - named "2021_cleaned_usaspending_grant_data"
+#Save the grants' errors to "Output" folder - named "grants_no_implan_code" - and the grants data to "temp" folder
 
-write.csv(grants_no_implan, paste("output/grants_no_implan_code.csv", sep = '')) #should we use output variable defined above here?
+write.csv(grants_no_implan, paste("output/grants_no_implan_code.csv", sep = '')) 
 
 write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_cleaned_usaspending_grant_data.csv")))

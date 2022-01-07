@@ -1,19 +1,17 @@
-# If we don't make this a function should it go to the master R code line by line as written? 
+# This code checks contracts data for errors, where possible fixes them and calculates the weights for NAICS codes with multiple IMPLAn codes
+# ((This will all change again once we add in the 2022 NAICS codes... assuming IMPLAN is ready for them at the end of the year)) 
 
-# Run hardcoded 2007 to 2017 NAICS code fixes first
-
-#Enter code here for that
+# Run hard coded fixes file first called "data/raw/2007_to_2017_NAICS.xlsx" so 2007 codes can get caught in the IMPLAN crosswalk
 
 # Load in files, start first crosswalk error check of NAICS codes to IMPLAN codes
 contracts <- read.csv(file.path(getwd(), "data", "temp", c_out_name)) 
-naics2implan <- read.xlsx(xlsxFile = "data/raw/2012_2017_NAICS_to_IMPLAN.xlsx") %>%
+naics2implan <- read.xlsx(xlsxFile = "data/raw/2012_2017_NAICS_to_IMPLAN.xlsx") %>% #re-name crosswalk, now includes some 2002 NAICS data
   rename(naics_code = "NaicsCode", implan_code = "Implan546Index") %>%
   distinct(naics_code, implan_code, .keep_all = TRUE)
 
 contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
 
 output <- file.path(getwd(), "output")
-
 
 #Run code and pull out data that do not have NAICS codes
 
@@ -22,11 +20,12 @@ contracts <- contracts[!(is.na(contracts$naics_code)),]
 
 #Save to "Output" folder- named "no_naics_code"
 
-write.csv(contracts_no_naics, paste("output/no_naics_code.csv", sep = '')) #should we use output variable defined above here? 
+write.csv(contracts_no_naics, paste("output/no_naics_code.csv", sep = '')) 
 
-#README instructions to manually fix "no_naics_code" by altering "no_naics_code_fixes" file in raw data and saving a copy to src folder?? - not temp because you would want the documentation
-
-
+# What do we want to do with construction data?? Do we pull it out here or ignore it? It isnt going to automatically match a NAICS code, maybe hardcoding
+# Everything wont be too big an issue, we can re-run the code to test what IMPLAN does with the different assignments like we did in our meeting
+# If thats the case, should we just make our own construction codes crosswalk and include it in raw data?? That way we could have a depreciated version
+# and a newer version
 
 #Run code and pull out data that have mismatched NAICS codes (that don't match any NAICS code in the crosswalk)
 
@@ -37,16 +36,10 @@ contracts <- contracts[!(is.na(contracts$implan_code)),]
 
 write.csv(contracts_mismatch_naics, paste("output/naics_code_errors.csv", sep = ''))
 
-#README instructions to manually fix "naics_code_errors" by altering "naics_code_fixes" file in raw data and saving a copy to src folder?? - not temp because you would want the documentation
-# Run construction code fixes here?? Or before final output of "cleaned" data? 
-
 ## Create new column "fao_weighted" that distributes federal_action_obligation spending by the CewAvgRatio weight for each implan code
 contracts <- contracts %>%
   mutate(fao_weighted = federal_action_obligation * CewAvgRatio)
 
-#Save contract data file with error lines REMOVED to temp folder "{YEAR}_cleaned_usaspending_contract_data"  {} = from parameters file 
-#Save cleaned data to "Output" folder - named "2021_cleaned_state_contracts"
-
-#temp <- file.path(getwd(), "data", "temp/")
+#Save contract data file with error lines REMOVED to temp folder "{YEAR}_cleaned_usaspending_contract_data" 
 
 write.csv(contracts, file.path(getwd(), "data", "temp", paste0(year, "_cleaned_usaspending_contract_data.csv")))
