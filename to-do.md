@@ -2,21 +2,16 @@
 (delete as items are completed- delete entire file once project is complete)
 
 1. Figure out how to handle NAICS errors
-  - Ask Devin how to handle construction codes, hard code them if possible and emit them from error output that way
-  - Add section to hard fix 2007 to 2017 NAICS code errors
-  - Maybe write "word search" style fix for construction codes for most accurate results
+  - Ask Devin how to handle construction codes and 92 series codes, hard code them if possible and emit them from error output that way
+
   
-2. Code means to fix the many to many IMPLAN NAICS crosswalk results
-  - Implement in error check and weight code
+2. DONE
   
 3. Double check no NAICS code industries repair code - this will just have to be hard coded. Don't see a way around it
 
 4. DONE
    
-5. Start looking into how to process the Grants data (previously we have only been working with Contract data)
-  - Select needed data using similar parameters to those used to filter contracts data - include DOE filtering here as well
-  - Error check this data- it looks like it has different error outputs compared to the Contracts data use old code to help
-  - Repair data- again using older code to help guide implementation of the new
+5. Mostly DONE, still need new code made to handle grant specific DISTRICT values being 90, already have contracts industry fixes finished
 
 6. Take a look into SmartPay
   - Will probably need to explain A LOT about the process we used to distribute SmartPay spending across the agencies
