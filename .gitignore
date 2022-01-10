@@ -41,5 +41,8 @@ vignettes/*.pdf
 #Temp data folder
 /data/temp/
 
+# DOD_County_Shares_R Excel file
+/data/raw/DOD_County_Shares_R.xlsx
+
 #Output folder
 /output
