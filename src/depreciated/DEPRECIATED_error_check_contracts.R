@@ -25,7 +25,7 @@ naics_to_implan <- naics_to_implan[!duplicated(naics_to_implan), ] #delete dupli
 # Apply crosswalk to contracts, and check for entries that do not get matched to an IMPLAN code
 contracts <- merge(contracts, naics_to_implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
 contracts <- contracts %>%
-  filter(!(federal_action_obligation == 0 & is.na(naics_code)))
+  filter(!(is.na(naics_code)))
 
 #Reassign the unmatched NAICS codes to corresponding IMPLAN codes
 contracts <- contracts %>%
