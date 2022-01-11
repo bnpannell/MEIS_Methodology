@@ -34,6 +34,9 @@ filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPREC
 source("src/depreciated/DEPRECIATED_error_check_contracts.R")
 source("src/depreciated/DEPRECIATED_error_check_grants.R")
 
+## Run concatenate function on usaspending data
+source("src/depreciated/DEPRECIATED_concatenate_usaspending.R")
+
 
 
 ## Split out DOE data from original/regular data

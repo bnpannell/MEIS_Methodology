@@ -43,5 +43,5 @@ grants <- grants %>%
   select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "implan_code")
 
 # Write grants and VA benefits CSVs into temp folder
-write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_grant_data.csv")))
-write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_va_benefits_data.csv")))
+write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_grant_data.csv")), row.names = FALSE)
+write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_va_benefits_data.csv")), row.names = FALSE)
