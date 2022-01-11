@@ -1,47 +1,50 @@
 ## Error check usaspending grants data ##
 
-## See depreciated methodology section for details on manual fix to usaspending contracts and grants Excel sheets prior to running below code
-# Assumes that all districts (previously labeled as NA or 90) have been fixed
+## See depreciated methodology section for details on manual fix to usaspending grants and grants Excel sheets prior to running below code
 
 # Load in grants CSV into dataframe
 grants <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECIATED_", g_out_name)))
 
+#PRIOR to applying crosswalk - take out VA benefits entries. These do not get assigned to an IMPLAN code.
+va_benefits <- grants %>%
+  filter(grants$assistance_type_code == 10)
+grants <- grants %>%
+  filter(!(grants$assistance_type_code == 10))
+
 # Load in Business type to IMPLAN crosswalk
 business_to_implan <- read.csv(file = "data/raw/business_type_to_implan546_crosswalk.csv", stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM")
 
-# DOD GRANTS
-DODGrants  <- merge(DODGrants, business_to_implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE) #merge with business to implan bridge
-DODGrants <- DODGrants %>%
-  select("federal_action_obligation", "county", "district", "implan_code") #select needed columns
+# Apply crosswalk to grants, and check for entries that do not get matched to an IMPLAN code
+grants <- merge(grants, business_to_implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE)
 
-# DHS Grants
-DHSGrants  <- merge(DHSGrants, business_to_implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE) #merge with business to implan bridge
-DHSGrants <- DHSGrants %>%
-  select("federal_action_obligation", "county", "district", "implan_code") #select needed columns
+# For entries with no NAICS code at all - manually assign IMPLAN codes based on recipient's industry
+grants$implan_code[grants$recipient_name == "UNIVERSITY OF CALIFORINA FULLERTON"] <- 531 #reassign some entries
+grants$implan_code[grants$recipient_name == "THE UNIVERSITY CORPORATION LOS ANGELES"] <- 524
+grants$implan_code[grants$recipient_name == "THE UNIVERSITY CORPORATION"] <- 524
+#grants$implan_code[grants$recipient_name == "CALIFORNIA INSTITUTE OF TECHNOLOGY"] <- 481
+#grants$implan_code[grants$recipient_name == "CONTRA COSTA MOSQUITO AND VECTOR CONTROL DISTRICT"] <- 476
+#grants$implan_code[grants$recipient_name == "LELAND STANFORD JUNIOR UNIVERSITY, THE"] <- 481
 
-# VA GRANTS
-VAGrants  <- merge(VAGrants, business_to_implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE) #merge with business to implan bridge
-VAGrants$implan_code[VAGrants$recipient_name == "UNIVERSITY OF CALIFORINA FULLERTON"] <- 531 #reassign some entries
-VAGrants$implan_code[VAGrants$recipient_name == "THE UNIVERSITY CORPORATION LOS ANGELES"] <- 524
-VAGrants$implan_code[VAGrants$recipient_name == "THE UNIVERSITY CORPORATION"] <- 524
-VAGrants <- VAGrants %>%
-  select("federal_action_obligation", "county", "district", "implan_code") #select needed columns
 
-## HOUSEHOLD SPENDING CHANGE ##
-# Upload VA Payments information (this will be used for household spending change)
-VA_payments_21 <- read.csv("VA_Direct_Payments_Recipient_USA_CA.csv") 
-VA_payments <- VA_payments_21 %>%
-  filter(primary_place_of_performance_state_name == "CALIFORNIA") %>%
-  select("total_obligated_amount", "recipient_county_name", "recipient_congressional_district") %>% #select needed columns
-  rename(county = "recipient_county_name", district = "recipient_congressional_district")
+#Take out grant entries that were not assigned an IMPLAN code, and manually code them. Remove these entries from the original "grants" dataframe
 
-# County household spending change
-HHSpendCH_county <- aggregate(VA_payments$total_obligated_amount, by=list(VA_payments$county), FUN=sum) #aggregate spending based on county
-colnames(HHSpendCH_county) <- c("county", "spending_change") #rename columns
-HHSpendCH_county$inverse <- (sum(VA_payments$total_obligated_amount)) - HHSpendCH_county$spending_change #add inverse column
+grants_missing_implan <- grants %>%
+  filter(is.na(implan_code)) #%>%
+  mutate(implan_code = case_when(
+    startsWith(as.character(recipient_name), "CALIFORNIA INSTITUTE OF TECHNOLOGY") ~ "481",
+    startsWith(as.character(recipient_name), "CONTRA COSTA MOSQUITO AND VECTOR CONTROL DISTRICT") ~ "476",
+    startsWith(as.character(recipient_name), "LELAND STANFORD JUNIOR UNIVERSITY, THE") ~ "481"))
 
-# District household spending change
-HHSpendCH_dist <- aggregate(VA_payments$total_obligated_amount, by=list(VA_payments$district), FUN=sum) #aggregate spending based on district
-colnames(HHSpendCH_dist) <- c("district", "spending_change") #rename columns
-HHSpendCH_dist$inverse <- (sum(VA_payments$total_obligated_amount)) - HHSpendCH_dist$spending_change #add inverse column
+grants <- grants %>%
+  filter(!(is.na(implan_code)))
 
+# Rbind grants_missing_implan back into original grants dataframe
+grants <- rbind(grants, grants_missing_implan)
+
+#select needed columns
+grants <- grants %>%
+  select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "implan_code")
+
+# Write grants and VA benefits CSVs into temp folder
+write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_grant_data.csv")))
+write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_va_benefits_data.csv")))

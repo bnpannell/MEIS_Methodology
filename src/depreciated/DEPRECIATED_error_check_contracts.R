@@ -1,14 +1,11 @@
 ## Error check usaspending contracts data ##
 
 ## See depreciated methodology section for details on manual fix to usaspending contracts and grants Excel sheets prior to running below code
-# Assumes that all districts (previously labeled as NA or 90) have been fixed
 
 # Load in contracts CSV into dataframe
 contracts <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECIATED_", c_out_name)))
 
 # Load in NAICS to IMPLAN crosswalk
-
-#NAICS to IMPLAN
 naics_to_implan <- read.xlsx(xlsxFile = "data/raw/depreciated/2017_implan_online_naics_to_implan546.xlsx")
 naics_to_implan <- naics_to_implan %>%
   select("Implan546Index", "2017NaicsCode") %>%
@@ -22,13 +19,18 @@ naics_to_implan <- naics_to_implan[!duplicated(naics_to_implan), ] #delete dupli
 # naics_to_implan[duplicated(naics_to_implan$naics_code),]
 
 
-# Apply crosswalk to contracts, and check for entries that do not get matched to an IMPLAN code
+# Apply crosswalk to contracts, and check for entries that do not have a NAICS code
 contracts <- merge(contracts, naics_to_implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
-contracts <- contracts %>%
-  filter(!(is.na(naics_code)))
 
-#Reassign the unmatched NAICS codes to corresponding IMPLAN codes
-contracts <- contracts %>%
+# For entries with no NAICS code at all - manually assign IMPLAN codes based on recipient's industry
+contracts$implan_code[contracts$recipient_name == "IMPERIAL IRRIGATION DISTRICT INC"] <- 530
+contracts$implan_code[contracts$recipient_name == "KAMP SYSTEMS, INC"] <- 244
+contracts$implan_code[contracts$recipient_name == "SCIENCE APPLICATIONS INTERNATIONAL CORPORATION"] <- 459
+contracts$implan_code[contracts$recipient_name == "DRS SENSORS & TARGETING SYSTEMS, INC."] <- 514
+contracts$implan_code[contracts$recipient_name == "KEYSTONE ENGINEERING COMPANY I"] <- 457
+
+#Take out contract entries that were not assigned an IMPLAN code, and manually code them. Remove these entries from the original "contracts" dataframe
+contracts_missing_implan <- contracts %>%
   filter(is.na(implan_code)) %>%
   mutate(implan_code = case_when(
     startsWith(as.character(naics_code), "2361") ~ "61",
@@ -61,24 +63,15 @@ contracts <- contracts %>%
     startsWith(as.character(naics_code), "926") ~ "530",
     startsWith(as.character(naics_code), "927") ~ "528",))
 
+contracts <- contracts %>%
+  filter(!(is.na(implan_code)))
 
-# Some entries had no NAICS code at all, so IMPLAN codes were manually assigned based on recipient's industry
-contracts$implan_code[contracts$recipient_name == "IMPERIAL IRRIGATION DISTRICT INC"] <- 530
-contracts$implan_code[contracts$recipient_name == "KAMP SYSTEMS, INC"] <- 244
-contracts$implan_code[contracts$recipient_name == "SCIENCE APPLICATIONS INTERNATIONAL CORPORATION"] <- 459
-contracts$implan_code[contracts$recipient_name == "DRS SENSORS & TARGETING SYSTEMS, INC."] <- 514
-contracts$implan_code[contracts$recipient_name == "KEYSTONE ENGINEERING COMPANY I"] <- 457
+# Rbind contracts_missing_implan back into original contracts dataframe
+contracts <- rbind(contracts, contracts_missing_implan)
 
 #select needed columns
 contracts <- contracts %>%
-  select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "implan_code") %>%
-  rename(county = recipient_county_name, district = recipient_congressional_district)
+  select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "implan_code")
 
-# use these to test where there are NAs
-contracts_no_implan <-contracts %>%
-  filter(is.na(implan_code))
-contracts_no_money <-contracts %>%
-  filter(is.na(federal_action_obligation))
-contracts_no_district <-contracts %>%
-  filter(is.na(district))
-
+# Write contracts CSV into temp folder
+write.csv(contracts, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_contract_data.csv")))
