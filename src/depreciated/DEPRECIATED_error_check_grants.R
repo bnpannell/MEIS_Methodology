@@ -40,9 +40,9 @@ grants <- rbind(grants, grants_missing_implan)
 
 #select needed columns for va benefits and grants
 va_benefits <- va_benefits %>%
-  select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district")
+  select("federal_action_obligation", "awarding_agency_name", "recipient_county_name", "recipient_congressional_district")
 grants <- grants %>%
-  select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "implan_code")
+  select("federal_action_obligation", "awarding_agency_name", "recipient_county_name", "recipient_congressional_district", "implan_code")
 
 # Write grants and VA benefits CSVs into temp folder
 write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_grant_data.csv")), row.names = FALSE)

@@ -40,11 +40,13 @@ source("src/depreciated/DEPRECIATED_error_check_grants.R")
 source("src/concatenate_usaspending.R")
 concatenated_usaspending <- c_usaspending(pattern = paste0(year, "_DEPRECIATED.+\\.csv"))
 
-write.csv(concatenated_usaspending, file.path(getwd(), "data", "temp", paste0("DEPRECATED_", u_out_name))) 
+write.csv(concatenated_usaspending, file.path(getwd(), "data", "temp", paste0("DEPRECATED_", u_out_name)), row.names = FALSE) 
 
 
+## Split out DOE data from concatenated usaspending data
+ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0("DEPRECATED_", u_out_name))
 
+source("src/split_usaspending.R")
 
-## Split out DOE data from original/regular data
-#source("src/split_usaspending.R")
-# print(split_usaspending(cfile_name, doe))
+usaspending <- split_usaspending(ufile_name)
+doespending <- split_doespending(ufile_name)
