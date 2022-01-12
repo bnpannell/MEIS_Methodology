@@ -1,6 +1,7 @@
 ## Error check usaspending contracts data ##
 
 ## See depreciated methodology section for details on manual fix to usaspending contracts and grants Excel sheets prior to running below code
+# Assuming that all manual fixes have been implemented
 
 # Load in contracts CSV into dataframe
 contracts <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECIATED_", c_out_name)))
@@ -74,4 +75,4 @@ contracts <- contracts %>%
   select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "implan_code")
 
 # Write contracts CSV into temp folder
-write.csv(contracts, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_contract_data.csv")))
+write.csv(contracts, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_contract_data.csv")), row.names = FALSE)
