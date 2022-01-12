@@ -63,6 +63,6 @@ g_out_name = paste0(year,"_all_grant_spending.csv")
 
 ## concatenate_usaspending parameters ##
 
-u_out_name = paste0(year,"concatenated_usaspending.csv")
+u_out_name = paste0(year,"_concatenated_usaspending.csv")
 
 ##aggregate_usaspending parameters##

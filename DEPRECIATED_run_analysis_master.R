@@ -34,9 +34,12 @@ filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPREC
 source("src/depreciated/DEPRECIATED_error_check_contracts.R")
 source("src/depreciated/DEPRECIATED_error_check_grants.R")
 
-## Run concatenate function on usaspending data
+## Run concatenate function to combine usaspending contracts and grants data
 source("src/concatenate_usaspending.R")
-c_usaspending(pattern = paste0(year, "_DEPRECIATED.+\\.csv"), u_out_name)
+c_usaspending(pattern = paste0(year, "_DEPRECIATED.+\\.csv"))
+
+#ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(year, "_DEPRECIATED.+\\.csv"), full.names = TRUE)
+#c_usaspending(ufile_name, u_out_name)
 
 
 
