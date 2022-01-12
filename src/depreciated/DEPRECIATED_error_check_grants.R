@@ -38,7 +38,9 @@ grants <- grants %>%
 # Rbind grants_missing_implan back into original grants dataframe
 grants <- rbind(grants, grants_missing_implan)
 
-#select needed columns
+#select needed columns for va benefits and grants
+va_benefits <- va_benefits %>%
+  select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district")
 grants <- grants %>%
   select("federal_action_obligation", "recipient_county_name", "recipient_congressional_district", "implan_code")
 

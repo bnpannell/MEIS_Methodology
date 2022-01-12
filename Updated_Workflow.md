@@ -27,7 +27,7 @@ This document is the updated work flow that both versions of the master code sho
 
 12. Error check for District values - fix NA and "90" values for Districts in data
 
-13. Deal with employment data
+13. Aggregate data into respective counties and districts. This includes dealing with the employment data.
 
 14. Parse out data into sheets to put into IMPLAN
 

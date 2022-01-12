@@ -30,12 +30,13 @@ gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0("DEPRECIATED_", c_out_name))
 filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPRECIATED_", g_out_name))
 
-## Run error check on data
+## Run error check on data - including manual fixes mentioned in methodology
 source("src/depreciated/DEPRECIATED_error_check_contracts.R")
 source("src/depreciated/DEPRECIATED_error_check_grants.R")
 
 ## Run concatenate function on usaspending data
-source("src/depreciated/DEPRECIATED_concatenate_usaspending.R")
+source("src/concatenate_usaspending.R")
+c_usaspending(pattern = paste0(year, "_DEPRECIATED.+\\.csv"), u_out_name)
 
 
 

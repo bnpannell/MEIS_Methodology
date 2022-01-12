@@ -1,10 +1,9 @@
 #Defines function "concatenate_usaspending" 
 
-c_usaspending <- function(pattern) {
+c_usaspending <- function(pattern, out_name) {
   files <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pattern, full.names = TRUE)
   tables <- lapply(files, read.csv, header = TRUE, )
   tables = tables[-3]
   return(do.call(rbind, tables))
+  write.csv((file.path(getwd(), "data", "temp", out_name)))
 }
-
-usaspending2 <- c_usaspending(pattern = paste0(year, "_DEPRECIATED.+\\.csv"))
