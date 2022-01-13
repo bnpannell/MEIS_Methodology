@@ -61,8 +61,21 @@ c_out_name = paste0(year,"_all_contract_spending.csv")
 g_out_name = paste0(year,"_all_grant_spending.csv")
 
 
-## concatenate_usaspending parameters ##
+##concatenate_usaspending parameters##
 u_out_name = paste0(year,"_concatenated_usaspending.csv")
 
 
+##split_usaspending parameters##
+u_out_name_final = paste0(year,"_dod_dhs_va_usaspending.csv")
+doe_out_name = paste0(year,"_doe_usaspending.csv")
+vabenefits_out_name = paste0(year,"_vabenefits_usaspending.csv")
+
+
 ##aggregate_usaspending parameters##
+state_agg = c("federal_action_obligation", "implan_code")
+counties_agg = c("federal_action_obligation", "recipient_county_name", "implan_code")
+districts_agg = c("federal_action_obligation", "recipient_congressional_district", "implan_code")
+
+u_state_outname = paste0(year, "_aggregated_usaspending_statewide.csv")
+u_county_outname = paste0(year, "_aggregated_usaspending_counties.csv")
+u_district_outname = paste0(year, "_aggregated_usaspending_districts.csv")

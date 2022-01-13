@@ -9,13 +9,3 @@ split_doespending <- function(file_name) {
   read.csv(file.path(getwd(), "data", "temp", file_name)) %>%
     filter(awarding_agency_name == doe)
 }
-
-#split_usaspending <- function(dataframe, file_name) {
- # dataframe <- read.csv(file.path(getwd(), "data", "temp", file_name)) %>%
-  #  split(dataframe, dataframe$awarding_agency_name == doe)
-#}
-
-#split_usaspending <- function(dataframe, file_name) {
- #  dataframe <- read.csv(file.path(getwd(), "data", "temp", file_name)) %>%
-  #   daply(dataframe,)
-   # daply(dataframe, dataframe$awarding_agency_name == doe)
