@@ -39,7 +39,7 @@ source("src/deprecated/deprecated_error_check_grants.R")
 
 ## Run concatenate function to combine usaspending contracts and grants data, and write into CSV
 source("src/concatenate_usaspending.R")
-concatenated_usaspending <- c_usaspending(pattern = paste0(year, "_deprecated.+\\.csv"))
+concatenated_usaspending <- concat_usaspending(pattern = paste0(year, "_DEPRECATED.+\\.csv"))
 
 write.csv(concatenated_usaspending, file.path(getwd(), "data", "temp", paste0("DEPRECATED_", u_out_name)), row.names = FALSE) 
 
