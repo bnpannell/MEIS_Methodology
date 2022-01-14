@@ -1,10 +1,10 @@
 ## Error check usaspending grants data ##
 
-## See depreciated methodology section for details on manual fix to usaspending grants and grants Excel sheets prior to running below code
+## See deprecated methodology section for details on manual fix to usaspending grants and grants Excel sheets prior to running below code
 # Assuming that all manual fixes have been implemented
 
 # Load in grants CSV into dataframe
-grants <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECIATED_", g_out_name)))
+grants <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECATED_", g_out_name)))
 
 #PRIOR to applying crosswalk - take out VA benefits entries. These do not get assigned to an IMPLAN code.
 va_benefits <- grants %>%
@@ -45,5 +45,5 @@ grants <- grants %>%
   select("federal_action_obligation", "awarding_agency_name", "recipient_county_name", "recipient_congressional_district", "implan_code")
 
 # Write grants and VA benefits CSVs into temp folder
-write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_grant_data.csv")), row.names = FALSE)
-write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECIATED_cleaned_usaspending_va_benefits_data.csv")), row.names = FALSE)
+write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECATED_cleaned_usaspending_grant_data.csv")), row.names = FALSE)
+write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECATED_cleaned_usaspending_va_benefits_data.csv")), row.names = FALSE)
