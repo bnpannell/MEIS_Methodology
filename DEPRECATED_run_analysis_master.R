@@ -1,4 +1,4 @@
-##DEPRECIATED## 
+##deprecated## 
 ## Clear Environment##
 rm(list = ls(all.names = TRUE))
 
@@ -28,18 +28,18 @@ gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 
 ##Filter files, save new output
 
-filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0("DEPRECIATED_", c_out_name))
-filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPRECIATED_", g_out_name))
+filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0("deprecated_", c_out_name))
+filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("deprecated_", g_out_name))
 
 
 ## Run error check on data - including manual fixes mentioned in methodology
-source("src/depreciated/DEPRECIATED_error_check_contracts.R")
-source("src/depreciated/DEPRECIATED_error_check_grants.R")
+source("src/deprecated/deprecated_error_check_contracts.R")
+source("src/deprecated/deprecated_error_check_grants.R")
 
 
 ## Run concatenate function to combine usaspending contracts and grants data, and write into CSV
 source("src/concatenate_usaspending.R")
-concatenated_usaspending <- c_usaspending(pattern = paste0(year, "_DEPRECIATED.+\\.csv"))
+concatenated_usaspending <- c_usaspending(pattern = paste0(year, "_deprecated.+\\.csv"))
 
 write.csv(concatenated_usaspending, file.path(getwd(), "data", "temp", paste0("DEPRECATED_", u_out_name)), row.names = FALSE) 
 
@@ -59,3 +59,7 @@ statewide_aggregate(usaspending, u_state_outname)
 statewide_aggregate(doespending, doe_state_outname)
 
 va_benefits_stateagg <- sum(va_benefits$federal_action_obligation)
+
+
+
+## Run for loop code to get activity sheets generated for counties and districts
