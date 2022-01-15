@@ -1,38 +1,35 @@
-## BLANK SHEETS FOR MULTI-SHEET EXCEL ##
-#These are the blank sheets from the activity sheet - they'll be combined with the aggregated data to create a multi-sheet excel doc
-CommodityOutput2 <- read_excel("CommodityOutput2.xlsx")
-LaborIncomeChange3 <- read_excel("LaborIncomeChange3.xlsx")
-HouseholdSpendingChange4 <- read_excel("HouseholdSpendingChange4.xlsx")
-IndustrySpendingPattern5 <- read_excel("IndustrySpendingPattern5.xlsx")
-InstitutionSpendingPattern6 <- read_excel("InstitutionSpendingPattern6.xlsx")
+## Code for generating county and district IMPLAN activity sheets
 
-## LIST OF UNIQUE COUNTIES AND DISTRICTS ## 
+#These are the blank sheets from the activity sheet - they'll be combined with the aggregated data to create a multi-sheet excel doc for IMPLAN
+CommodityOutput2 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "CommodityOutput2.xlsx")))
+LaborIncomeChange3 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "LaborIncomeChange3.xlsx")))
+HouseholdSpendingChange4 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "HouseholdSpendingChange4.xlsx")))
+IndustrySpendingPattern5 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "IndustrySpendingPattern5.xlsx")))
+InstitutionSpendingPattern6 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "InstitutionSpendingPattern6.xlsx")))
 
-# List of all unique counties included in all sheets (looks like there are only 55 counties where spending happened)
-countynames <- unique(c(unique(usaspending[[1]][["county"]]), unique(usaspending[[2]][["county"]]), 
-                        unique(usaspending[[3]][["county"]]), unique(usaspending[[4]][["county"]]), 
-                        unique(usaspending[[5]][["county"]]), unique(usaspending[[6]][["county"]])))
 
-# Gives you all of the congressional districts 
-congressid <- unique(c(unique(usaspending[[1]][["district"]]), unique(usaspending[[2]][["district"]]), 
-                       unique(usaspending[[3]][["district"]]), unique(usaspending[[4]][["district"]]), 
-                       unique(usaspending[[5]][["district"]]), unique(usaspending[[6]][["district"]])))
+## Create a list of unique counties and districts to read into the for loop
+countynames <- unique(c(unique(usaspending[3])))
+#view(countynames)
+
+congressid <- unique(c(unique(usaspending[4])))
+#view(congressid)
 
 
 ## LOOP FOR SPENDING PER COUNTY AND INVERSE SPENDING PER COUNTY ##
 for (county in countynames){
   temp <- NULL
   for(sheet_num in 1:length(usaspending)){
-    j <- which(usaspending[[sheet_num]][["county"]] == county)
-    temp <- rbind(temp, usaspending[[sheet_num]][j,])
+    j <- which(usaspending[3] == county)
+    temp <- rbind(temp, usaspending[3][j,])
   } 
   temp <- aggregate(temp$federal_action_obligation, by=list(temp$implan_code), FUN=sum) #this line aggregates the data by sector
   colnames(temp) <- c("Sector", "Event_value") #change the column names to match activity sheet
-  usaemp_county$totalemployment <- 0 #create new employment column
-  m <- which(usaemp_county$county == county)
+  county_emp$totalemployment <- 0 #create new employment column
+  m <- which(county_emp$county == county)
   temp$Employment <- ""
-  temp <- rbind(temp, c(545, "", usaemp_county$implan_545[which(usaemp_county$county == county)])) #add employment to temp for 545
-  temp <- rbind(temp, c(546, "", usaemp_county$implan_546[which(usaemp_county$county == county)])) #add employment to temp for 546
+  temp <- rbind(temp, c(545, "", county_emp$implan_545[which(county_emp$county == county)])) #add employment to temp for 545
+  temp <- rbind(temp, c(546, "", county_emp$implan_546[which(county_emp$county == county)])) #add employment to temp for 546
   #create extra columns for the first sheet (temp)
   temp$Employee_Compensation <- ""
   temp$Proprieter_Income <- ""
@@ -45,7 +42,7 @@ for (county in countynames){
                 c("","","","","","","",""),
                 c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                 temp)
-  HouseholdSpendingChange4[5,2] <- as.character(HHSpendCH_county[which(HHSpendCH_county$county == county), 2]) #update household spending by county
+  HouseholdSpendingChange4[5,2] <- as.character(va_benefits_countiesagg[which(va_benefits_countiesagg$recipient_county_name == county), 2]) #update household spending by county
   temp <- rbind(temp, c("temp", "0", "0")) #add fake 0s to make the line below work
   temp <- temp[-(which(temp[,2]=="0" | temp[,3]=="0")),] #delete 0s
   #put sheets into a list. This list will turn into the excel file.
@@ -65,8 +62,8 @@ for (county in countynames){
   }
   #add inverse employment data to tempooc doc
   tempooc$Employment <- ""
-  tempooc <- rbind(tempooc, c(545, "", usaemp_county$inverse_545[which(usaemp_county$county == county)]))
-  tempooc <- rbind(tempooc, c(546, "", usaemp_county$inverse_546[which(usaemp_county$county == county)]))
+  tempooc <- rbind(tempooc, c(545, "", county_emp$inverse_545[which(county_emp$county == county)]))
+  tempooc <- rbind(tempooc, c(546, "", county_emp$inverse_546[which(county_emp$county == county)]))
   #add extra sheets to inverse doc
   tempooc$Employee_Compensation <- ""
   tempooc$Proprieter_Income <- ""
