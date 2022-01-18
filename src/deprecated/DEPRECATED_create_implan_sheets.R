@@ -21,7 +21,7 @@ for (county in countynames){
   temp <- NULL
   for(sheet_num in 1:length(usaspending)){
     j <- which(usaspending[3] == county)
-    temp <- rbind(temp, usaspending[3][j,])
+    temp <- rbind(temp, usaspending[j,])
   } 
   temp <- aggregate(temp$federal_action_obligation, by=list(temp$implan_code), FUN=sum) #this line aggregates the data by sector
   colnames(temp) <- c("Sector", "Event_value") #change the column names to match activity sheet
@@ -42,7 +42,7 @@ for (county in countynames){
                 c("","","","","","","",""),
                 c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                 temp)
-  HouseholdSpendingChange4[5,2] <- as.character(va_benefits_countiesagg[which(va_benefits_countiesagg$recipient_county_name == county), 2]) #update household spending by county
+  HouseholdSpendingChange4[5,2] <- as.character(as.list(va_benefits_countiesagg[which(va_benefits_countiesagg$recipient_county_name == county), 2])) #update household spending by county
   temp <- rbind(temp, c("temp", "0", "0")) #add fake 0s to make the line below work
   temp <- temp[-(which(temp[,2]=="0" | temp[,3]=="0")),] #delete 0s
   #put sheets into a list. This list will turn into the excel file.
@@ -54,7 +54,7 @@ for (county in countynames){
   write.xlsx(templist, paste0("Output/", county, ".xlsx"), colNames = FALSE) #note that "output" is where your sheets will end up
   print(paste(county, ":", (length(templist[["Industry Change"]][["Sector"]])-4)))
   #tempooc is the INVERSE sheet
-  tempooc <- CATotals
+  tempooc <- usaspending
   temp <- temp[-(1:4),]
   for (i in 1:nrow(temp)){
     n <- which(tempooc$Group.1 == temp$Sector[i])
@@ -76,7 +76,7 @@ for (county in countynames){
                    c("","","","","","","",""),
                    c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                    tempooc)
-  HouseholdSpendingChange4[5,2] <- as.character(HHSpendCH_county[which(HHSpendCH_county$county == county), 3]) #update household spending by county (in)
+  HouseholdSpendingChange4[5,2] <- as.character(va_benefits_countiesagg[which(va_benefits_countiesagg$county == county), 3]) #update household spending by county (in)
   tempooc <- rbind(tempooc, c("temp", "0", "0"))
   tempooc <- tempooc[-(which(tempooc[,2]=="0" | tempooc[,3]=="0")),]
   #put all sheets into one list
@@ -88,6 +88,14 @@ for (county in countynames){
   write.xlsx(tempooclist, paste0("Output/", county, "in.xlsx"), colNames = FALSE) #Output is the folder name
   print(paste(county, "(in) :", (length(tempooclist[["Industry Change"]][["Group.1"]])-4)))
 }
+
+
+
+
+
+
+
+
 
 ## LOOP FOR SPENDING PER DISTRICT AND INVERSE SPENDING PER DISTRICT ##
 for (district in congressid){

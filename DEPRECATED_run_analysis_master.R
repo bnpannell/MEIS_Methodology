@@ -60,8 +60,8 @@ statewide_aggregate(usaspending, u_state_outname)
 statewide_aggregate(doespending, doe_state_outname)
 
 va_benefits_stateagg <- sum(va_benefits$federal_action_obligation)
-va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$county), FUN=sum)
-va_benefits_districtsagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$county), FUN=sum)
+va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_county_name), FUN=sum)
+va_benefits_districtsagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_congressional_district), FUN=sum)
 
 
 ## Define and/or read in employment data for purposes of the statewide, county, and district IMPLAN activity sheets
@@ -70,12 +70,14 @@ state_civilianemp =  (2526+(155282*.142)) + 34641 + (9807 + 9235 + 5612 + 38894)
 
 state_doeemp = 358 * 0.550142248
 
-county_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "2021_employment_totals.xlsx")), sheet=1) %>%
+county_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "2021_employment_totals.xlsx")), sheet=1) 
+county_emp <- county_emp %>%
   mutate(inverse_545 = (sum(county_emp$implan_545)) - county_emp$implan_545,
          inverse_546 = (sum(county_emp$implan_546)) - county_emp$implan_546) %>%
   select(-(total))
 
-district_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "2021_employment_totals.xlsx")), sheet=2) %>%
+district_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "2021_employment_totals.xlsx")), sheet=2) 
+district_emp <- district_emp %>%
   mutate(inverse_545 = (sum(district_emp$implan_545)) - district_emp$implan_545,
          inverse_546 = (sum(district_emp$implan_546)) - district_emp$implan_546) %>%
   select(-(total))
