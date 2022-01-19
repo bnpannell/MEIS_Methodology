@@ -64,7 +64,7 @@ va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=l
 va_benefits_districtsagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_congressional_district), FUN=sum)
 
 
-## Define and/or read in employment data for purposes of the statewide, county, and district IMPLAN activity sheets
+## Define and/or read in employment data for purposes of the statewide, county, and district IMPLAN activity sheets  **Need to make separate file to contain these values
 state_miliemp = 167761 + (57100 * 0.1825)
 state_civilianemp =  (2526+(155282*.142)) + 34641 + (9807 + 9235 + 5612 + 38894)
 
