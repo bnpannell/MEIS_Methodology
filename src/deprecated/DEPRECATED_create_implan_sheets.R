@@ -10,9 +10,11 @@ InstitutionSpendingPattern6 <- read_excel(path = (file.path(getwd(), "data", "ra
 
 ##Create a list of unique counties and districts to read into the for loop
 countynames <- unique(usaspending[,3])
+countynames <- countynames[countynames!=""] 
 #view(countynames)
 
-congressid <- unique(usaspending[,4])
+congressid <- as.character(unique(usaspending[,4]))
+
 #view(congressid)
 
 
@@ -90,7 +92,12 @@ for (county in countynames){
 }
 
 ## LOOP FOR "NORMAL" IMPLAN ACTIVITY SHEETS PER DISTRICT ##
+# Account for districts without spending data # 
+va_benefits_districtsagg <- merge(va_benefits_districtsagg, data.frame(id = congressid), by.x = "Group.1", by.y = "id", all.y = TRUE)
+va_benefits_districtsagg$x[is.na(va_benefits_districtsagg$x)] <- 0 
+
 for (district in congressid){
+  #print(paste(district, class(district)))
   k <- which(usaspending[4] == district)
   temp2 <- usaspending[k,]
   temp2 <- aggregate(temp2$federal_action_obligation, by=list(temp2$implan_code), FUN=sum) #this line aggregates the data by sector
@@ -106,8 +113,8 @@ for (district in congressid){
   temp2$EventYear <- 2020
   temp2$Retail <- "No"
   temp2$Local_Direct_Purchase <- "100%"
-  #add rows to top of sheet to match needed formatting 
-  temp2 <- rbind(c("Activity Type", "Activity Name",    "Activity Level","",    "Activity Year","","",""),    
+  #add rows to top of sheet to match needed formatting
+  temp2 <- rbind(c("Activity Type", "Activity Name",    "Activity Level","",    "Activity Year","","",""),
                 c("Industry Change", "Industry Purchases",    "1","",    "2020","","",""),
                 c("","","","","","","",""),
                 c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
@@ -116,10 +123,10 @@ for (district in congressid){
   temp2 <- rbind(temp2, c("temp2", "0", "0")) #add fake 0s to make the line below work
   temp2 <- temp2[-(which(temp2[,2]=="0" | temp2[,3]=="0")),] #delete 0s
   #put sheets into a list. This list will turn into the excel file.
-  temp2list <- list("Industry Change" = temp, "Commodity Output" = CommodityOutput2, 
+  temp2list <- list("Industry Change" = temp2, "Commodity Output" = CommodityOutput2,
                    "Labor Income Change" = LaborIncomeChange3, "Household Spending Change" = HouseholdSpendingChange4,
-                   "Industry Spending Pattern" = IndustrySpendingPattern5, 
-                   "Institution Spending Pattern" = InstitutionSpendingPattern6) 
+                   "Industry Spending Pattern" = IndustrySpendingPattern5,
+                   "Institution Spending Pattern" = InstitutionSpendingPattern6)
   #write into multi-sheet excel file
   output_dep_d <- file.path("output/DEPRECATED_districts//")
   dir.create(output_dep_d)
@@ -127,4 +134,4 @@ for (district in congressid){
   print(paste(district, ":", (length(temp2list[["Industry Change"]][["Sector"]])-4)))
 }
 
-district = 2
+
