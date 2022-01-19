@@ -2,10 +2,19 @@
 
 split_usaspending <- function(file_name, is_doe) {
   temp_data = read.csv(file.path(getwd(), "data", "temp", file_name))
+<<<<<<< HEAD
   if(is_doe) {
     filter(temp_data, awarding_agency_name == doe)
   }
     else {
       filter(temp_data, awarding_agency_name != doe)
     }
+=======
+  if (is_doe) {
+    filter(temp_data, awarding_agency_name == doe)
+  }
+  else {
+    filter(temp_data, awarding_agency_name != doe)
+  }
+>>>>>>> 43100b1b657cbea4e8576e10efe26de65ae61f73
 }
