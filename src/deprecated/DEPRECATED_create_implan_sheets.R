@@ -14,7 +14,6 @@ countynames <- countynames[countynames!=""]
 #view(countynames)
 
 congressid <- as.character(unique(usaspending[,4]))
-
 #view(congressid)
 
 
@@ -133,5 +132,3 @@ for (district in congressid){
   write.xlsx(temp2list, paste0(output_dep_d, "CA-", district, ".xlsx"), colNames = FALSE)
   print(paste(district, ":", (length(temp2list[["Industry Change"]][["Sector"]])-4)))
 }
-
-
