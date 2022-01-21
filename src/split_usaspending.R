@@ -8,12 +8,4 @@ split_usaspending <- function(file_name, is_doe) {
     else {
       filter(temp_data, awarding_agency_name != doe)
     }
-
-  if (is_doe) {
-    filter(temp_data, awarding_agency_name == doe)
-  }
-  else {
-    filter(temp_data, awarding_agency_name != doe)
-  }
-
 }
