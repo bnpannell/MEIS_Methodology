@@ -12,7 +12,7 @@ library(readxl)
 library(tidyverse)  
  
 ##Load Parameters##
-source("src/parameters.R")
+source("parameters.R")
 
 
 ##Load Script files##
