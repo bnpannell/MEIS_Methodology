@@ -12,10 +12,12 @@ Update the parameters file to your desired specifications in order to prepare cu
 
 ### General Global Variables
 
-
-f_year = "2020" #Fiscal year of target data 
-year = "2021" #report output year
-state = "CALIFORNIA"
+- f_year:
+  - Accepted values: A four digit year of the fiscal year of data (may be different than the report year) in double quotes
+- year:
+  - Accepted values: A four digit year of the expected publication date of the study in double quotes
+- state:
+  - Accepted values: The target state of the study, in upper case wrapped in double quotes  
 
 ### obtain_usaspending.R Parameters
 With the exception of 'tier_name,' variables under "Required" MUST have an accepted value entry or the USAspending API will not run.
@@ -100,7 +102,7 @@ Department of Energy (DOE) data has a special additional filtering step, not all
 
 - doe = "DEPARTMENT OF ENERGY (DOE)"
 - doe_offices: 
-    - Accepted values are DOE subtier agencies that are considered to be part of defense spending, names should be in "", comma seperated and   upper case
+    - Accepted values are DOE subtier agencies that are considered to be part of defense spending, names should be in "", comma separated and   upper case
       - Example: "MISSILE DEFENSE AGENCY"
 - grant_columns:
   - Accepted values are column headers for data columns you wish to keep in the output file for grants data, exactly as written in the file and in "".
@@ -118,7 +120,23 @@ Department of Energy (DOE) data has a special additional filtering step, not all
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
     - Example: paste0(year,"_all_grant_spending.csv")
 
-### error_check_contracts_data.R Parameters
+##concatenate_usaspending parameters##
+- u_out_name:
+  - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable 
+    - Example: paste0(year,"_concatenated_usaspending.csv")
 
-n2i_dup <- c(111191, 111366, 332117, 335220)
+
+##aggregate_usaspending parameters##
+- u_state_outname:
+  - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
+    - Example: paste0(year, "_aggregated_usaspending_statewide.csv")
+- doe_state_outname:
+  - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
+    -Example: paste0(year, "_aggregated_doespending_statewide.csv")
+    
+## Additional Notes
+If you are repeating the 2021 California study, pay attention to what sections of the "DEPRECATED_ruN_analysis_master.R" you are running. There is a break between obtaining, filtering and cleaning data where the user will have to manually edit errors in the data and save the files to the correct folders before continuing the code. See ([Link to documentation]) for detailed instructions. 
+
+The "run_analysis_master.R"" code follows similar conventions, but is updated to correct errors in data in a more automated way. Follow instructions in the code comments. 
+
 

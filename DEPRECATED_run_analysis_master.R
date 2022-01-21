@@ -1,26 +1,22 @@
-##DEPRECATED## 
+##DEPRECATED Code for 2021 Report## 
+
 ## Clear Environment##
 rm(list = ls(all.names = TRUE))
 
-##Set Working Directory##
-
-
-
 ##Load Libraries##
+library(dplyr)
 library(httr)
 library(jsonlite)
-library(tidyverse)
+library(openxlsx)
 library(readxl) 
-library(dplyr)  
-library(openxlsx) 
-
-
+library(tidyverse)  
+ 
 ##Load Parameters##
 source("src/parameters.R")
 
 
-##Load Scripts to perform functions for retrieving usaspending from API, and cleaning the data down for IMPLAN##
-#source("src/obtain_usaspending.R")
+##Load Script files##
+source("src/obtain_usaspending.R")
 source("src/filter_usaspending.R")
 source("src/concatenate_usaspending.R")
 source("src/split_usaspending.R")
@@ -34,7 +30,7 @@ filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0("DEP
 filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPRECATED_", g_out_name))
 
 
-## Run error check on data - including manual fixes mentioned in methodology##
+## Run error check on data ## 
 source("src/deprecated/deprecated_error_check_contracts.R")
 source("src/deprecated/deprecated_error_check_grants.R")
 
