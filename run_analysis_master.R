@@ -5,15 +5,15 @@ rm(list = ls(all.names = TRUE))
 
 
 ##Load Libraries##
+library(dplyr)
 library(httr)
 library(jsonlite)
-library(tidyverse)
+library(openxlsx)
 library(readxl) 
-library(dplyr) 
-library(openxlsx) 
+library(tidyverse) 
 
 ##Load Parameters##
-source("src/parameters.R")
+source("parameters.R")
 
 ##Load Scripts##
 #source("src/obtain_usaspending.R")

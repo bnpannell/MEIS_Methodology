@@ -15,12 +15,12 @@ library(tidyverse)
 source("parameters.R")
 
 
-##Load Script files##
+##Load Function Scripts##
 source("src/obtain_usaspending.R")
 source("src/filter_usaspending.R")
 source("src/concatenate_usaspending.R")
 source("src/split_usaspending.R")
-
+source("src/aggregate_usaspending.R")
 
 ##Load in usaspending contract and grants files from temp folder as variable for filtering, and save new data back into temp folder##
 cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
@@ -51,7 +51,7 @@ doespending <- split_usaspending(ufile_name, TRUE)
 ##Aggregate the DOD/DHS/VA usaspending, DOE usaspending, and VA benefits for statewide numbers## 
 #this gives you all the spending info for the statewide usaspending IMPLAN activity sheet and the statewide DOE IMPLAN activity sheet
 #as well as the VA benefits at the state, county, and district level (for the Household Spending tab in the IMPLAN activity sheet)
-source("src/aggregate_usaspending.R")
+
 
 statewide_aggregate(usaspending, u_state_outname)
 statewide_aggregate(doespending, doe_state_outname)
