@@ -11,7 +11,7 @@ state = "CALIFORNIA"
 
 #anything else that doesn't fit into a category below 
 
-
+#enter multiplier for reserves here 
 
 
 ##USAspending.gov Filter Parameters##
