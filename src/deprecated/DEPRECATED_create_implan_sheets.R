@@ -7,15 +7,11 @@ HouseholdSpendingChange4 <- read_excel(path = (file.path(getwd(), "data", "raw",
 IndustrySpendingPattern5 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "IndustrySpendingPattern5.xlsx")))
 InstitutionSpendingPattern6 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "InstitutionSpendingPattern6.xlsx")))
 
-
 ##Create a list of unique counties and districts to read into the for loop
 countynames <- unique(usaspending[,3])
 countynames <- countynames[countynames!=""] 
-#view(countynames)
 
 congressid <- as.character(unique(usaspending[,4]))
-#view(congressid)
-
 
 ##LOOP FOR "NORMAL" AND INVERSE IMPLAN ACTIVITY SHEETS PER COUNTY
 for (county in countynames){
@@ -31,7 +27,7 @@ for (county in countynames){
   #create extra columns for the first sheet (temp)
   temp$Employee_Compensation <- ""
   temp$Proprieter_Income <- ""
-  temp$EventYear <- 2020
+  temp$EventYear <- as.integer(f_year)
   temp$Retail <- "No"
   temp$Local_Direct_Purchase <- "100%"
   #add rows to top of sheet to match needed formatting 
@@ -49,7 +45,7 @@ for (county in countynames){
                    "Industry Spending Pattern" = IndustrySpendingPattern5, 
                    "Institution Spending Pattern" = InstitutionSpendingPattern6) 
   #write into multi-sheet excel file
-  output_dep_c <- file.path("output/DEPRECATED_counties//")
+  output_dep_c <- file.path("output", paste0("DEPRECATED_IMPLAN_", year, "_counties//"))
   dir.create(output_dep_c)
   write.xlsx(templist, paste0(output_dep_c, county, ".xlsx"), colNames = FALSE)
   print(paste(county, ":", (length(templist[["Industry Change"]][["Sector"]])-4)))
@@ -68,7 +64,7 @@ for (county in countynames){
   #add extra sheets to inverse doc
   tempooc$Employee_Compensation <- ""
   tempooc$Proprieter_Income <- ""
-  tempooc$EventYear <- 2020
+  tempooc$EventYear <- as.integer(f_year)
   tempooc$Retail <- "No"
   tempooc$Local_Direct_Purchase <- "100%"  
   #add four additional rows to top of spreadsheet to match needed formatting 
@@ -109,7 +105,7 @@ for (district in congressid){
   #create extra columns for the first sheet (temp2)
   temp2$Employee_Compensation <- ""
   temp2$Proprieter_Income <- ""
-  temp2$EventYear <- 2020
+  temp2$EventYear <- as.integer(f_year)
   temp2$Retail <- "No"
   temp2$Local_Direct_Purchase <- "100%"
   #add rows to top of sheet to match needed formatting
@@ -127,7 +123,7 @@ for (district in congressid){
                    "Industry Spending Pattern" = IndustrySpendingPattern5,
                    "Institution Spending Pattern" = InstitutionSpendingPattern6)
   #write into multi-sheet excel file
-  output_dep_d <- file.path("output/DEPRECATED_districts//")
+  output_dep_d <- file.path("output", paste0("DEPRECATED_IMPLAN_", year, "_districts//"))
   dir.create(output_dep_d)
   write.xlsx(temp2list, paste0(output_dep_d, "CA-", district, ".xlsx"), colNames = FALSE)
   print(paste(district, ":", (length(temp2list[["Industry Change"]][["Sector"]])-4)))
