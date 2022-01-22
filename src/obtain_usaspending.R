@@ -1,4 +1,4 @@
-# Build framework for manditory filters first
+# Build framework for mandatory filters first
 body = list(
   filters = list(
     agencies = data.frame(
@@ -13,7 +13,6 @@ body = list(
   file_format = "csv" 
 )
 # Check for Optional Filters, add to framework if found
-#Check and add award filters
 if(exists("awards")){
   body$filters[["prime_award_types"]] <- awards
 }
@@ -28,7 +27,6 @@ if(length(ls(pattern="recipient_locations"))>0){
   body$filters[["recipient_locations"]] <- do.call(cbind.data.frame, location_list)
 
 }
-#Further filter additions will require additional code 
 
 #Format filter body 
 toJSON(body, pretty=T)

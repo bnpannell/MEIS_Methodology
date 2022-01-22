@@ -15,18 +15,24 @@ library(tidyverse)
 source("parameters.R")
 
 ##Load Function Scripts##
-source("src/obtain_usaspending.R")
 source("src/filter_usaspending.R")
 source("src/concatenate_usaspending.R")
 source("src/split_usaspending.R")
 source("src/aggregate_usaspending.R")
 
-##Load in usaspending contract and grants files from temp folder as variable for filtering, and save new data back into temp folder##
+##Obtain USASpending.gov Data##
+source("src/obtain_usaspending.R")
+
+##Load in USASpending.gov Data##
 cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
 gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
 
+#Filter Data##
 filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0("DEPRECATED_", c_out_name))
 filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPRECATED_", g_out_name))
+
+
+
 
 
 ## Run error check on data ## 

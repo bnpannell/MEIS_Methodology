@@ -1,8 +1,5 @@
 ## Error check usaspending grants data ##
 
-## See deprecated methodology section for details on manual fix to usaspending grants and grants Excel sheets prior to running below code
-# Assuming that all manual fixes have been implemented
-
 # Load in grants CSV into dataframe
 grants <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECATED_", g_out_name)))
 
@@ -28,6 +25,7 @@ grants$implan_code[grants$recipient_name == "LELAND STANFORD JUNIOR UNIVERSITY, 
 
 
 #Take out grant entries that were not assigned an IMPLAN code, and manually code them. Remove these entries from the original "grants" dataframe
+##DOUBLE CHECK IF THIS SECTION IS ACTUALLY NEEDED, WE DONT DO ANYTHING WITH IT AND HAVE NO INSTRUCTIONS ON ADDING CODE BACK IN AND DOING A RECHECK##
 
 grants_missing_implan <- grants %>%
   filter(is.na(implan_code))

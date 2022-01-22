@@ -1,8 +1,5 @@
 ## Error check usaspending contracts data ##
 
-## See deprecated methodology section for details on manual fix to usaspending contracts and grants Excel sheets prior to running below code
-# Assuming that all manual fixes have been implemented
-
 # Load in contracts CSV into dataframe
 contracts <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECATED_", c_out_name)))
 
@@ -16,21 +13,17 @@ naics_to_implan$implan_code[naics_to_implan$naics_code == 335220] <- 327
 naics_to_implan$implan_code[naics_to_implan$naics_code == 332117] <- 231
 naics_to_implan <- naics_to_implan[!duplicated(naics_to_implan), ] #delete duplicate rows
 
-# this gives you any codes where naics is paired up with multiple implan_codes
-# naics_to_implan[duplicated(naics_to_implan$naics_code),]
-
-
 # Apply crosswalk to contracts, and check for entries that do not have a NAICS code
 contracts <- merge(contracts, naics_to_implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
 
-# For entries with no NAICS code at all - manually assign IMPLAN codes based on recipient's industry
+# For entries with no NAICS code at all - assign IMPLAN codes based on recipient's industry
 contracts$implan_code[contracts$recipient_name == "IMPERIAL IRRIGATION DISTRICT INC"] <- 530
 contracts$implan_code[contracts$recipient_name == "KAMP SYSTEMS, INC"] <- 244
 contracts$implan_code[contracts$recipient_name == "SCIENCE APPLICATIONS INTERNATIONAL CORPORATION"] <- 459
 contracts$implan_code[contracts$recipient_name == "DRS SENSORS & TARGETING SYSTEMS, INC."] <- 514
 contracts$implan_code[contracts$recipient_name == "KEYSTONE ENGINEERING COMPANY I"] <- 457
 
-#Take out contract entries that were not assigned an IMPLAN code, and manually code them. Remove these entries from the original "contracts" dataframe
+#Take out contract entries that were not assigned an IMPLAN code, and code them. Remove these entries from the original "contracts" dataframe
 contracts_missing_implan <- contracts %>%
   filter(is.na(implan_code)) %>%
   mutate(implan_code = case_when(
