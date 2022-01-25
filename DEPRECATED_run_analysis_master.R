@@ -23,7 +23,7 @@ source("src/split_usaspending.R")
 source("src/aggregate_usaspending.R")
 
 ##Obtain USASpending.gov Data##
-source("src/obtain_usaspending.R")
+#source("src/obtain_usaspending.R")
 
 ##Load in USASpending.gov Data##
 cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
@@ -71,13 +71,11 @@ state_civilianemp =  (2526+(155282*.142)) + 34641 + (9807 + 9235 + 5612 + 38894)
 
 state_doeemp = 358 * 0.550142248
 
-county_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", 2021_employment_totals.xlsx")), sheet=1) 
 county_emp <- county_emp %>%
   mutate(inverse_545 = (sum(county_emp$implan_545)) - county_emp$implan_545,
          inverse_546 = (sum(county_emp$implan_546)) - county_emp$implan_546) %>%
   select(-(total))
 
-district_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=2) 
 district_emp <- district_emp %>%
   select(-(total))
 

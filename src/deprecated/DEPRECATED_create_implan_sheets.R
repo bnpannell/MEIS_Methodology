@@ -12,8 +12,14 @@ countynames <- unique(usaspending[,3])
 countynames <- countynames[countynames!=""] 
 
 congressid <- as.character(unique(usaspending[,4]))
+congressid <- congressid[congressid!=90] 
+congressid <- congressid[!(is.na(congressid))]
 
 ##LOOP FOR "NORMAL" AND INVERSE IMPLAN ACTIVITY SHEETS PER COUNTY
+# Account for counties without spending data # 
+va_benefits_countiesagg <- merge(va_benefits_countiesagg, data.frame(county = countynames), by.x = "Group.1", by.y = "county", all.y = TRUE)
+va_benefits_countiesagg$x[is.na(va_benefits_countiesagg$x)] <- 0
+
 for (county in countynames){
     j <- which(usaspending[3] == county)
     temp <- usaspending[j,]
@@ -46,7 +52,7 @@ for (county in countynames){
                    "Institution Spending Pattern" = InstitutionSpendingPattern6) 
   #write into multi-sheet excel file
   output_dep_c <- file.path("output", paste0("DEPRECATED_IMPLAN_", year, "_counties//"))
-  dir.create(output_dep_c)
+  if(!dir.exists(output_dep_c)){dir.create(output_dep_c)}
   write.xlsx(templist, paste0(output_dep_c, county, ".xlsx"), colNames = FALSE)
   print(paste(county, ":", (length(templist[["Industry Change"]][["Sector"]])-4)))
   #tempooc is the INVERSE sheet
@@ -124,7 +130,7 @@ for (district in congressid){
                    "Institution Spending Pattern" = InstitutionSpendingPattern6)
   #write into multi-sheet excel file
   output_dep_d <- file.path("output", paste0("DEPRECATED_IMPLAN_", year, "_districts//"))
-  dir.create(output_dep_d)
+  if(!dir.exists(output_dep_d)){dir.create(output_dep_d)}
   write.xlsx(temp2list, paste0(output_dep_d, "CA-", district, ".xlsx"), colNames = FALSE)
   print(paste(district, ":", (length(temp2list[["Industry Change"]][["Sector"]])-4)))
 }

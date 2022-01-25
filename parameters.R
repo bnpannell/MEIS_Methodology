@@ -9,7 +9,10 @@ f_year = "2020" #Fiscal year of target data
 year = "2021" #report output year
 state = "CALIFORNIA"
 
-#anything else that doesn't fit into a category below 
+#user-generated file names
+county_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=1) 
+district_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=2) 
+
 
 #enter multiplier for reserves here 
 
