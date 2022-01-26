@@ -2,22 +2,21 @@
 #Comment out parameters that are not needed. 
 #For specific instructions on how to use this file, see README.md
 
-##General Global Variable Parameters##
-
-#need file naming conventions
+##General Global Variables##
 f_year = "2020" #Fiscal year of target data 
 year = "2021" #report output year
 state = "CALIFORNIA"
 
-#user-generated file names
+#User-Generated Employment Files
 county_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=1) 
 district_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=2) 
 
+res_mult = 0.1825
+national_sus_dhs = 155282
+sus_dhs_mult = .142
+doe_ns_adjustment = 0.550142248
 
-#enter multiplier for reserves here 
-
-
-##USAspending.gov Filter Parameters##
+##USAspending.gov Filter Variables##
 
 ##THE FOLLOWING FILTERS ARE MANDATORY AND MUST HAVE A VALID VALUE FOR THE SCRIPT TO RUN
 
@@ -45,7 +44,7 @@ recipient_locations_state = c("CA")
 #recipient_locations_district = c() 
 
 
-##filter_usaspending parameters##
+##filter_usaspending variables##
 doe = "DEPARTMENT OF ENERGY (DOE)"
 doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE FORCE",
                         "DEF ADVANCED RESEARCH PROJECTS AGCY", "DEPT OF COMMERCE NIST", "DOD SUPPLY ACTIVITY",
@@ -64,10 +63,10 @@ c_out_name = paste0(year,"_all_contract_spending.csv")
 g_out_name = paste0(year,"_all_grant_spending.csv")
 
 
-##concatenate_usaspending parameters##
+##concatenate_usaspending variables##
 u_out_name = paste0(year,"_concatenated_usaspending.csv")
 
 
-##aggregate_usaspending parameters##
+##aggregate_usaspending variables##
 u_state_outname = paste0(year, "_aggregated_usaspending_statewide.csv")
 doe_state_outname = paste0(year, "_aggregated_doespending_statewide.csv")

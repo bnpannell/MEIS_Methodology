@@ -37,7 +37,7 @@ filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPREC
 source("src/deprecated/deprecated_error_check_contracts.R")
 source("src/deprecated/deprecated_error_check_grants.R")
 
-##Open DEPRECATED_cleaned_usaspending_grant_data.csv, DEPRECATED_cleaned_usaspending_va_benefits_data.csv and DEPRECATED_cleaned_usaspending_contract_data.csv- the three files created by running the error check above. There are errors in the data that require manual fixes in order to be able to sucessfully group data by Congressional District. Check ([ENTER LINK TO METHODS SECTION ON HAND FIXING NA and "90" IN DISTRICTS COLUMN]) for in depth instructions##
+##Open DEPRECATED_cleaned_usaspending_grant_data.csv, DEPRECATED_cleaned_usaspending_va_benefits_data.csv and DEPRECATED_cleaned_usaspending_contract_data.csv- the three files created by running the error check above. There are errors in the data that require manual fixes in order to be able to successfully group data by Congressional District. Check ([ENTER LINK TO METHODS SECTION ON HAND FIXING NA and "90" IN DISTRICTS COLUMN]) for in depth instructions##
 
 ##ONLY RUN CODE BELOW IF YOU HAVE VERIFIED THAT THE CLEANED DATA IS SATISFACTORY, ALL DISTRICT REASIGNMENTS HAVE BEEN SAVED OR NO ALTERATIONS ARE NECESSARY##
 
@@ -66,10 +66,8 @@ va_benefits_districtsagg <- aggregate(va_benefits$federal_action_obligation, by=
 ## Define and/or read in employment data for purposes of the statewide, county, and district IMPLAN activity sheets  **Need to make separate file to contain these values
 ##Note in calculations of statewide employment for statewide IMPLAN activity sheet, and read in Excel file that provides statewide employment
 #at the county and district levels for their respective IMPLAN activity sheets
-state_miliemp = 167761 + (57100 * 0.1825)
-state_civilianemp =  (2526+(155282*.142)) + 34641 + (9807 + 9235 + 5612 + 38894)
 
-state_doeemp = 358 * 0.550142248
+source(src/"generate_employment_worksheet")
 
 county_emp <- county_emp %>%
   mutate(inverse_545 = (sum(county_emp$implan_545)) - county_emp$implan_545,
