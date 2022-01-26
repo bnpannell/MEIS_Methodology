@@ -51,10 +51,8 @@ ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)
 
-
 ##Aggregate the DOD/DHS/VA usaspending, DOE usaspending, and VA benefits for statewide numbers## 
-#this gives you all the spending info for the statewide usaspending IMPLAN activity sheet and the statewide DOE IMPLAN activity sheet
-#as well as the VA benefits at the state, county, and district level (for the Household Spending tab in the IMPLAN activity sheet)
+#this gives you all the spending info for the statewide usaspending IMPLAN activity sheet and the statewide DOE IMPLAN activity sheet, as well as the VA benefits at the state, county, and district level (for the Household Spending tab in the IMPLAN activity sheet)
 statewide_aggregate(usaspending, u_state_outname)
 statewide_aggregate(doespending, doe_state_outname)
 
@@ -62,21 +60,8 @@ va_benefits_stateagg <- sum(va_benefits$federal_action_obligation)
 va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_county_name), FUN=sum)
 va_benefits_districtsagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_congressional_district), FUN=sum)
 
-##STILL NEED TO FIX VIA CSV##
-## Define and/or read in employment data for purposes of the statewide, county, and district IMPLAN activity sheets  **Need to make separate file to contain these values
-##Note in calculations of statewide employment for statewide IMPLAN activity sheet, and read in Excel file that provides statewide employment
-#at the county and district levels for their respective IMPLAN activity sheets
-
+##Load R script that provides employment calculations at statewide, county, and congressional district levels
 source(src/"generate_employment_worksheet")
-
-county_emp <- county_emp %>%
-  mutate(inverse_545 = (sum(county_emp$implan_545)) - county_emp$implan_545,
-         inverse_546 = (sum(county_emp$implan_546)) - county_emp$implan_546) %>%
-  select(-(total))
-
-district_emp <- district_emp %>%
-  select(-(total))
-
 
 ## Run for loop code to get IMPLAN activity sheets generated for counties and districts
 source("src/deprecated/DEPRECATED_create_implan_sheets.R")

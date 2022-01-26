@@ -13,6 +13,20 @@ national_sus_dhs = 155282
 sus_dhs_mult = .142
 doe_ns_adjustment = 0.550142248
 
+acs <- read_excel(file.path(getwd(), "data", "raw", paste0("2019_ACS.xlsx"))) %>%
+  select(geography, armed_forces_employed)
+dod_shares_county <- read_excel(file.path(getwd(), "data", "raw", paste0("DOD_County_Shares.xlsx")), sheet = 1)
+dod_shares_district <- read_excel(file.path(getwd(), "data", "raw", paste0("DOD_County_Shares.xlsx")), sheet = 2)
+fedprop <- read.csv(file.path(getwd(), "data", "raw", paste0("fed_prop_", year, ".csv")), stringsAsFactors = FALSE) %>%  
+  select(Reporting.Agency, Reporting.Bureau, Real.Property.Type, Real.Property.Use, Square.Feet..Buildings.,  
+         Street.Address, State.Name, County.Name, Zip.Code, Congressional.District) %>%
+  rename(Department = Reporting.Agency, Prop_type=Real.Property.Type,
+         Prop_use=Real.Property.Use, Sq_ft=Square.Feet..Buildings., Add=Street.Address, county=County.Name,
+         district=Congressional.District) %>% 
+  filter(State.Name == state) %>% #select only entries in California 
+  filter(Prop_type == "Building") %>% #select only buildings 
+  filter(Department == "VETERANS AFFAIRS" | Department == "HOMELAND SECURITY")
+
 ##USAspending.gov API Variables##
 
 ##THE FOLLOWING FILTERS ARE MANDATORY AND MUST HAVE A VALID VALUE FOR THE SCRIPT TO RUN

@@ -41,8 +41,8 @@ vignettes/*.pdf
 #Temp data folder
 /data/temp/
 
-# DOD_County_Shares_R Excel file
-/data/raw/DOD_County_Shares_R.xlsx
+# fed_prop_2021 CSV file
+/data/raw/fed_prop_2021.csv
 
 #Output folder
 /output
