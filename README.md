@@ -32,9 +32,6 @@ Update the parameters file to your desired specifications in order to prepare cu
 - sus_dhs_mult:
   - Accepted values: the multiplier for calculating the number of national suppressed federal employees in the given study region in decimal format.
     - Example: .142
-- doe_ns_adjustment:
-  - Accepted values: the multiplier for calcuating the portion of Department of Energy  
-    - Example:  0.550142248
 
 
 ### obtain_usaspending.R Parameters

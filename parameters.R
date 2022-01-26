@@ -11,7 +11,6 @@ state = "CALIFORNIA"
 res_mult = 0.1825
 national_sus_dhs = 155282
 sus_dhs_mult = .142
-doe_ns_adjustment = 0.550142248
 
 acs <- read_excel(file.path(getwd(), "data", "raw", paste0("2019_ACS.xlsx"))) %>%
   select(geography, armed_forces_employed)
