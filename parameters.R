@@ -16,7 +16,7 @@ national_sus_dhs = 155282
 sus_dhs_mult = .142
 doe_ns_adjustment = 0.550142248
 
-##USAspending.gov Filter Variables##
+##USAspending.gov API Variables##
 
 ##THE FOLLOWING FILTERS ARE MANDATORY AND MUST HAVE A VALID VALUE FOR THE SCRIPT TO RUN
 
