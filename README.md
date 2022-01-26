@@ -12,13 +12,34 @@ Select relevant master.R" file to run. The depreciated file may be used to repea
 Update the parameters file to your desired specifications in order to prepare custom defense spending data for entry into IMPLAN. 
 
 ### General Global Variables
-
 - f_year:
   - Accepted values: A four digit year of the fiscal year of data (may be different than the report year) in double quotes
 - year:
   - Accepted values: A four digit year of the expected publication date of the study in double quotes
 - state:
   - Accepted values: The target state of the study, in upper case wrapped in double quotes  
+
+###User-Generated Employment File Variables
+- county_emp:
+  - Accepted values: any form of reading in the file path to the .xlsx sheet containing the county employment data. It is recommended to follow a naming convention when entering this variable
+    - Example: read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=1)
+- district_emp:
+  - Accepted values: any form of reading in the file path to the .xlsx sheet containing the district employment data. It is recommended to follow a naming convention when entering this variable
+    - Example: read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=2) 
+
+- res_mult:
+  - Accepted values: the multiplier to calculate full time employment numbers from military reserves in decimal format.
+    - Example: 0.1825
+- national_sus_dhs:
+  - Accepted values: the number of suppressed federal employees in integer format.
+    - Example: 155282
+- sus_dhs_mult:
+  - Accepted values: the multiplier for calculating the number of national suppressed federal employees in the given study region in decimal format.
+    - Example: .142
+- doe_ns_adjustment:
+  - Accepted values: the multiplier for calcuating the portion of Department of Energy  
+    - Example:  0.550142248
+
 
 ### obtain_usaspending.R Parameters
 With the exception of 'tier_name,' variables under "Required" MUST have an accepted value entry or the USAspending API will not run.
@@ -103,7 +124,7 @@ Department of Energy (DOE) data has a special additional filtering step, not all
 
 - doe = "DEPARTMENT OF ENERGY (DOE)"
 - doe_offices: 
-    - Accepted values are DOE subtier agencies that are considered to be part of defense spending, names should be in "", comma separated and   upper case
+    - Accepted values are DOE subtier agencies that are considered to be part of defense spending, names should be in "", comma separated and upper case
       - Example: "MISSILE DEFENSE AGENCY"
 - grant_columns:
   - Accepted values are column headers for data columns you wish to keep in the output file for grants data, exactly as written in the file and in "".
