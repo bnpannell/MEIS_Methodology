@@ -8,9 +8,6 @@ year = "2021" #report output year
 state = "CALIFORNIA"
 
 #User-Generated Employment Files
-county_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=1) 
-district_emp <- read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=2) 
-
 res_mult = 0.1825
 national_sus_dhs = 155282
 sus_dhs_mult = .142
