@@ -23,13 +23,6 @@ Update the parameters file to your desired specifications in order to prepare cu
     -Example: "CALIFORNIA"
 
 ###User-Generated Employment File Variables
-- county_emp:
-  - Accepted values: any form of reading in the file path to the .xlsx sheet containing the county employment data. It is recommended to follow a naming convention when entering this variable
-    - Example: read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=1)
-- district_emp:
-  - Accepted values: any form of reading in the file path to the .xlsx sheet containing the district employment data. It is recommended to follow a naming convention when entering this variable
-    - Example: read_excel(path = (file.path(getwd(), "data", "raw", "deprecated", "2021_employment_totals.xlsx")), sheet=2) 
-
 - res_mult:
   - Accepted values: the multiplier to calculate full time employment numbers from military reserves in decimal format.
     - Example: 0.1825
