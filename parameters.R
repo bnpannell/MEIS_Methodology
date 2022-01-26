@@ -11,8 +11,8 @@ state = "CALIFORNIA"
 res_mult = 0.1825
 national_sus_dhs = 155282
 sus_dhs_mult = .142
-acs = "2019_ACS.xlsx"
-dod_shares = "DOD_County_Shares.xlsx"
+acs = "2019_acs.xlsx"
+dod_shares = "dod_county_shares.xlsx"
 fed_prop = "fed_prop_2021.csv" 
 
 ##USAspending.gov API Variables##
