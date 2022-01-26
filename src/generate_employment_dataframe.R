@@ -15,6 +15,23 @@ doe_emp = state_emp[1,9] * doe_ns_adjustment
 ##Begin apportioning military and civilian employment by county and district, sectioning off based on employment type##
 ##Start out with military employment - use ACS data and apportion by employed armed forces. 
 #First clean up the ACS dataframe to format entries as needed.
+
+read_excel(file.path(getwd(), "data", "temp", acs)) %>%
+  select(geography, armed_forces_employed)
+
+dod_shares_county <- read_excel(file.path(getwd(), "data", "raw", dod_shares), sheet = 1)
+dod_shares_district <- read_excel(file.path(getwd(), "data", "raw", dod_shares ), sheet = 2)
+
+fedprop <- read.csv(file.path(getwd(), "data", "temp", fed_prop), stringsAsFactors = FALSE) %>%  
+  select(Reporting.Agency, Reporting.Bureau, Real.Property.Type, Real.Property.Use, Square.Feet..Buildings.,  
+         Street.Address, State.Name, County.Name, Zip.Code, Congressional.District) %>%
+  rename(Department = Reporting.Agency, Prop_type=Real.Property.Type,
+         Prop_use=Real.Property.Use, Sq_ft=Square.Feet..Buildings., Add=Street.Address, county=County.Name,
+         district=Congressional.District) %>% 
+  filter(State.Name == state) %>% #select only entries in California 
+  filter(Prop_type == "Building") %>% #select only buildings 
+  filter(Department == "VETERANS AFFAIRS" | Department == "HOMELAND SECURITY")
+
 acs$geography <- gsub(pattern = " County, California", replacement = "", acs$geography)
 acs$geography <- gsub(pattern = "Congressional District ([0-9]+) \\(116th Congress\\), California",
                            -                          replacement = "\\1",

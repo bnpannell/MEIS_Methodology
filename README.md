@@ -1,12 +1,10 @@
 # MEIS_Methodology
 Contains R code for transforming raw data to allow import and processing by IMPLAN 
 
-
 ## How to Use This Repository
 Fork repository, and Clone to a new local RStudio Project.
 Edit Parameters file- see instructions below or [(link to Documentation)] for detailed explanations.
 Select relevant master.R" file to run. The depreciated file may be used to repeat the FY 2020 study, but all subsequent years should use "run_analysis_master.R"
-
 
 ## Parameters File
 Update the parameters file to your desired specifications in order to prepare custom defense spending data for entry into IMPLAN. 
@@ -32,7 +30,15 @@ Update the parameters file to your desired specifications in order to prepare cu
 - sus_dhs_mult:
   - Accepted values: the multiplier for calculating the number of national suppressed federal employees in the given study region in decimal format.
     - Example: .142
-
+- acs:
+  - Accepted values: the properly formatted name (in "") of the file containing needed ACS data after downloading and renaming. 
+    - Example: "2019_ACS.xlsx"
+- dod_shares:
+  - Accepted values: the properly formatted name (in "") of the file containing data for the % of each county that is in each Congressional District for the study state.
+    - Example: "DOD_County_Shares.xlsx"
+- fed_prop:
+  - Accepted values: the properly formatted name (in "") of the file containing needed federal data after downloading and renaming. 
+    - Example: "fed_prop_2021.csv"
 
 ### obtain_usaspending.R Parameters
 With the exception of 'tier_name,' variables under "Required" MUST have an accepted value entry or the USAspending API will not run.
@@ -140,7 +146,6 @@ Department of Energy (DOE) data has a special additional filtering step, not all
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable 
     - Example: paste0(year,"_concatenated_usaspending.csv")
 
-
 ##aggregate_usaspending parameters##
 - u_state_outname:
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
@@ -153,5 +158,3 @@ Department of Energy (DOE) data has a special additional filtering step, not all
 If you are repeating the 2021 California study, pay attention to what sections of the "DEPRECATED_ruN_analysis_master.R" you are running. There is a break between obtaining, filtering and cleaning data where the user will have to manually edit errors in the data and save the files to the correct folders before continuing the code. See ([Link to documentation]) for detailed instructions. 
 
 The "run_analysis_master.R"" code follows similar conventions, but is updated to correct errors in data in a more automated way. Follow instructions in the code comments. 
-
-
