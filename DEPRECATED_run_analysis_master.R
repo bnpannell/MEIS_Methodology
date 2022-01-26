@@ -61,7 +61,7 @@ va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=l
 va_benefits_districtsagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_congressional_district), FUN=sum)
 
 ##Load R script that provides employment calculations at statewide, county, and congressional district levels
-source(src/"generate_employment_worksheet")
+source(src/"generate_employment_dataframe.R")
 
 ## Run for loop code to get IMPLAN activity sheets generated for counties and districts
 source("src/deprecated/DEPRECATED_create_implan_sheets.R")
