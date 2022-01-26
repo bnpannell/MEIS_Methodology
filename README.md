@@ -14,10 +14,13 @@ Update the parameters file to your desired specifications in order to prepare cu
 ### General Global Variables
 - f_year:
   - Accepted values: A four digit year of the fiscal year of data (may be different than the report year) in double quotes
+    -Example: "2020"
 - year:
   - Accepted values: A four digit year of the expected publication date of the study in double quotes
+    - Example: "2021"
 - state:
   - Accepted values: The target state of the study, in upper case wrapped in double quotes  
+    -Example: "CALIFORNIA"
 
 ###User-Generated Employment File Variables
 - county_emp:
