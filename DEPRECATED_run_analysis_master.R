@@ -30,8 +30,8 @@ cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
 
 #Filter Data##
-filter_usaspending(cfile_name, state, contract_columns, paste0("DEPRECATED_", c_out_name))
-filter_usaspending(gfile_name, state, grant_columns, paste0("DEPRECATED_", g_out_name))
+filter_usaspending(cfile_name, state, contract_columns, paste0("DEPRECATED_", year, c_out_name))
+filter_usaspending(gfile_name, state, grant_columns, paste0("DEPRECATED_", year,  g_out_name))
 
 ## Run error check on data ## 
 source("src/deprecated/deprecated_error_check_contracts.R")
@@ -42,11 +42,11 @@ source("src/deprecated/deprecated_error_check_grants.R")
 ##ONLY RUN CODE BELOW IF YOU HAVE VERIFIED THAT THE CLEANED DATA IS SATISFACTORY, ALL DISTRICT REASIGNMENTS HAVE BEEN SAVED OR NO ALTERATIONS ARE NECESSARY##
 
 ## Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
-concat_files <- concat_usaspending(pattern = paste0(year, "_DEPRECATED.+\\.csv"))
-write.csv(concat_files, file.path(getwd(), "data", "temp", paste0("DEPRECATED_", u_out_name)), row.names = FALSE) 
+concat_files <- concat_usaspending(pattern = paste0("DEPRECATED_", year, ".+\\.csv"))
+write.csv(concat_files, file.path(getwd(), "data", "temp", paste0("DEPRECATED_", year, u_out_name)), row.names = FALSE) 
 
 ##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending
-ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0("DEPRECATED_", u_out_name))
+ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0("DEPRECATED_", year, u_out_name))
 
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)
@@ -56,8 +56,8 @@ source("src/natsec_doe.R")
 
 ##Aggregate the DOD/DHS/VA usaspending, DOE usaspending, and VA benefits for statewide numbers## 
 #this gives you all the spending info for the statewide usaspending IMPLAN activity sheet and the statewide DOE IMPLAN activity sheet, as well as the VA benefits at the state, county, and district level (for the Household Spending tab in the IMPLAN activity sheet)
-statewide_aggregate(usaspending, u_state_outname)
-statewide_aggregate(doe_ns_spending, doe_state_outname)
+statewide_aggregate(usaspending, (paste0("DEPRECATED_", year, u_state_outname)))
+statewide_aggregate(doe_ns_spending, (paste0("DEPRECATED_", year, doe_state_outname)))
 
 va_benefits_stateagg <- sum(va_benefits$federal_action_obligation)
 va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_county_name), FUN=sum)

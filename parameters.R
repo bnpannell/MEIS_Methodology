@@ -52,12 +52,12 @@ grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding
 c_label <- "Contracts"
 g_label <- "Assistance" 
 
-c_out_name = paste0(year,"_all_contract_spending.csv")
-g_out_name = paste0(year,"_all_grant_spending.csv")
+c_out_name = "_all_contract_spending.csv"
+g_out_name = "_all_grant_spending.csv"
 
 
 ##concatenate_usaspending variables##
-u_out_name = paste0(year,"_concatenated_usaspending.csv")
+u_out_name = "_concatenated_usaspending.csv"
 
 
 ##natsec_doe variables##
@@ -71,5 +71,5 @@ doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE F
 
 
 ##aggregate_usaspending variables##
-u_state_outname = paste0(year, "_aggregated_usaspending_statewide.csv")
-doe_state_outname = paste0(year, "_aggregated_doespending_statewide.csv")
+u_state_outname = "_aggregated_usaspending_statewide.csv"
+doe_state_outname = "_aggregated_doespending_statewide.csv"

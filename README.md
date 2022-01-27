@@ -45,14 +45,14 @@ With the exception of 'tier_name,' variables under "Required" MUST have an accep
 
 #### Required Variables
 - agency_type: 
-  - Accepted values:
+  - Accepted values: A comma separated list of the following values- one for every agency in the query.
     - "awarding"
     - "funding"
-- agency_tier: 
+- agency_tier: A comma separated list of the following values- one for every agency in the query.
   - Accepted values:
     - "toptier"
     - "subtier" 
-- agency_name: Required
+- agency_name: Required, A comma separated list of every desired agency in the query.
   - Accepted Format:
     - ["Full Proper-case Name of Agency"]
       -Example: "Department of Veterans Affairs" 

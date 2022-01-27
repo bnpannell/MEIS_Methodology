@@ -1,7 +1,7 @@
 ## Error check usaspending contracts data ##
 
 # Load in contracts CSV into dataframe
-contracts <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECATED_", c_out_name)))
+contracts <- read.csv(file.path(getwd(), "data", "temp", paste0("DEPRECATED_", year, c_out_name)))
 
 # Load in NAICS to IMPLAN crosswalk
 naics_to_implan <- read.xlsx(xlsxFile = "data/raw/deprecated/2017_implan_online_naics_to_implan546.xlsx")
@@ -68,4 +68,4 @@ contracts <- contracts %>%
   select("federal_action_obligation", "awarding_agency_name", "funding_office_name", "recipient_county_name", "recipient_congressional_district", "implan_code")
 
 # Write contracts CSV into temp folder
-write.csv(contracts, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECATED_cleaned_usaspending_contract_data.csv")), row.names = FALSE)
+write.csv(contracts, file.path(getwd(), "data", "temp", paste0("DEPRECATED_", year, "_cleaned_usaspending_contracts.csv")), row.names = FALSE)
