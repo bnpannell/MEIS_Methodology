@@ -65,7 +65,7 @@ contracts <- rbind(contracts, contracts_missing_implan)
 
 #select needed columns
 contracts <- contracts %>%
-  select("federal_action_obligation", "awarding_agency_name", "recipient_county_name", "recipient_congressional_district", "implan_code")
+  select("federal_action_obligation", "awarding_agency_name", "funding_office_name", "recipient_county_name", "recipient_congressional_district", "implan_code")
 
 # Write contracts CSV into temp folder
 write.csv(contracts, file.path(getwd(), "data", "temp", paste0(year, "_DEPRECATED_cleaned_usaspending_contract_data.csv")), row.names = FALSE)

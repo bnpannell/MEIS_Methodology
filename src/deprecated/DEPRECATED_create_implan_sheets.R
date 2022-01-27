@@ -8,10 +8,10 @@ IndustrySpendingPattern5 <- read_excel(path = (file.path(getwd(), "data", "raw",
 InstitutionSpendingPattern6 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "InstitutionSpendingPattern6.xlsx")))
 
 ##Create a list of unique counties and districts to read into the for loop
-countynames <- unique(usaspending[,3])
+countynames <- unique(usaspending[,4])
 countynames <- countynames[countynames!=""] 
 
-congressid <- as.character(unique(usaspending[,4]))
+congressid <- as.character(unique(usaspending[,5]))
 congressid <- congressid[congressid!=90] 
 congressid <- congressid[!(is.na(congressid))]
 
@@ -21,7 +21,7 @@ va_benefits_countiesagg <- merge(va_benefits_countiesagg, data.frame(county = co
 va_benefits_countiesagg$x[is.na(va_benefits_countiesagg$x)] <- 0
 
 for (county in countynames){
-    j <- which(usaspending[3] == county)
+    j <- which(usaspending[4] == county)
     temp <- usaspending[j,]
   temp <- aggregate(temp$federal_action_obligation, by=list(temp$implan_code), FUN=sum) #this line aggregates the data by sector
   colnames(temp) <- c("Sector", "Event_value") #change the column names to match activity sheet
@@ -99,7 +99,7 @@ va_benefits_districtsagg$x[is.na(va_benefits_districtsagg$x)] <- 0
 
 for (district in congressid){
   #print(paste(district, class(district)))
-  k <- which(usaspending[4] == district)
+  k <- which(usaspending[5] == district)
   temp2 <- usaspending[k,]
   temp2 <- aggregate(temp2$federal_action_obligation, by=list(temp2$implan_code), FUN=sum) #this line aggregates the data by sector
   colnames(temp2) <- c("Sector", "Event_value") #change the column names to match activity sheet

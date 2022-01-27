@@ -30,8 +30,8 @@ cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
 
 #Filter Data##
-filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0("DEPRECATED_", c_out_name))
-filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0("DEPRECATED_", g_out_name))
+filter_usaspending(cfile_name, state, contract_columns, paste0("DEPRECATED_", c_out_name))
+filter_usaspending(gfile_name, state, grant_columns, paste0("DEPRECATED_", g_out_name))
 
 ## Run error check on data ## 
 source("src/deprecated/deprecated_error_check_contracts.R")
@@ -51,10 +51,13 @@ ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)
 
+##Load an R script that filters the DOE spending to only national security-related data
+source("src/natsec_doe.R")
+
 ##Aggregate the DOD/DHS/VA usaspending, DOE usaspending, and VA benefits for statewide numbers## 
 #this gives you all the spending info for the statewide usaspending IMPLAN activity sheet and the statewide DOE IMPLAN activity sheet, as well as the VA benefits at the state, county, and district level (for the Household Spending tab in the IMPLAN activity sheet)
 statewide_aggregate(usaspending, u_state_outname)
-statewide_aggregate(doespending, doe_state_outname)
+statewide_aggregate(doe_ns_spending, doe_state_outname)
 
 va_benefits_stateagg <- sum(va_benefits$federal_action_obligation)
 va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_county_name), FUN=sum)

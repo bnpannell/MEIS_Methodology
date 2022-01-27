@@ -71,6 +71,7 @@ fedprop <- read.csv(file.path(getwd(), "data", "temp", fed_prop), stringsAsFacto
   filter(State.Name == state) %>% #select only entries in California 
   filter(Prop_type == "Building") %>% #select only buildings 
   filter(Department == "VETERANS AFFAIRS" | Department == "HOMELAND SECURITY")
+
 ##First start with working through VA - limit fedprop to VA entries, and clean up some missing 0's in districts column.
 va_fedprop <- fedprop %>%
   filter(Department == "VETERANS AFFAIRS")
