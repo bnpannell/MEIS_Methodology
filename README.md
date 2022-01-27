@@ -136,23 +136,23 @@ Department of Energy (DOE) data has a special additional filtering step, not all
     - Example: 'Assistance'
 - c_out_name:
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
-    - Example: paste0(year,"_all_contract_spending.csv")
+    - Example: "_all_contract_spending.csv"
 - g_out_name: 
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
-    - Example: paste0(year,"_all_grant_spending.csv")
+    - Example: "_all_grant_spending.csv"
 
 ##concatenate_usaspending parameters##
 - u_out_name:
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable 
-    - Example: paste0(year,"_concatenated_usaspending.csv")
+    - Example: "_concatenated_usaspending.csv"
 
 ##aggregate_usaspending parameters##
 - u_state_outname:
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
-    - Example: paste0(year, "_aggregated_usaspending_statewide.csv")
+    - Example: "_aggregated_usaspending_statewide.csv"
 - doe_state_outname:
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
-    -Example: paste0(year, "_aggregated_doespending_statewide.csv")
+    -Example: "_aggregated_doespending_statewide.csv"
     
 ## Additional Notes
 If you are repeating the 2021 California study, pay attention to what sections of the "DEPRECATED_ruN_analysis_master.R" you are running. There is a break between obtaining, filtering and cleaning data where the user will have to manually edit errors in the data and save the files to the correct folders before continuing the code. See ([Link to documentation]) for detailed instructions. 
