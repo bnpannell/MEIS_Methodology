@@ -122,9 +122,6 @@ This function is designed to filter the USASpending.gov download based on user s
 Department of Energy (DOE) data has a special additional filtering step, not all DOE spending is considered defense spending. 
 
 - doe = "DEPARTMENT OF ENERGY (DOE)"
-- doe_offices: 
-    - Accepted values are DOE subtier agencies that are considered to be part of defense spending, names should be in "", comma separated and upper case
-      - Example: "MISSILE DEFENSE AGENCY"
 - grant_columns:
   - Accepted values are column headers for data columns you wish to keep in the output file for grants data, exactly as written in the file and in "".
     - Example: "awarding_agency_name"
@@ -145,6 +142,11 @@ Department of Energy (DOE) data has a special additional filtering step, not all
 - u_out_name:
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable 
     - Example: "_concatenated_usaspending.csv"
+
+##natsec_doe paramenters##   
+- doe_offices: 
+    - Accepted values are DOE subtier agencies that are considered to be part of defense spending, names should be in "", comma separated and upper case
+      - Example: "MISSILE DEFENSE AGENCY"
 
 ##aggregate_usaspending parameters##
 - u_state_outname:
