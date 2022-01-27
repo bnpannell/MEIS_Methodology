@@ -42,7 +42,7 @@ source("src/deprecated/deprecated_error_check_grants.R")
 ##ONLY RUN CODE BELOW IF YOU HAVE VERIFIED THAT THE CLEANED DATA IS SATISFACTORY, ALL DISTRICT REASIGNMENTS HAVE BEEN SAVED OR NO ALTERATIONS ARE NECESSARY##
 
 ## Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
-concat_files <- concat_usaspending(pattern = paste0("DEPRECATED_", year, ".+\\.csv"))
+concat_files <- concat_usaspending(pattern = paste0("DEPRECATED_", year, "_cleaned.+\\.csv"))
 write.csv(concat_files, file.path(getwd(), "data", "temp", paste0("DEPRECATED_", year, u_out_name)), row.names = FALSE) 
 
 ##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending
@@ -66,7 +66,7 @@ va_benefits_districtsagg <- aggregate(va_benefits$federal_action_obligation, by=
 ##Load R script that provides employment calculations at statewide, county, and congressional district levels
 source("src/generate_employment_dataframe.R")
 
-## Run for loop code to get IMPLAN activity sheets generated for counties and districts
+##Run for loop code to get IMPLAN activity sheets generated for counties and districts
 source("src/deprecated/DEPRECATED_create_implan_sheets.R")
 
-## Dont forget to insert code to empty temp folder except for "/data/temp/placeholderfortemp.txt" 
+##Don't forget to insert code to empty temp folder except for "/data/temp/placeholderfortemp.txt"
