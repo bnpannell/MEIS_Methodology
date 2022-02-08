@@ -2,9 +2,9 @@
 Contains R code for transforming raw data to allow import and processing by IMPLAN 
 
 ## How to Use This Repository
-Fork repository, and Clone to a new local RStudio Project.
-Edit Parameters file- see instructions below or [(link to Documentation)] for detailed explanations.
-Select relevant master.R" file to run. The depreciated file may be used to repeat the FY 2020 study, but all subsequent years should use "run_analysis_master.R"
+Fork the repository, and clone to a new local RStudio Project.
+Edit the Parameters file - see instructions below or [(link to Documentation)] for detailed explanations.
+Select the relevant "master.R" file to run. The "DEPRECATED_run_analysis_master.R" file may be used to repeat the 2021 study, but all subsequent years should use "run_analysis_master.R"
 
 ## Parameters File
 Update the parameters file to your desired specifications in order to prepare custom defense spending data for entry into IMPLAN. 
@@ -20,21 +20,21 @@ Update the parameters file to your desired specifications in order to prepare cu
   - Accepted values: The target state of the study, in upper case wrapped in double quotes  
     -Example: "CALIFORNIA"
 
-###User-Generated Employment File Variables
+### User-Generated Employment File Variables
 - res_mult:
-  - Accepted values: the multiplier to calculate full time employment numbers from military reserves in decimal format.
+  - Accepted values: the multiplier to calculate full time equivalent numbers of military reserves in decimal format.
     - Example: 0.1825
 - national_sus_dhs:
-  - Accepted values: the number of suppressed federal employees in integer format.
+  - Accepted values: the number of suppressed federal Department of Homeland Security employees in integer format.
     - Example: 155282
 - sus_dhs_mult:
-  - Accepted values: the multiplier for calculating the number of national suppressed federal employees in the given study region in decimal format.
+  - Accepted values: the multiplier for calculating the number of national suppressed federal Department of Homeland Security employees in the given study region in decimal format.
     - Example: .142
 - acs:
   - Accepted values: the properly formatted name (in "") of the file containing needed ACS data after downloading and renaming. 
     - Example: "2019_ACS.xlsx"
 - dod_shares:
-  - Accepted values: the properly formatted name (in "") of the file containing data for the % of each county that is in each Congressional District for the study state.
+  - Accepted values: the properly formatted name (in "") of the file containing data for the % of each county that is in each congressional district for the study state.
     - Example: "DOD_County_Shares.xlsx"
 - fed_prop:
   - Accepted values: the properly formatted name (in "") of the file containing needed federal data after downloading and renaming. 
@@ -45,10 +45,10 @@ With the exception of 'tier_name,' variables under "Required" MUST have an accep
 
 #### Required Variables
 - agency_type: 
-  - Accepted values: A comma separated list of the following values- one for every agency in the query.
+  - Accepted values: A comma separated list of the following values - one for every agency in the query.
     - "awarding"
     - "funding"
-- agency_tier: A comma separated list of the following values- one for every agency in the query.
+- agency_tier: A comma separated list of the following values - one for every agency in the query.
   - Accepted values:
     - "toptier"
     - "subtier" 
@@ -93,8 +93,8 @@ With the exception of 'tier_name,' variables under "Required" MUST have an accep
       - "10" 
 
 ##### Location Variables
-The API can handle a list of countries or a list of states within one country or a list of counties within one country and state etc. 
-Counties and districts are mutually exclusive filters- you must pick one or the other. If you wish to aggregate data by both, it will require several separate API queries to get data of interest.
+The API can handle a list of countries or a list of states within one country, or a list of counties within one country and state, etc. 
+Counties and districts are mutually exclusive filters - you must pick one or the other. If you wish to aggregate data by both, it will require several separate API queries to get the data of interest.
 
 - recipient_locations_country:
   - Accepted Values:
@@ -113,13 +113,13 @@ Counties and districts are mutually exclusive filters- you must pick one or the 
     - District name 
       - Example: "2"
 
-For complete documentation of award types permitted in the filter see: 
+For complete documentation of award types permitted in the filter, see: 
 - https://fedspendingtransparency.github.io/whitepapers/types/ and
 - https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md
 
 ### filter_usaspending.R Parameters
 This function is designed to filter the USASpending.gov download based on user specified parameters.
-Department of Energy (DOE) data has a special additional filtering step, not all DOE spending is considered defense spending. 
+Department of Energy (DOE) data has a special additional filtering step, as not all DOE spending is considered defense spending. 
 
 - doe = "DEPARTMENT OF ENERGY (DOE)"
 - grant_columns:
@@ -138,17 +138,23 @@ Department of Energy (DOE) data has a special additional filtering step, not all
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
     - Example: "_all_grant_spending.csv"
 
-##concatenate_usaspending parameters##
+### concatenate_usaspending.R Parameters
+This function is designed to concatenate the cleaned USASpending.gov spending contracts and grants data into one dataframe and subsequent CSV file.
+
 - u_out_name:
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable 
     - Example: "_concatenated_usaspending.csv"
 
-##natsec_doe paramenters##   
+### natsec_doe.R Parameters   
+This R script is designed to filter the DOE spending data to only national security-related spending, and to provide a national security proportion to be applied to DOE employment and SmartPay spending.
+
 - doe_offices: 
     - Accepted values are DOE subtier agencies that are considered to be part of defense spending, names should be in "", comma separated and upper case
       - Example: "MISSILE DEFENSE AGENCY"
 
-##aggregate_usaspending parameters##
+### aggregate_usaspending.R Parameters
+This function is designed to aggregate the concatenated USASpending and DOE spending data by IMPLAN sector into two dataframes and subsequent CSV files.
+
 - u_state_outname:
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
     - Example: "_aggregated_usaspending_statewide.csv"
@@ -157,6 +163,6 @@ Department of Energy (DOE) data has a special additional filtering step, not all
     -Example: "_aggregated_doespending_statewide.csv"
     
 ## Additional Notes
-If you are repeating the 2021 California study, pay attention to what sections of the "DEPRECATED_ruN_analysis_master.R" you are running. There is a break between obtaining, filtering and cleaning data where the user will have to manually edit errors in the data and save the files to the correct folders before continuing the code. See ([Link to documentation]) for detailed instructions. 
+If you are repeating the 2021 study, pay attention to what sections of the "DEPRECATED_run_analysis_master.R" code you are running. There is a break between obtaining, filtering and cleaning data where the user will have to manually edit errors in the data and save the files to the correct folders before continuing the code. See ([Link to documentation]) for detailed instructions. 
 
-The "run_analysis_master.R"" code follows similar conventions, but is updated to correct errors in data in a more automated way. Follow instructions in the code comments. 
+The "run_analysis_master.R" code follows similar conventions, but is updated to correct errors in the data in a more automated way. Follow instructions in the code comments. 
