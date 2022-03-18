@@ -3,39 +3,32 @@
 library(jsonlite)
 library(httr)
 
-# Build framework for mandatory filters first
-body = list(
-  filters = list(
-    state = "06",
-    variables = "B21001_001E"),
-  file_format = "csv" 
-)
 
-#Format filter body 
-toJSON(body, pretty=T)
 
-#Post query to API
-request <- GET(
-  "https://api.census.gov/data/2019/acs/acs5?get=B21001_001E&for=county:*&in=state:06",
-  body = body,
-  encode = "json",
-  verbose()
-)
+##Method #1: Lines 8-16 work to read the Census API into a dataframe... only need the jsonlite package for this
 
-#Wait for file download to be prepared by site
-Sys.sleep(5)
-if(request$status_code == 200){
-  status_check <- GET(url = content(request)$status_url)
-  
-  while(content(status_check)$status == "running"){
-    print("System is still preparing the download link")
-    Sys.sleep(30)
-    status_check <- GET(url = content(request)$status_url)
-  }
-  
-  file_url <- content(request)$file_url
-}
+data <- url("https://api.census.gov/data/2020/acs/acs5?get=B21001_002E,NAME&for=county:*&in=state:06")
 
+datanew <- fromJSON(data)
+
+dataframe1 <- as.data.frame(datanew)
+names(dataframe1) <- c("total_vets", "county", "state_fips", "county_fips")  
+dataframe1 <- dataframe1[-c(1),]
+
+
+
+##Method #2: Lines 20-31 also work to read the Census API into a dataframe, but using both httr and jsonlite
+
+censusapi_url <- paste0("https://api.census.gov/data/2020/acs/acs5?get=B21001_002E,NAME&for=county:*&in=state:06")
+result <- httr::GET(censusapi_url)
+
+#Check out result - in this list, we need the "content" in it. That holds the data.
+content <- httr::content(result, as ="text")
+content_json <- jsonlite::fromJSON(content)
+
+dataframe2 <- as.data.frame(content_json)
+names(dataframe2) <- c("total_vets", "county", "state_fips", "county_fips")  
+dataframe2 <- dataframe2[-c(1),]
 
 
 
@@ -43,9 +36,7 @@ if(request$status_code == 200){
 
 #First, install and load the census API package
 
-install.packages("censusapi")
-library("censusapi")
+#install.packages("censusapi")
+#library("censusapi")
 
 #Look at the list of endpoints available
-
-
