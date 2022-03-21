@@ -1,4 +1,4 @@
-# This code checks contracts data for errors, where possible fixes them and calculates the weights for NAICS codes with multiple IMPLAn codes
+# This code checks contracts data for errors, where possible fixes them and calculates the weights for NAICS codes with multiple IMPLAN codes
 # ((This will all change again once we add in the 2022 NAICS codes... assuming IMPLAN is ready for them at the end of the year)) 
 
 # Run hard coded fixes file first called "data/raw/2007_to_2017_NAICS.xlsx" so 2007 codes can get caught in the IMPLAN crosswalk
@@ -48,11 +48,3 @@ contracts <- contracts[!(is.na(contracts$implan_code)),]
 #Save to "Output" folder- named "naics_code_errors" 
 
 write.csv(contracts_mismatch_naics, paste("output/naics_code_errors.csv", sep = ''))
-
-## Create new column "fao_weighted" that distributes federal_action_obligation spending by the CewAvgRatio weight for each implan code
-contracts <- contracts %>%
-  mutate(fao_weighted = federal_action_obligation * CewAvgRatio)
-
-#Save contract data file with error lines REMOVED to temp folder "{YEAR}_cleaned_usaspending_contract_data" 
-
-write.csv(contracts, file.path(getwd(), "data", "temp", paste0(year, "_cleaned_usaspending_contract_data.csv")))

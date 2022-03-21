@@ -43,9 +43,13 @@ recipient_locations_state = c("CA")
 #recipient_locations_district = c() 
 
 
-##filter_usaspending variables##
-doe = "DEPARTMENT OF ENERGY (DOE)"
+##PARAMETERS FOR obtain_vet_census.R##
 
+
+
+
+
+##filter_usaspending variables##
 contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "naics_code")
 grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_code", "recipient_zip_last_4_code", "assistance_type_code", "business_types_description")
 
@@ -59,6 +63,8 @@ g_out_name = "_all_grant_spending.csv"
 ##concatenate_usaspending variables##
 u_out_name = "_concatenated_usaspending.csv"
 
+##split_usaspending variables##
+doe = "DEPARTMENT OF ENERGY (DOE)"
 
 ##natsec_doe variables##
 doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE FORCE",
