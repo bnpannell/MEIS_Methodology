@@ -9,6 +9,10 @@ Sys.getenv("CENSUS_KEY")
 
 #Look at the list of endpoints available
 view(listCensusApis())
+list = "01,02,03,04,05,06,07,08"
+thing = paste0("state:06", "+congressional district:", list)
+
+print(thing)
 
 # API Call
 districts_vets <- getCensus(
@@ -16,7 +20,7 @@ districts_vets <- getCensus(
   vintage = 2020, 
   vars = c("NAME", "B21001_002E"), 
   region = "county (or part):*", 
-  regionin = "state:06+congressional district:01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53")
+  regionin = thing)
 
 counties_vets <- getCensus(
   name = "acs/acs5",
