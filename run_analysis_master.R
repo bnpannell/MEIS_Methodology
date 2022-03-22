@@ -30,8 +30,8 @@ cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = pa
 gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
 
 ##Filter data##
-filter_usaspending(cfile_name, state, doe_offices, contract_columns, paste0(year, c_out_name))
-filter_usaspending(gfile_name, state, doe_offices, grant_columns, paste0(year, g_out_name))
+filter_usaspending(cfile_name, state, contract_columns, paste0(year, c_out_name))
+filter_usaspending(gfile_name, state, grant_columns, paste0(year, g_out_name))
 
 ##Run error check on data##
 source("src/error_check_contracts.R")
