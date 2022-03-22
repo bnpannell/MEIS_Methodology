@@ -8,9 +8,10 @@ readRenviron("~/.Renviron")
 Sys.getenv("CENSUS_KEY")
 
 #Look at the list of endpoints available
-view(listCensusApis())
-list = "01,02,03,04,05,06,07,08"
-thing = paste0("state:06", "+congressional district:", list)
+#view(listCensusApis())
+dist_list = "01,02,03,04,05,06,07,08" #define in parameters- CANNOT CONTAIN SPACES
+state_fips = 06  #define in parameters
+thing = paste0("state:", state_fips, "+congressional district:", dist_list) #make variable in api section, not parameters
 
 print(thing)
 
