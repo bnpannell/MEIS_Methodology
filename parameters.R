@@ -50,6 +50,8 @@ dist_list = "01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,2
 state_fips = "06"  #Uses 2 digit state fips code
 
 
+##Parameters for wrangle_opm_foia.R##
+opm_foia_file <- "Copy of Select Agencies by Locations FY 2019 - FY 2021.xlsx"
 
 
 ##filter_usaspending variables##
