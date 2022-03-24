@@ -10,11 +10,24 @@ opm_emp$total <- as.numeric(opm_emp$total)
 #Aggregate the "total" employees column based on agency and file_date. 
 #Question for Patrick and Britnee: Why doesn't the first method work, but the other 2 do?
 
-opm_emp_counties <- opm_emp %>%
+#opm_emp_counties <- opm_emp %>%
   aggregate(opm_emp$total, by=list(opm_emp$file_date, opm_emp$agency, opm_emp$county), FUN = sum)
 
 opm_emp_counties <- opm_emp %>%
   group_by(file_date, agency, county) %>%
   summarise(employees = sum(total))
 
-opm_emp_counties <- aggregate(total ~ file_date + agency + county, data = opm_emp, FUN = sum, na.rm = TRUE)
+#opm_emp_counties <- aggregate(total ~ file_date + agency + county, data = opm_emp, FUN = sum, na.rm = TRUE)
+
+#Transpose the dataframe - we need the county as the row, agency as the column, and employees as the cell value.
+opm_emp_counties <- opm_emp_counties %>%
+  spread(agency, employees)
+
+#Rename columns, drop DoD-related agency columns/rows (OPM FOIA didn't specify them by county), and then change NAs to 0
+colnames(opm_emp_counties) <- c("file_date", "county", "airforce_emp", "army_emp", "dod_emp", "doe_emp", "dhs_emp", "navy_emp", "va_emp")
+
+opm_emp_counties <- opm_emp_counties %>%
+  select("file_date", "county", "doe_emp", "dhs_emp", "va_emp") %>%
+  filter(!(county == "DOD COUNTY REDACTED"))
+
+opm_emp_counties[is.na(opm_emp_counties)] = 0
