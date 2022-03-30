@@ -50,10 +50,6 @@ dist_list = "01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,2
 state_fips = "06"  #Uses 2 digit state fips code
 
 
-##Parameters for wrangle_opm_foia.R##
-opm_foia_file <- "Copy of Select Agencies by Locations FY 2019 - FY 2021.xlsx"
-
-
 ##filter_usaspending variables##
 contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "naics_code")
 grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_code", "recipient_county_name", "recipient_congressional_district", "recipient_zip_code", "recipient_zip_last_4_code", "assistance_type_code", "business_types_description")
@@ -65,11 +61,19 @@ c_out_name = "_all_contract_spending.csv"
 g_out_name = "_all_grant_spending.csv"
 
 
+##error_check_contracts variables##
+naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
+naics_2007 <- c(314912, 315228, 315999, 316999, 332212, 333313, 333319, 333518, 334119, 334411, 339944, 443120)
+
+implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
+
 ##concatenate_usaspending variables##
 u_out_name = "_concatenated_usaspending.csv"
 
+
 ##split_usaspending variables##
 doe = "DEPARTMENT OF ENERGY (DOE)"
+
 
 ##natsec_doe variables##
 doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE FORCE",
@@ -84,3 +88,7 @@ doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE F
 ##aggregate_usaspending variables##
 u_state_outname = "_aggregated_usaspending_statewide.csv"
 doe_state_outname = "_aggregated_doespending_statewide.csv"
+
+
+##Parameters for wrangle_opm_foia.R##
+opm_foia_file <- "Copy of Select Agencies by Locations FY 2019 - FY 2021.xlsx"

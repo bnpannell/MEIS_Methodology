@@ -1,7 +1,7 @@
 # This code checks grant data for errors and where possible, fixes them
 
 # Load in grants data and grants-related implan crosswalk
-grants <- read.csv(file.path(getwd(), "data", "temp", g_out_name))
+grants <- read.csv(file.path(getwd(), "data", "temp", paste0(f_year, g_out_name)))
 btype2implan <- read.csv(file = "data/raw/business_type_to_implan546_crosswalk.csv", fileEncoding="UTF-8-BOM")
 
 #Prior to running crosswalk - pull out the VA direct payments/benefits data - this does not get matched with an IMPLAN code - and write into CSV file

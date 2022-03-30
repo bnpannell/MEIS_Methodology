@@ -1,50 +1,28 @@
-# This code checks contracts data for errors, where possible fixes them and calculates the weights for NAICS codes with multiple IMPLAN codes
-# ((This will all change again once we add in the 2022 NAICS codes... assuming IMPLAN is ready for them at the end of the year)) 
+##This code checks the contracts data for errors, fixes the errors where possible, and calculates the weights for NAICS codes with multiple IMPLAN codes
 
-# Run hard coded fixes file first called "data/raw/2007_to_2017_NAICS.xlsx" so 2007 codes can get caught in the IMPLAN crosswalk
+#Load in contracts data
+contracts <- read.csv(file.path(getwd(), "data", "temp", paste0(f_year, c_out_name)))
 
-# Load in contracts data
-contracts <- read.csv(file.path(getwd(), "data", "temp", paste0(year, c_out_name)))
+#First read in the NAICS to NAICS crosswalk and merge to contract entries to get a new dataframe that includes contracts entries with 2007 NAICS codes and their 2017 equivalent
+naics2naics <- read.xlsx(file.path(getwd(), "data", "raw", naics_crosswalk))
 
-#Check for errors in contracts entries where congressional districts are "NAs", and subset from original contracts dataframe
-contracts_error_districts <- contracts %>%
-  filter(is.na(recipient_congressional_district))
+contracts_naics_fix <- merge(x=contracts, y=naics2naics, by.x="naics_code", by.y="2007_NAICS", x.all=FALSE, y.all=FALSE)
 
-contracts <- contracts %>%
-  filter(!(is.na(recipient_congressional_district)))
+#Drop the contracts whose NAICS have to be fixed from the original contracts dataframe - these will be rbind back together after the fix
+contracts <- contracts[! contracts$naics_code %in% naics_2007,]
+  
 
-# Read in crosswalk that accounts for recipients to congressional districts
+#Drop the 2007 NAICS code column, rename the 2017 NAICS column to "naics_code", and rbind back to contracts dataframe
+contracts_naics_fix <- contracts_naics_fix %>%
+  select(-(naics_code)) %>%
+  rename(naics_code = "2017_NAICS")
 
+contracts <- rbind(contracts, contracts_naics_fix)
 
-
-# Load in second crosswalk - NAICS codes to IMPLAN codes - to fix contracts entries where there was no match between NAICS and IMPLAN
-naics2implan <- read.xlsx(xlsxFile = "data/raw/2012_2017_NAICS_to_IMPLAN.xlsx") %>% #re-name crosswalk, now includes some 2002 NAICS data
+#Now load in the NAICS to IMPLAN crosswalk and merge to contracts - this will assign contracts entries to their appropriate IMPLAN code based on 2012 and 2017 NAICS codes
+naics2implan <- read.xlsx(file.path(getwd(), "data", "raw", implan_crosswalk))
+naics2implan <- naics2implan %>%
   rename(naics_code = "NaicsCode", implan_code = "Implan546Index") %>%
   distinct(naics_code, implan_code, .keep_all = TRUE)
 
 contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
-
-output <- file.path(getwd(), "output")
-
-#Run code and pull out data that do not have NAICS codes
-
-contracts_no_naics <- contracts[is.na(contracts$naics_code),]
-contracts <- contracts[!(is.na(contracts$naics_code)),]
-
-#Save to "Output" folder- named "no_naics_code"
-
-write.csv(contracts_no_naics, paste("output/no_naics_code.csv", sep = '')) 
-
-# What do we want to do with construction data?? Do we pull it out here or ignore it? It isnt going to automatically match a NAICS code, maybe hardcoding
-# Everything wont be too big an issue, we can re-run the code to test what IMPLAN does with the different assignments like we did in our meeting
-# If thats the case, should we just make our own construction codes crosswalk and include it in raw data?? That way we could have a depreciated version
-# and a newer version
-
-#Run code and pull out data that have mismatched NAICS codes (that don't match any NAICS code in the crosswalk)
-
-contracts_mismatch_naics <- contracts[is.na(contracts$implan_code),]
-contracts <- contracts[!(is.na(contracts$implan_code)),]
-
-#Save to "Output" folder- named "naics_code_errors" 
-
-write.csv(contracts_mismatch_naics, paste("output/naics_code_errors.csv", sep = ''))

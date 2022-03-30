@@ -49,10 +49,10 @@ source("src/repair_and_weight_direct_payments.R")
 
 ## Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
 concat_files <- concat_usaspending(pattern = paste0(year, "_cleaned.+\\.csv"))
-write.csv(concat_files, file.path(getwd(), "data", "temp", paste0(year, u_out_name)), row.names = FALSE) 
+write.csv(concat_files, file.path(getwd(), "data", "temp", paste0(f_year, u_out_name)), row.names = FALSE) 
 
 ##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending
-ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(year, u_out_name))
+ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(f_year, u_out_name))
 
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)
@@ -62,8 +62,8 @@ source("src/natsec_doe.R")
 
 ##Aggregate the DOD/DHS/VA usaspending, DOE usaspending, and VA benefits for statewide numbers## 
 #this gives you all the spending info for the statewide usaspending IMPLAN activity sheet and the statewide DOE IMPLAN activity sheet, as well as the VA benefits at the state, county, and district level (for the Household Spending tab in the IMPLAN activity sheet)
-statewide_aggregate(usaspending, (paste0(year, u_state_outname)))
-statewide_aggregate(doe_ns_spending, (paste0(year, doe_state_outname)))
+statewide_aggregate(usaspending, (paste0(f_year, u_state_outname)))
+statewide_aggregate(doe_ns_spending, (paste0(f_year, doe_state_outname)))
 
 va_benefits_stateagg <- sum(va_benefits$federal_action_obligation)
 va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_county_name), FUN=sum)
