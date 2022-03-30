@@ -4,7 +4,7 @@
 # Run hard coded fixes file first called "data/raw/2007_to_2017_NAICS.xlsx" so 2007 codes can get caught in the IMPLAN crosswalk
 
 # Load in contracts data
-contracts <- read.csv(file.path(getwd(), "data", "temp", c_out_name))
+contracts <- read.csv(file.path(getwd(), "data", "temp", paste0(year, c_out_name)))
 
 #Check for errors in contracts entries where congressional districts are "NAs", and subset from original contracts dataframe
 contracts_error_districts <- contracts %>%

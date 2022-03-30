@@ -10,7 +10,7 @@ va_benefits <- grants %>%
 grants <- grants %>%
   filter(!(grants$assistance_type_code == 10 | grants$assistance_type_code == 6))
 
-write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(year, "_cleaned_usaspending_va_benefit_data.csv")))
+write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(f_year, "_cleaned_usaspending_va_benefit_data.csv")))
 
 # start first crosswalk error check of grants data to IMPLAN codes
 

@@ -25,13 +25,16 @@ source("src/aggregate_usaspending.R")
 #source("src/obtain_usaspending.R")
 #source("src/obtain_vet_census.R")
 
+##Make VA Apportioning File
+#source("src/make_va_benefits_cw.R")
+
 ##Load in USASpending.gov Data##
 cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
 gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
 
 ##Filter data##
-filter_usaspending(cfile_name, state, contract_columns, paste0(year, c_out_name))
-filter_usaspending(gfile_name, state, grant_columns, paste0(year, g_out_name))
+filter_usaspending(cfile_name, state, contract_columns, paste0(f_year, c_out_name))
+filter_usaspending(gfile_name, state, grant_columns, paste0(f_year, g_out_name))
 
 ##Run error check on data##
 source("src/error_check_contracts.R")
