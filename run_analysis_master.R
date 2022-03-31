@@ -25,7 +25,7 @@ source("src/aggregate_usaspending.R")
 #source("src/obtain_usaspending.R")
 #source("src/obtain_vet_census.R")
 
-##Make VA Apportioning File
+##Make VA Apportioning File##
 #source("src/make_va_benefits_cw.R")
 
 ##Load in USASpending.gov Data##
@@ -47,17 +47,17 @@ source("src/repair_and_weight_contracts.R")
 source("src/repair_and_weight_grants.R")
 source("src/repair_and_weight_direct_payments.R")
 
-## Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
+##Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
 concat_files <- concat_usaspending(pattern = paste0(year, "_cleaned.+\\.csv"))
 write.csv(concat_files, file.path(getwd(), "data", "temp", paste0(f_year, u_out_name)), row.names = FALSE) 
 
-##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending
+##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending##
 ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(f_year, u_out_name))
 
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)
 
-##Load an R script that filters the DOE spending to only national security-related data
+##Load an R script that filters the DOE spending to only national security-related data##
 source("src/natsec_doe.R")
 
 ##Aggregate the DOD/DHS/VA usaspending, DOE usaspending, and VA benefits for statewide numbers## 
@@ -69,10 +69,10 @@ va_benefits_stateagg <- sum(va_benefits$federal_action_obligation)
 va_benefits_countiesagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_county_name), FUN=sum)
 va_benefits_districtsagg <- aggregate(va_benefits$federal_action_obligation, by=list(va_benefits$recipient_congressional_district), FUN=sum)
 
-##Load R script that provides employment calculations at statewide, county, and congressional district levels
+##Load R script that provides employment calculations at statewide, county, and congressional district levels##
 source("src/generate_employment_dataframe.R")
 
-##Run for loop code to get IMPLAN activity sheets generated for counties and districts
+##Run for loop code to get IMPLAN activity sheets generated for counties and districts##
 source("src/deprecated/DEPRECATED_create_implan_sheets.R")
 
-##Don't forget to insert code to empty temp folder except for "/data/temp/placeholderfortemp.txt"
+##Don't forget to insert code to empty temp folder except for "/data/temp/placeholderfortemp.txt"##

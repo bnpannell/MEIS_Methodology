@@ -11,7 +11,6 @@ contracts_naics_fix <- merge(x=contracts, y=naics2naics, by.x="naics_code", by.y
 #Drop the contracts whose NAICS have to be fixed from the original contracts dataframe - these will be rbind back together after the fix
 contracts <- contracts[! contracts$naics_code %in% naics_2007,]
   
-
 #Drop the 2007 NAICS code column, rename the 2017 NAICS column to "naics_code", and rbind back to contracts dataframe
 contracts_naics_fix <- contracts_naics_fix %>%
   select(-(naics_code)) %>%
@@ -26,3 +25,42 @@ naics2implan <- naics2implan %>%
   distinct(naics_code, implan_code, .keep_all = TRUE)
 
 contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
+
+#Pull out all contracts entries which do not have an IMPLAN code - this includes construction codes, the "92s", and some entries which didn't have a NAICS code
+
+##QUESTION FOR BRITNEE!! Do we want to just pull out all these errors together, or pull them out based on error type (i.e. 1 for construction, 1 for "92s", and 1 for no NAICS codes?)
+##NOTE: Method 1 grabs 3,337 entries of errors. Method 2 combined grabs 3,283 entries of errors, meaning it has 54 less than Method 1. 
+##The issue is partly with construction (45 entries aren't pulled out - idk why?), and partly because there are 9 entries with unresolved/unaccounted for NAICS - 339111 and 514210.
+
+
+
+#Method 1: Lumping all errors out together
+contracts_errors <- contracts %>%
+  filter(is.na(implan_code))
+
+contracts <- contracts %>%
+  filter(!is.na(implan_code))
+
+
+#Method 2: Taking out errors based on type - construction, "92s" NAICS, and NAs NAICS
+
+#CONSTRUCTION
+construction_contracts <- contracts %>%
+  filter(naics_code %in% construction_naics)
+
+contracts <- contracts %>%
+  filter(!(naics_code %in% construction_naics))
+
+#"92s" NAICS
+naics_92_contracts <- contracts %>%
+  filter(grepl(("^92"), naics_code))
+
+contracts <- contracts %>%
+  filter(!(grepl(("^92"), naics_code)))
+
+#NA NAICS
+naics_na_contracts <- contracts %>%
+  filter(is.na(naics_code))
+
+contracts <- contracts %>%
+  filter(!is.na(naics_code))
