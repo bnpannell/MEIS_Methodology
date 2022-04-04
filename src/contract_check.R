@@ -6,16 +6,16 @@
 
 #Loop thru line by line, if true put record in dataframe A, if false record to dataframe B? 
 
-myfilter <- function(patterns, data){
+contract_check <- function(patterns, data){
   val <- rep(FALSE, length(data))
   if(is.character(patterns)){
     for(i in 1:length(patterns)){
-      val <- val | grepl(patterns[i], data)
+      val <- val | grepl(patterns[i], data, ignore.case = TRUE)
     }
   } else {
     stop('pattern must be a character vector')
   }
   return(val)
 }
-patterns = c("escholarship", "trid", "doi")
-test <- urls[myfilter(patterns = patterns, data = urls$publink),]
+
+test <- contracts_errors[!(contract_check(patterns = implan_60, data = contracts_errors$award_description)),]

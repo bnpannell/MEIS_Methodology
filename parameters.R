@@ -52,6 +52,14 @@ c_out_name = "_all_contract_spending.csv"
 g_out_name = "_all_grant_spending.csv"
 
 
+##contract_check variables##
+implan_60 <- c("repair", "rpr", "maint", "renovat", "replac", "inspect", "install", "restor", "reroof", "re-roof", "reshingle", "re-shingle", 
+               "service", "upgrade", "retrofit", "remov", "ratif", "relocat", "modif", "modern", "clean", "convert", "change", "alter", "repaint",
+               "re-paint", "remediat", "repav", "re-pav", "abate", "adjust", "annual", "test", "rehab", "realign", "remodel", "improv", "broke", "expans",
+               "revis", "restrip", "substit", "patch", "dredg", "resurfac", "outdat", "reconfig", "refurb", "rerout", "replen", "troubleshoot",
+               "correct", "updat", "treatment")
+
+
 ##error_check_contracts variables##
 naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
 naics_2007 <- c(314912, 315228, 315999, 316999, 332212, 333313, 333319, 333518, 334119, 334411, 339944, 443120)

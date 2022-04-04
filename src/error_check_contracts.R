@@ -45,22 +45,28 @@ contracts <- contracts %>%
 #Method 2: Taking out errors based on type - construction, "92s" NAICS, and NAs NAICS
 
 #CONSTRUCTION
-construction_contracts <- contracts %>%
-  filter(naics_code %in% construction_naics)
+#construction_contracts <- contracts %>%
+ # filter(naics_code %in% construction_naics)
 
-contracts <- contracts %>%
-  filter(!(naics_code %in% construction_naics))
+#contracts <- contracts %>%
+ # filter(!(naics_code %in% construction_naics))
 
 #"92s" NAICS
-naics_92_contracts <- contracts %>%
-  filter(grepl(("^92"), naics_code))
+#naics_92_contracts <- contracts %>%
+ # filter(grepl(("^92"), naics_code))
 
-contracts <- contracts %>%
-  filter(!(grepl(("^92"), naics_code)))
+#contracts <- contracts %>%
+ # filter(!(grepl(("^92"), naics_code)))
 
 #NA NAICS
-naics_na_contracts <- contracts %>%
-  filter(is.na(naics_code))
+#naics_na_contracts <- contracts %>%
+ # filter(is.na(naics_code))
 
-contracts <- contracts %>%
-  filter(!is.na(naics_code))
+#contracts <- contracts %>%
+ # filter(!is.na(naics_code))
+
+
+
+## Apply contract_check filter to filter out contracts that should be assigned IMPLAN code 60
+implan_60_contracts <- contracts_errors[contract_check(patterns = implan_60, data = contracts_errors$award_description),]
+contracts_errors <- contracts_errors[!(contract_check(patterns = implan_60, data = contracts_errors$award_description)),]

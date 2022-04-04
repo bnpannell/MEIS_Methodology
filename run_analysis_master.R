@@ -17,6 +17,7 @@ source("parameters.R")
 
 ##Load Function Scripts##
 source("src/filter_usaspending.R")
+#source("src/contract_check.R")
 source("src/concatenate_usaspending.R")
 source("src/split_usaspending.R")
 source("src/aggregate_usaspending.R")
