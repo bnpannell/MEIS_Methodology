@@ -6,6 +6,15 @@ contracts <- read.csv(file.path(getwd(), "data", "temp", paste0(f_year, c_out_na
 #First read in the NAICS to NAICS crosswalk and merge to contract entries to get a new dataframe that includes contracts entries with 2007 NAICS codes and their 2017 equivalent
 naics2naics <- read.xlsx(file.path(getwd(), "data", "raw", naics_crosswalk))
 
+#Rewrite the 2007 NAICS codes in the contracts dataframe by matching it to those in the 2007 to 2017 NAICS crosswalk dataframe
+contracts$naics_code <- naics2naics$`2017_NAICS`[match(contracts$naics_code, naics2naics$`2007_NAICS`)]
+
+
+old_contracts <- contracts %>%
+  filter(naics_code %in% naics_2007)
+
+
+
 contracts_naics_fix <- merge(x=contracts, y=naics2naics, by.x="naics_code", by.y="2007_NAICS", x.all=FALSE, y.all=FALSE)
 
 #Drop the contracts whose NAICS have to be fixed from the original contracts dataframe - these will be rbind back together after the fix
