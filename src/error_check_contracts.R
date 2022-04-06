@@ -7,25 +7,9 @@ contracts <- read.csv(file.path(getwd(), "data", "temp", paste0(f_year, c_out_na
 naics2naics <- read.xlsx(file.path(getwd(), "data", "raw", naics_crosswalk))
 
 #Rewrite the 2007 NAICS codes in the contracts dataframe by matching it to those in the 2007 to 2017 NAICS crosswalk dataframe
-contracts$naics_code <- naics2naics$`2017_NAICS`[match(contracts$naics_code, naics2naics$`2007_NAICS`)]
-
-
-old_contracts <- contracts %>%
-  filter(naics_code %in% naics_2007)
-
-
-
-contracts_naics_fix <- merge(x=contracts, y=naics2naics, by.x="naics_code", by.y="2007_NAICS", x.all=FALSE, y.all=FALSE)
-
-#Drop the contracts whose NAICS have to be fixed from the original contracts dataframe - these will be rbind back together after the fix
-contracts <- contracts[! contracts$naics_code %in% naics_2007,]
-  
-#Drop the 2007 NAICS code column, rename the 2017 NAICS column to "naics_code", and rbind back to contracts dataframe
-contracts_naics_fix <- contracts_naics_fix %>%
-  select(-(naics_code)) %>%
-  rename(naics_code = "2017_NAICS")
-
-contracts <- rbind(contracts, contracts_naics_fix)
+for (i in 1:nrow(naics2naics)) {
+  contracts$naics_code[grep(naics2naics$`2007_NAICS`[i],contracts$naics_code)] <- naics2naics$`2017_NAICS`[i]
+}
 
 #Now load in the NAICS to IMPLAN crosswalk and merge to contracts - this will assign contracts entries to their appropriate IMPLAN code based on 2012 and 2017 NAICS codes
 naics2implan <- read.xlsx(file.path(getwd(), "data", "raw", implan_crosswalk))
@@ -34,6 +18,37 @@ naics2implan <- naics2implan %>%
   distinct(naics_code, implan_code, .keep_all = TRUE)
 
 contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
+
+#Next, hard code any contract entries with a NAICS code starting with "92" to IMPLAN code 528
+contracts$implan_code[startsWith(as.character(contracts$naics_code), "92")] <- "528"
+
+#Pull out all contracts errors - those entries without an IMPLAN code
+
+index_na <- which(is.na(contracts$implan_code) & is.na(contracts$naics_code))
+index_construct <- which(substr(contracts$naics_code,1,2) == "23")
+
+
+
+
+
+contracts_errors <- contracts %>%
+  filter(is.na(implan_code) & is.na(naics_code))
+
+contracts <- contracts %>%
+  filter(!(is.na(implan_code) | is.na(naics_code)))
+
+#Now, pull out construction contracts from the contracts_errors dataframe - there are some entries we can fix easily
+construction_contracts <- contracts_errors[which(substr(contracts_errors$naics_code,1,2) == "23"),]
+
+contracts_errors <- contracts_errors[which(!substr(contracts_errors$naics_code,1,2) == "23"),]
+
+#Construction contracts that have NAICS code 236118 can be associated with IMPLAN code 61. Also, we developed a word search to assign construction contracts to IMPLAN code 60.
+construction_contracts <- construction_contracts %>%
+  mutate(implan_code = case_when(startsWith(as.character(naics_code), "236118") ~ "61",))
+
+implan_60_contracts <- construction_contracts[contract_check(patterns = implan_60, data = construction_contracts$award_description),]
+contracts_errors <- construction_contracts[!(contract_check(patterns = implan_60, data = construction_contracts$award_description)),]
+
 
 #Pull out all contracts entries which do not have an IMPLAN code - this includes construction codes, the "92s", and some entries which didn't have a NAICS code
 
@@ -44,28 +59,10 @@ contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, a
 
 
 #Method 1: Lumping all errors out together
-contracts_errors <- contracts %>%
-  filter(is.na(implan_code))
 
-contracts <- contracts %>%
-  filter(!is.na(implan_code))
 
 
 #Method 2: Taking out errors based on type - construction, "92s" NAICS, and NAs NAICS
-
-#CONSTRUCTION
-#construction_contracts <- contracts %>%
- # filter(naics_code %in% construction_naics)
-
-#contracts <- contracts %>%
- # filter(!(naics_code %in% construction_naics))
-
-#"92s" NAICS
-#naics_92_contracts <- contracts %>%
- # filter(grepl(("^92"), naics_code))
-
-#contracts <- contracts %>%
- # filter(!(grepl(("^92"), naics_code)))
 
 #NA NAICS
 #naics_na_contracts <- contracts %>%
@@ -76,6 +73,3 @@ contracts <- contracts %>%
 
 
 
-## Apply contract_check filter to filter out contracts that should be assigned IMPLAN code 60
-implan_60_contracts <- contracts_errors[contract_check(patterns = implan_60, data = contracts_errors$award_description),]
-contracts_errors <- contracts_errors[!(contract_check(patterns = implan_60, data = contracts_errors$award_description)),]

@@ -62,7 +62,6 @@ implan_60 <- c("repair", "rpr", "maint", "renovat", "replac", "inspect", "instal
 
 ##error_check_contracts variables##
 naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
-naics_2007 <- c(314912, 315228, 315999, 316999, 332212, 333313, 333319, 333518, 334119, 334411, 339944, 443120)
 
 implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
 construction_naics <- c(236118, 236220, 237110, 237130, 237310, 237990, 238110, 238120, 238140, 238160, 238190, 238210, 

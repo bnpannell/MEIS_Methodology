@@ -17,5 +17,3 @@ contract_check <- function(patterns, data){
   }
   return(val)
 }
-
-test <- contracts_errors[!(contract_check(patterns = implan_60, data = contracts_errors$award_description)),]
