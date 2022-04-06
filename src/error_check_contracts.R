@@ -22,25 +22,41 @@ contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, a
 #Next, hard code any contract entries with a NAICS code starting with "92" to IMPLAN code 528
 contracts$implan_code[startsWith(as.character(contracts$naics_code), "92")] <- "528"
 
-#Pull out all contracts errors - those entries without an IMPLAN code
 
-index_na <- which(is.na(contracts$implan_code) & is.na(contracts$naics_code))
-index_construct <- which(substr(contracts$naics_code,1,2) == "23")
+##Define all the tiers of errors as indices that we need to pull out from the contracts dataframe, based on error type and appropriate fix. This includes:
+#Contracts without districts; Contracts with construction NAICS codes that either have no IMPLAN code and/or no district; and Contracts with no NAICS##
+
+no_dist_ind <- which(is.na(contracts$recipient_congressional_district) & !(substr(contracts$naics_code,1,2) == "23") & !(is.na(contracts$implan_code)))
+constr_ind <- which(substr(contracts$naics_code,1,2) == "23" & !(is.na(contracts$recipient_congressional_district)))
+constr_no_dist_ind <- which(substr(contracts$naics_code,1,2) == "23" & is.na(contracts$recipient_congressional_district))
+no_naics_ind <- which(is.na(contracts$implan_code) & is.na(contracts$naics_code))
+
+#Pull out these various errors into their own dataframes, and drop from the contracts dataframe
+no_dist_contracts <- contracts[no_dist_ind,]
+construction_contracts <- contracts[constr_ind,]
+construction_contracts_no_dist <- contracts[constr_no_dist_ind,]
+no_naics_contracts <- contracts[no_naics_ind,]
+
+contracts <- contracts[-c(no_dist_ind, constr_ind, constr_no_dist_ind, no_naics_ind),]
+
+
+
+##FIX TIER 2: CONTRACTS WITHOUT DISTRICTS. USE DISTRICTS CROSSWALK FROM DATA/RAW TO ASSIGN DISTRICTS.
+
+#Read in CSV file that contains congressional districts for contract entries based on contract recipient
+contr_dist_cw <- read.csv(file.path(getwd(), "data", "raw", contr_dist_crosswalk), fileEncoding="UTF-8-BOM")
+
+#Rewrite the NA district values in the no_dist_contracts dataframe by matching it to those in the crosswalk dataframe that we just read in
+for (i in 1:nrow(contr_dist_cw)) {
+  no_dist_contracts$recipient_congressional_district[grep(contr_dist_cw$recipient_name[i],no_dist_contracts$recipient_name)] <- contr_dist_cw$recipient_congressional_district[i]
+}
+
+#Concat the now-fixed entries back into the contracts dataframe - TIER 2 COMPLETED.
 
 
 
 
-
-contracts_errors <- contracts %>%
-  filter(is.na(implan_code) & is.na(naics_code))
-
-contracts <- contracts %>%
-  filter(!(is.na(implan_code) | is.na(naics_code)))
-
-#Now, pull out construction contracts from the contracts_errors dataframe - there are some entries we can fix easily
-construction_contracts <- contracts_errors[which(substr(contracts_errors$naics_code,1,2) == "23"),]
-
-contracts_errors <- contracts_errors[which(!substr(contracts_errors$naics_code,1,2) == "23"),]
+#FIX TIER 3: CONSTRUCTION CONTRACTS WITH DISTRICTS. USE WORD SEARCH FOR IMPLAN 60 CODES.
 
 #Construction contracts that have NAICS code 236118 can be associated with IMPLAN code 61. Also, we developed a word search to assign construction contracts to IMPLAN code 60.
 construction_contracts <- construction_contracts %>%
@@ -50,26 +66,20 @@ implan_60_contracts <- construction_contracts[contract_check(patterns = implan_6
 contracts_errors <- construction_contracts[!(contract_check(patterns = implan_60, data = construction_contracts$award_description)),]
 
 
-#Pull out all contracts entries which do not have an IMPLAN code - this includes construction codes, the "92s", and some entries which didn't have a NAICS code
 
-##QUESTION FOR BRITNEE!! Do we want to just pull out all these errors together, or pull them out based on error type (i.e. 1 for construction, 1 for "92s", and 1 for no NAICS codes?)
-##NOTE: Method 1 grabs 3,337 entries of errors. Method 2 combined grabs 3,283 entries of errors, meaning it has 54 less than Method 1. 
-##The issue is partly with construction (45 entries aren't pulled out - idk why?), and partly because there are 9 entries with unresolved/unaccounted for NAICS - 339111 and 514210.
+
+#FIX TIER 3A: CONSTRUCTION CONTRACTS WITH DISTRICTS THAT WERE NOT CAPTURED ABOVE. MANUALLY ASSIGN IMPLAN CODES.
 
 
 
-#Method 1: Lumping all errors out together
 
 
 
-#Method 2: Taking out errors based on type - construction, "92s" NAICS, and NAs NAICS
-
-#NA NAICS
-#naics_na_contracts <- contracts %>%
- # filter(is.na(naics_code))
-
-#contracts <- contracts %>%
- # filter(!is.na(naics_code))
+#FIX TIER 4: CONSTRUCTION CONTRACTS WITHOUT DISTRICTS. MANUALLY ASSIGN IMPLAN CODES AND/OR DISTRICTS?
 
 
 
+
+
+
+#FIX TIER 5: CONTRACTS WITH NO NAICS OR IMPLAN CODE. MANUALLY FIX?
