@@ -1,12 +1,11 @@
-##This code checks the contracts data for errors, fixes the errors where possible, and calculates the weights for NAICS codes with multiple IMPLAN codes
+##This code checks the contracts data for errors, fixes the errors where possible, and produces a cleaned contracts dataframe + an error file to work through in later code##
 
 #Load in contracts data
 contracts <- read.csv(file.path(getwd(), "data", "temp", paste0(f_year, c_out_name)))
 
-#First read in the NAICS to NAICS crosswalk and merge to contract entries to get a new dataframe that includes contracts entries with 2007 NAICS codes and their 2017 equivalent
+#First read in the NAICS to NAICS crosswalk. Then rewrite the 2007 NAICS codes in the contracts dataframe by matching it to those in the 2007 to 2017 NAICS crosswalk dataframe
 naics2naics <- read.xlsx(file.path(getwd(), "data", "raw", naics_crosswalk))
 
-#Rewrite the 2007 NAICS codes in the contracts dataframe by matching it to those in the 2007 to 2017 NAICS crosswalk dataframe
 for (i in 1:nrow(naics2naics)) {
   contracts$naics_code[grep(naics2naics$`2007_NAICS`[i],contracts$naics_code)] <- naics2naics$`2017_NAICS`[i]
 }
@@ -24,21 +23,24 @@ contracts$implan_code[startsWith(as.character(contracts$naics_code), "92")] <- "
 
 
 ##Define all the tiers of errors as indices that we need to pull out from the contracts dataframe, based on error type and appropriate fix. This includes:
-#Contracts without districts; Contracts with construction NAICS codes that either have no IMPLAN code and/or no district; and Contracts with no NAICS##
-
+#Contracts without districts; and Contracts with construction NAICS codes that either have no IMPLAN code and/or no district##
 no_dist_ind <- which(is.na(contracts$recipient_congressional_district) & !(substr(contracts$naics_code,1,2) == "23") & !(is.na(contracts$implan_code)))
 constr_ind <- which(substr(contracts$naics_code,1,2) == "23" & !(is.na(contracts$recipient_congressional_district)))
 constr_no_dist_ind <- which(substr(contracts$naics_code,1,2) == "23" & is.na(contracts$recipient_congressional_district))
-no_naics_ind <- which(is.na(contracts$implan_code) & is.na(contracts$naics_code))
 
 #Pull out these various errors into their own dataframes, and drop from the contracts dataframe
 no_dist_contracts <- contracts[no_dist_ind,]
 construction_contracts <- contracts[constr_ind,]
 construction_contracts_no_dist <- contracts[constr_no_dist_ind,]
-no_naics_contracts <- contracts[no_naics_ind,]
 
-contracts <- contracts[-c(no_dist_ind, constr_ind, constr_no_dist_ind, no_naics_ind),]
+contracts <- contracts[-c(no_dist_ind, constr_ind, constr_no_dist_ind),]
 
+##Last, be sure to pull out any other contracts entries that do not fall to the above categories, but did not get an IMPLAN code assigned to them. Repeat above process##
+no_implan_rem_ind <- which(is.na(contracts$implan_code))
+                           
+no_implan_contracts <- contracts[no_implan_rem_ind,]
+
+contracts <- contracts[-no_implan_rem_ind,]
 
 
 ##FIX TIER 2: CONTRACTS WITHOUT DISTRICTS. USE DISTRICTS CROSSWALK FROM DATA/RAW TO ASSIGN DISTRICTS.
@@ -48,12 +50,16 @@ contr_dist_cw <- read.csv(file.path(getwd(), "data", "raw", contr_dist_crosswalk
 
 #Rewrite the NA district values in the no_dist_contracts dataframe by matching it to those in the crosswalk dataframe that we just read in
 for (i in 1:nrow(contr_dist_cw)) {
-  no_dist_contracts$recipient_congressional_district[grep(contr_dist_cw$recipient_name[i],no_dist_contracts$recipient_name)] <- contr_dist_cw$recipient_congressional_district[i]
+ pattern <- gsub("\\(", "\\\\(", contr_dist_cw$recipient_name[i])
+ pattern <- gsub("\\)", "\\\\)", pattern)
+  no_dist_contracts$recipient_congressional_district[grep(pattern,no_dist_contracts$recipient_name)] <- contr_dist_cw$recipient_congressional_district[i]
 }
 
-#Concat the now-fixed entries back into the contracts dataframe - TIER 2 COMPLETED.
 
+#Concat the now-fixed entries back into the contracts dataframe and drop the fixed dataframe - TIER 2 COMPLETED.
+contracts <- rbind(contracts, no_dist_contracts)
 
+rm(no_dist_contracts)
 
 
 #FIX TIER 3: CONSTRUCTION CONTRACTS WITH DISTRICTS. USE WORD SEARCH FOR IMPLAN 60 CODES.
