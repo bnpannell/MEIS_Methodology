@@ -35,7 +35,7 @@ construction_contracts_no_dist <- contracts[constr_no_dist_ind,]
 
 contracts <- contracts[-c(no_dist_ind, constr_ind, constr_no_dist_ind),]
 
-##Last, be sure to pull out any other contracts entries that do not fall to the above categories, but did not get an IMPLAN code assigned to them. Repeat above process##
+##Last, be sure to pull out any other contracts entries that do not fall to the above categories, but still did not have an IMPLAN code assigned to them. Repeat above process##
 no_implan_rem_ind <- which(is.na(contracts$implan_code))
                            
 no_implan_contracts <- contracts[no_implan_rem_ind,]
@@ -43,7 +43,7 @@ no_implan_contracts <- contracts[no_implan_rem_ind,]
 contracts <- contracts[-no_implan_rem_ind,]
 
 
-##FIX TIER 2: CONTRACTS WITHOUT DISTRICTS. USE DISTRICTS CROSSWALK FROM DATA/RAW TO ASSIGN DISTRICTS.
+##FIX TIER 2: CONTRACTS WITHOUT DISTRICTS. USE DISTRICTS CROSSWALK FROM DATA/RAW FOLDER TO ASSIGN DISTRICTS.
 
 #Read in CSV file that contains congressional districts for contract entries based on contract recipient
 contr_dist_cw <- read.csv(file.path(getwd(), "data", "raw", contr_dist_crosswalk), fileEncoding="UTF-8-BOM")
@@ -55,37 +55,54 @@ for (i in 1:nrow(contr_dist_cw)) {
   no_dist_contracts$recipient_congressional_district[grep(pattern,no_dist_contracts$recipient_name)] <- contr_dist_cw$recipient_congressional_district[i]
 }
 
-
 #Concat the now-fixed entries back into the contracts dataframe and drop the fixed dataframe - TIER 2 COMPLETED.
+#NOTE: The fixed dataframe should only be dropped once all the values in the recipient_congressional_district column is filled.
 contracts <- rbind(contracts, no_dist_contracts)
 
 rm(no_dist_contracts)
 
 
-#FIX TIER 3: CONSTRUCTION CONTRACTS WITH DISTRICTS. USE WORD SEARCH FOR IMPLAN 60 CODES.
+#FIX TIER 3: CONSTRUCTION CONTRACTS WITH DISTRICTS. FIX ENTRIES WITH NAICS 236118, AND THEN USE WORD SEARCH FOR IMPLAN 60 CODES.
 
-#Construction contracts that have NAICS code 236118 can be associated with IMPLAN code 61. Also, we developed a word search to assign construction contracts to IMPLAN code 60.
+#Construction contracts that have NAICS code 236118 can be assigned to IMPLAN code 61. Pull those into their own dataframe, and drop from construction contracts dataframe.
 construction_contracts <- construction_contracts %>%
   mutate(implan_code = case_when(startsWith(as.character(naics_code), "236118") ~ "61",))
 
+naics_236118_contracts <- construction_contracts %>%
+  filter(!is.na(implan_code))
+construction_contracts <- construction_contracts %>%
+  filter(is.na(implan_code))
+
+#Rbind this fixed dataframe into the main contracts dataframe and then remove the fixed dataframe
+contracts <- rbind(contracts, naics_236118_contracts)
+rm(naics_236118_contracts)
+
+#Utilize the contract_check function and the word search defined in parameters to pull out certain construction contracts and drop them from the construction contracts dataframe. 
+#All of these contracts will be assigned to IMPLAN code 60
 implan_60_contracts <- construction_contracts[contract_check(patterns = implan_60, data = construction_contracts$award_description),]
-contracts_errors <- construction_contracts[!(contract_check(patterns = implan_60, data = construction_contracts$award_description)),]
+implan_60_contracts$implan_code <- 60
 
+construction_contracts <- construction_contracts[!(contract_check(patterns = implan_60, data = construction_contracts$award_description)),]
 
+#Rbind this fixed dataframe into the main contracts dataframe and then remove the fixed dataframe - TIER 3 COMPLETED.
+contracts <- rbind(contracts, implan_60_contracts)
+rm(implan_60_contracts)
 
 
 #FIX TIER 3A: CONSTRUCTION CONTRACTS WITH DISTRICTS THAT WERE NOT CAPTURED ABOVE. MANUALLY ASSIGN IMPLAN CODES.
 
-
+construction_contracts
 
 
 
 
 #FIX TIER 4: CONSTRUCTION CONTRACTS WITHOUT DISTRICTS. MANUALLY ASSIGN IMPLAN CODES AND/OR DISTRICTS?
 
+construction_contracts_no_dist
 
 
 
 
+#FIX TIER 5: REMAINING CONTRACTS WITH NO IMPLAN CODE. MANUALLY FIX?
 
-#FIX TIER 5: CONTRACTS WITH NO NAICS OR IMPLAN CODE. MANUALLY FIX?
+no_implan_contracts
