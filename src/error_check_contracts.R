@@ -20,13 +20,13 @@ contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, a
 
 #Next, hard code any contract entries with a NAICS code starting with "92" to IMPLAN code 528
 contracts$implan_code[startsWith(as.character(contracts$naics_code), "92")] <- "528"
-
+contracts$implan_code[startsWith(as.character(contracts$naics_code), "236118")] <- "61"
 
 ##Define all the tiers of errors as indices that we need to pull out from the contracts dataframe, based on error type and appropriate fix. This includes:
 #Contracts without districts; and Contracts with construction NAICS codes that either have no IMPLAN code and/or no district##
 no_dist_ind <- which(is.na(contracts$recipient_congressional_district) & !(substr(contracts$naics_code,1,2) == "23") & !(is.na(contracts$implan_code)))
-constr_ind <- which(substr(contracts$naics_code,1,2) == "23" & !(is.na(contracts$recipient_congressional_district)))
-constr_no_dist_ind <- which(substr(contracts$naics_code,1,2) == "23" & is.na(contracts$recipient_congressional_district))
+constr_ind <- which(substr(contracts$naics_code,1,2) == "23" & !(is.na(contracts$recipient_congressional_district)) & is.na(contracts$implan_code))
+constr_no_dist_ind <- which(substr(contracts$naics_code,1,2) == "23" & is.na(contracts$recipient_congressional_district) & is.na(contracts$implan_code))
 
 #Pull out these various errors into their own dataframes, and drop from the contracts dataframe
 no_dist_contracts <- contracts[no_dist_ind,]
@@ -51,7 +51,7 @@ contr_dist_cw <- read.csv(file.path(getwd(), "data", "raw", contr_dist_crosswalk
 #Rewrite the NA district values in the no_dist_contracts dataframe by matching it to those in the crosswalk dataframe that we just read in
 for (i in 1:nrow(contr_dist_cw)) {
  pattern <- gsub("\\(", "\\\\(", contr_dist_cw$recipient_name[i])
- pattern <- gsub("\\)", "\\\\)", pattern)
+ pattern <- gsub("\\)", "\\\\)", pattern) ##DOUBLE CHECK THAT THERE ARE NO OTHER SPECIAL CHARACTERS IN R THAT ONE MAY NEED TO ESCAPE OUT OF. POTENTIALLY MAKE AS VARIABLE IN PARAMETERS IF THAT IS THE CASE.
   no_dist_contracts$recipient_congressional_district[grep(pattern,no_dist_contracts$recipient_name)] <- contr_dist_cw$recipient_congressional_district[i]
 }
 
@@ -62,20 +62,7 @@ contracts <- rbind(contracts, no_dist_contracts)
 rm(no_dist_contracts)
 
 
-#FIX TIER 3: CONSTRUCTION CONTRACTS WITH DISTRICTS. FIX ENTRIES WITH NAICS 236118, AND THEN USE WORD SEARCH FOR IMPLAN 60 CODES.
-
-#Construction contracts that have NAICS code 236118 can be assigned to IMPLAN code 61. Pull those into their own dataframe, and drop from construction contracts dataframe.
-construction_contracts <- construction_contracts %>%
-  mutate(implan_code = case_when(startsWith(as.character(naics_code), "236118") ~ "61",))
-
-naics_236118_contracts <- construction_contracts %>%
-  filter(!is.na(implan_code))
-construction_contracts <- construction_contracts %>%
-  filter(is.na(implan_code))
-
-#Rbind this fixed dataframe into the main contracts dataframe and then remove the fixed dataframe
-contracts <- rbind(contracts, naics_236118_contracts)
-rm(naics_236118_contracts)
+#FIX TIER 3: CONSTRUCTION CONTRACTS WITH DISTRICTS. USE WORD SEARCH FOR IMPLAN 60 CODES.
 
 #Utilize the contract_check function and the word search defined in parameters to pull out certain construction contracts and drop them from the construction contracts dataframe. 
 #All of these contracts will be assigned to IMPLAN code 60
