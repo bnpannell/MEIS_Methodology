@@ -18,6 +18,9 @@ source("parameters.R")
 ##Load Function Scripts##
 source("src/filter_usaspending.R")
 source("src/contract_check.R")
+#source("src/t1_contracts_error_check.R")
+#source("src/t2_contracts_error_check.R")
+#source("src/t3_contracts_error_check.R")
 source("src/concatenate_usaspending.R")
 source("src/split_usaspending.R")
 source("src/aggregate_usaspending.R")
@@ -33,12 +36,60 @@ source("src/aggregate_usaspending.R")
 cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
 gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
 
-##Filter data##
+##Filter USAspending data##
 filter_usaspending(cfile_name, state, contract_columns, paste0(f_year, c_out_name))
 filter_usaspending(gfile_name, state, grant_columns, paste0(f_year, g_out_name))
 
-##Run error check on data##
-source("src/error_check_contracts.R")
+##Run error check on USAspending data##
+#CONTRACTS DATA - read in CSV
+contracts <- read.csv(file.path(getwd(), "data", "temp", paste0(f_year, c_out_name)))
+
+#Then read in the NAICS to NAICS crosswalk and rewrite the 2007 NAICS codes in the contracts dataframe by matching it to those in the 2007 to 2017 NAICS crosswalk dataframe
+naics2naics <- read.xlsx(file.path(getwd(), "data", "raw", naics_crosswalk))
+
+for (i in 1:nrow(naics2naics)) {
+  contracts$naics_code[grep(naics2naics$`2007_NAICS`[i],contracts$naics_code)] <- naics2naics$`2017_NAICS`[i]
+}
+
+#Now load in the NAICS to IMPLAN crosswalk and merge to contracts - this will assign contracts entries to their appropriate IMPLAN code based on 2012 and 2017 NAICS codes
+naics2implan <- read.xlsx(file.path(getwd(), "data", "raw", implan_crosswalk))
+naics2implan <- naics2implan %>%
+  rename(naics_code = "NaicsCode", implan_code = "Implan546Index") %>%
+  distinct(naics_code, implan_code, .keep_all = TRUE)
+
+contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
+
+#Next, hard code any contract entries with a NAICS code starting with "92" to IMPLAN code 528
+contracts$implan_code[startsWith(as.character(contracts$naics_code), "92")] <- "528"
+contracts$implan_code[startsWith(as.character(contracts$naics_code), "236118")] <- "61"
+
+#Define the indices of contract entries based on error type - contracts but no district, construction contracts, etc.
+no_dist_ind <- which(is.na(contracts$recipient_congressional_district) & !(substr(contracts$naics_code,1,2) == "23") & !(is.na(contracts$implan_code)))
+constr_ind <- which(substr(contracts$naics_code,1,2) == "23" & is.na(contracts$implan_code))
+#no_implan_rem_ind <- which(is.na(contracts$implan_code)) # DO WE NEED THIS ONE? ALSO NOTE - IF WE RUN/USE THIS, WE NEED TO FIRST PULL OUT THE INDEXED ENTRIES FROM THE 2 ABOVE
+
+#Pull out construction contracts into its own dataframe, and drop from the main contracts dataframe
+construction_contracts <- contracts[constr_ind,]
+contracts <- contracts[-constr_ind,]
+
+#Run the IMPLAN code 60 word search on the construction contracts - this will assign IMPLAN code 60 to contracts based on their award description
+implan_60_contracts <- construction_contracts[contract_check(patterns = implan_60, data = construction_contracts$award_description),]
+implan_60_contracts$implan_code <- 60
+
+construction_contracts <- construction_contracts[!(contract_check(patterns = implan_60, data = construction_contracts$award_description)),]
+
+#Bring back these 2 dataframes into the main contracts dataframe, and then drop both separate dataframes from environment
+contracts_list <- list(contracts, implan_60_contracts, construction_contracts)
+contracts <- Reduce(function(x,y) merge(x, y, all=TRUE), contracts_list)
+
+rm(implan_60_contracts, construction_contracts, contracts_list)
+
+#Load in functions that that apply appropriate tier fix to contracts data
+
+
+
+
+#GRANTS DATA - read in CSV
 source("src/error_check_grants.R")
 
 ##NOTE: DOUBLE CHECK THE ERRORS FOUND IN THE 2 PREVIOUS LINES OF CODE TO DETERMINE WHAT/HOW TO FIX VIA NEXT 2 LINES OF CODE
