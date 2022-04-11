@@ -1,34 +1,22 @@
 ## To do List for rest of project
 (delete as items are completed- delete entire file once project is complete)
 
-1. Figure out how to handle NAICS errors
-  - Ask Devin how to handle construction codes and 92 series codes, hard code them if possible and emit them from error output that way
+1. Go into library REPO and delete notes from src files
 
-  
-2. DONE
-  
-3. Double check no NAICS code industries repair code - this will just have to be hard coded. Don't see a way around it
+2. Document census parameters in Readme
 
-4. DONE
-   
-5. Mostly DONE, still need new code made to handle grant specific DISTRICT values being 90, already have contracts industry fixes finished
+3. Keep redoing census call from scratch on back burner
 
-6. Take a look into SmartPay
-  - Will probably need to explain A LOT about the process we used to distribute SmartPay spending across the agencies
-  - Maybe make as an optional piece?
-  
-7. Start looking at employment data
-  - Is this all stuff to be hard coded? Documentation will be rough, take extensive notes
-  
-8. Final steps will be making sure all outputs are ready for IMPLAN - do we want to provide the file schemas to run the final code bits?
+4. Add Log File to API calls (talk to Patrick about how this works)
 
-9. Go through and re-outline the documentation, make sure to go over old notes to ensure nothing tricky or different was left out of the documentation
-  - Readme file should be finalized first, and documentation structured off of it for a start
-  
-10. Finalize documentation repo and add in html links etc
+7. Error check and weight census: Double check new business crosswalk for contracts without District values - document how this was done and the logic behind it.
 
-11. Get Devin and Tom to proof read, apply edits and get ready for publishing. 
+8. NAICS crosswalk that includes 2007, 2002 and 2012 codes figured out, document how this data is obtained including lookup website for NAICS
 
-12. Priority goes to getting documentation ready for how we did it for 2021 data- then going into detail on how subsequent years will work
-    based on modifications and efficiences worked into new code 
+9. Deal with Construction NAICS codes- using the justification that if we dont find 'maintainence words' we assume is newer construction and we put it in a bin that seems correct based on the multipliers used by IMPLAN in the 'enter 1 million $ test' and split the difference. 
 
+10. Error check Grants: Need a crosswalk to fix grant errors where no district is assigned (but there are few so yay)
+
+11. Will need to add better instructions for dealing with fixes. IE - pull out error entries. Make fix file (if needed) save fix file(s) and run fix code and make sure it reconcats fixes back to main code block.
+
+12. Generate employment dataframe will need edits
