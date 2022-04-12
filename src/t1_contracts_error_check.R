@@ -5,3 +5,14 @@
 #Sort data based on if it has an implan_code and district
 #Pull it from the contracts dataframe and save it as a file if a file doesn't exist
 #if file exists, then append. If not, then make file. Subsequently, deletes that written data from the contracts dataframe.
+
+##Call file_check within the t1_check function##
+t1_check <- function(df1, file_path, file) {
+  t1_ind <- which(!(is.na(df1$recipient_congressional_district)) & !(is.na(df1$implan_code)))
+  df2 <- df1 %>%
+    filter(!is.na(recipient_congressional_district) & !is.na(implan_code))
+  file_check(file_path, file, df2)
+  contracts <<- df1[-t1_ind,]
+}
+
+t1_check(contracts, file.path(getwd(), "data", "temp"), paste0(f_year, "_cleaned_contracts.csv"))

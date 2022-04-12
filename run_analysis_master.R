@@ -18,7 +18,8 @@ source("parameters.R")
 ##Load Function Scripts##
 source("src/filter_usaspending.R")
 source("src/contract_check.R")
-#source("src/t1_contracts_error_check.R")
+source("src/file_check.R")
+source("src/t1_contracts_error_check.R")
 #source("src/t2_contracts_error_check.R")
 #source("src/t3_contracts_error_check.R")
 source("src/concatenate_usaspending.R")
@@ -59,7 +60,7 @@ naics2implan <- naics2implan %>%
 
 contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, all.y = FALSE)
 
-#Next, hard code any contract entries with a NAICS code starting with "92" to IMPLAN code 528
+#Next, hard code any contract entries with a NAICS code starting with 236118 and 92 to IMPLAN codes 61 and 528
 contracts$implan_code[startsWith(as.character(contracts$naics_code), "92")] <- "528"
 contracts$implan_code[startsWith(as.character(contracts$naics_code), "236118")] <- "61"
 
@@ -85,7 +86,7 @@ contracts <- Reduce(function(x,y) merge(x, y, all=TRUE), contracts_list)
 rm(implan_60_contracts, construction_contracts, contracts_list)
 
 #Load in functions that that apply appropriate tier fix to contracts data
-
+file_check(file.path(getwd(), "data", "temp"), paste0(f_year, "_cleaned_contracts.csv"), contracts)
 
 
 
