@@ -7,6 +7,11 @@ f_year = "2020" #Fiscal year of target data
 year = "2021" #report output year
 state = "CALIFORNIA"
 
+#General Paths to Folders
+output_path = file.path("output")
+temp_path = file.path("data", "temp")
+raw_path = file.path("data", "raw") 
+
 
 ##USAspending.gov API Variables##
 
