@@ -12,7 +12,11 @@ t1_check <- function(df1, file_path, file) {
   df2 <- df1 %>%
     filter(!is.na(recipient_congressional_district) & !is.na(implan_code))
   file_check(file_path, file, df2)
-  contracts <<- df1[-t1_ind,]
+  return(df1[-t1_ind,])
 }
 
-t1_check(contracts, file.path(getwd(), "data", "temp"), paste0(f_year, "_cleaned_contracts.csv"))
+
+
+contracts <- t1_check(contracts, file.path("data", "temp"), paste0(f_year, "_cleaned_contracts.csv"))
+
+write.csv("EFG", file.path("data", "temp", paste0(f_year, "test.csv"))

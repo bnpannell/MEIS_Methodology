@@ -8,3 +8,8 @@ file_check <- function(file_path, file, dataframe) {
     write.csv(dataframe, path, row.names = FALSE)
   }
 }
+
+
+ifelse(file.exists(path), write.table(dataframe, path, append = TRUE, row.names = FALSE), write.csv(dataframe, path, row.names = FALSE))
+
+#'
