@@ -53,7 +53,6 @@ if(request$status_code == 200){
 }
 
 #Set download file path
-temp_path = file.path(getwd(), "data", "temp")
 download_path = file.path(temp_path, content(request)$file_name)
 
 #Download file to download file path

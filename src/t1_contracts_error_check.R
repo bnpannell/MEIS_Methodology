@@ -12,16 +12,18 @@ t1_check <- function(df1, file_path) {
  # df2 <- df1 %>%
   #  filter(!is.na(recipient_congressional_district) & !is.na(implan_code))
   
-  ifelse(file.exists(file_path), write.table(df1[t1_ind,], file_path, append = TRUE, row.names = FALSE), write.csv(df1[t1_ind,], file_path, row.names = FALSE))
+  write.table(df1[t1_ind,], file_path, append = file.exists(file_path), col.names = !file.exists(file_path), row.names = FALSE, sep = ",")
  
   return(df1[-t1_ind,])
 }
 
-file_path <- file.path(temp_path, paste0(f_year, "_cleaned_contracts.txt"))
+contracts$award_description <-gsub("/","", as.character(contracts$award_description))
+contracts$award_description <-gsub(",","", as.character(contracts$award_description))
+contracts$award_description <-gsub(r"(\\)","", as.character(contracts$award_description))
+contracts$award_description <-gsub('"',"", as.character(contracts$award_description))
+
+
 
 contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, "_cleaned_contracts.csv")))
 
 
-
-write.table(test, file_path, append = file.exists(file_path), col.names = !file.exists(file_path), row.names = FALSE, sep = "\t")
-test <- contracts[grep("/", contracts$award_description),]
