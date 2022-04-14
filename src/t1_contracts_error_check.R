@@ -19,10 +19,3 @@ t1_check <- function(df1, file_path) {
   }
   return(df1[-t1_ind,])
 }
-
-contracts$award_description <-gsub("/","", as.character(contracts$award_description))
-contracts$award_description <-gsub(",","", as.character(contracts$award_description))
-contracts$award_description <-gsub(r"(\\)","", as.character(contracts$award_description))
-contracts$award_description <-gsub('"',"", as.character(contracts$award_description))
-
-contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, "_cleaned_contracts.csv")))

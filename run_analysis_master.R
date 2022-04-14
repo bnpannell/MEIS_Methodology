@@ -1,6 +1,6 @@
-## Master code for running MEIS analysis up until IMPLAN##
+##Master code for running MEIS analysis up until IMPLAN##
 
-## Clear Environment##
+##Clear Environment##
 rm(list = ls(all.names = TRUE))
 
 ##Load Libraries##
@@ -18,7 +18,7 @@ source("parameters.R")
 ##Load Function Scripts##
 source("src/filter_usaspending.R")
 source("src/contract_check.R")
-source("src/file_check.R")
+#source("src/file_check.R")
 source("src/t1_contracts_error_check.R")
 #source("src/t2_contracts_error_check.R")
 #source("src/t3_contracts_error_check.R")
@@ -34,26 +34,26 @@ source("src/aggregate_usaspending.R")
 #source("src/make_va_benefits_cw.R")
 
 ##Load in USASpending.gov Data##
-cfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(c_label, ".+\\.csv"))
-gfile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(g_label, ".+\\.csv"))
+cfile_name <- list.files(path = temp_path, pattern = paste0(c_label, ".+\\.csv"))
+gfile_name <- list.files(path = temp_path, pattern = paste0(g_label, ".+\\.csv"))
 
 ##Filter USAspending data##
 filter_usaspending(cfile_name, state, contract_columns, paste0(f_year, c_out_name))
 filter_usaspending(gfile_name, state, grant_columns, paste0(f_year, g_out_name))
 
 ##Run error check on USAspending data##
-#CONTRACTS DATA - read in CSV
-contracts <- read.csv(file.path(getwd(), "data", "temp", paste0(f_year, c_out_name)))
+##CONTRACTS DATA - read in CSV
+contracts <- read.csv(file.path(temp_path, paste0(f_year, c_out_name)))
 
 #Then read in the NAICS to NAICS crosswalk and rewrite the 2007 NAICS codes in the contracts dataframe by matching it to those in the 2007 to 2017 NAICS crosswalk dataframe
-naics2naics <- read.xlsx(file.path(getwd(), "data", "raw", naics_crosswalk))
+naics2naics <- read.xlsx(file.path(raw_path, naics_crosswalk))
 
 for (i in 1:nrow(naics2naics)) {
   contracts$naics_code[grep(naics2naics$`2007_NAICS`[i],contracts$naics_code)] <- naics2naics$`2017_NAICS`[i]
 }
 
 #Now load in the NAICS to IMPLAN crosswalk and merge to contracts - this will assign contracts entries to their appropriate IMPLAN code based on 2012 and 2017 NAICS codes
-naics2implan <- read.xlsx(file.path(getwd(), "data", "raw", implan_crosswalk))
+naics2implan <- read.xlsx(file.path(raw_path, implan_crosswalk))
 naics2implan <- naics2implan %>%
   rename(naics_code = "NaicsCode", implan_code = "Implan546Index") %>%
   distinct(naics_code, implan_code, .keep_all = TRUE)
@@ -85,13 +85,59 @@ contracts <- Reduce(function(x,y) merge(x, y, all=TRUE), contracts_list)
 
 rm(implan_60_contracts, construction_contracts, contracts_list)
 
-#Load in functions that that apply appropriate tier fix to contracts data
-file_check(file.path(getwd(), "data", "temp"), paste0(f_year, "_cleaned_contracts.csv"), contracts)
+#Fix issues with special characters in contracts' award description column, and then run the tier 1 check function on contracts
+contracts$award_description <-gsub("/","", as.character(contracts$award_description))
+contracts$award_description <-gsub(",","", as.character(contracts$award_description))
+contracts$award_description <-gsub(r"(\\)","", as.character(contracts$award_description))
+contracts$award_description <-gsub('"',"", as.character(contracts$award_description))
+
+contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, "_cleaned_contracts.csv")))
+
+
+#TEST - run after line 94, then repeat line 94. 8 entries should be dropped from contracts, and written to CSV file
+contracts_33 <- contracts %>%
+  filter(naics_code == 339111)
+contracts_33$implan_code <- 61
+
+contracts_ind <- which(contracts$naics_code == 339111)
+contracts <- contracts[-contracts_ind,]
+
+contracts <- rbind(contracts, contracts_33)
+
+rm(contracts_33)
 
 
 
-#GRANTS DATA - read in CSV
-source("src/error_check_grants.R")
+##GRANTS DATA - read in CSV
+grants <- read.csv(file.path(temp_path, paste0(f_year, g_out_name)))
+
+#Now read in the business type to IMPLAN crosswalk - this will help us assign IMPLAN codes to grants
+btype2implan <- read.csv(file.path(raw_path, paste0(btype_crosswalk)), fileEncoding="UTF-8-BOM")
+
+#Prior to running crosswalk - pull out the VA direct payments/benefits data - this does not get matched with an IMPLAN code - and write into CSV file
+va_benefits <- grants %>%
+  filter(grants$assistance_type_code == 10 | grants$assistance_type_code == 6)
+grants <- grants %>%
+  filter(!(grants$assistance_type_code == 10 | grants$assistance_type_code == 6))
+
+write.csv(va_benefits, file.path(temp_path, paste0(f_year, "_cleaned_va_benefits.csv")))
+
+# start first crosswalk error check of grants data to IMPLAN codes
+
+grants <- merge(grants, btype2implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE)
+
+#Fix issues with special characters in grants' award description column, and then run the tier 1 check function on grants
+grants$award_description <-gsub("/","", as.character(grants$award_description))
+grants$award_description <-gsub(",","", as.character(grants$award_description))
+
+grants <- t1_check(grants, file.path(temp_path, paste0(f_year, "_cleaned_grants.csv")))
+
+
+#We need to figure out how to pull the "90s" districts from grants if we want to use the t1_check function 
+#Also need to figure out what to do with the VA benefits - do we write into clean file or leave as dataframe? fix now or later?
+
+
+
 
 ##NOTE: DOUBLE CHECK THE ERRORS FOUND IN THE 2 PREVIOUS LINES OF CODE TO DETERMINE WHAT/HOW TO FIX VIA NEXT 2 LINES OF CODE
 
@@ -102,10 +148,10 @@ source("src/repair_and_weight_direct_payments.R")
 
 ##Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
 concat_files <- concat_usaspending(pattern = paste0(year, "_cleaned.+\\.csv"))
-write.csv(concat_files, file.path(getwd(), "data", "temp", paste0(f_year, u_out_name)), row.names = FALSE) 
+write.csv(concat_files, file.path(temp_path, paste0(f_year, u_out_name)), row.names = FALSE) 
 
 ##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending##
-ufile_name <- list.files(path = file.path(getwd(), "data", "temp"), pattern = paste0(f_year, u_out_name))
+ufile_name <- list.files(path = file.path(temp_path), pattern = paste0(f_year, u_out_name))
 
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)

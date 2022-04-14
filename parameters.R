@@ -71,6 +71,10 @@ implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
 contr_dist_crosswalk <- "contract_industry_district_crosswalk.csv"
 
 
+##error_check_grants variables##
+btype_crosswalk <- "business_type_to_implan546_crosswalk.csv"
+
+
 ##concatenate_usaspending variables##
 u_out_name = "_concatenated_usaspending.csv"
 
