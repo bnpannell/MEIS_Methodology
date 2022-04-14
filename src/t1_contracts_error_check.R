@@ -8,12 +8,15 @@
 
 ##Call file_check within the t1_check function##
 t1_check <- function(df1, file_path) {
-  t1_ind <- which(!(is.na(df1$recipient_congressional_district)) & !(is.na(df1$implan_code)))
+  t1_ind <- which(!is.na(df1$recipient_county_name) & !is.na(df1$recipient_congressional_district) & !is.na(df1$implan_code))
  # df2 <- df1 %>%
   #  filter(!is.na(recipient_congressional_district) & !is.na(implan_code))
-  
-  write.table(df1[t1_ind,], file_path, append = file.exists(file_path), col.names = !file.exists(file_path), row.names = FALSE, sep = ",")
- 
+  if(length(t1_ind)>0) {
+    write.table(df1[t1_ind,], file_path, append = file.exists(file_path), col.names = !file.exists(file_path), row.names = FALSE, sep = ",")
+    } 
+  else {
+      return(df1)
+  }
   return(df1[-t1_ind,])
 }
 
@@ -22,8 +25,4 @@ contracts$award_description <-gsub(",","", as.character(contracts$award_descript
 contracts$award_description <-gsub(r"(\\)","", as.character(contracts$award_description))
 contracts$award_description <-gsub('"',"", as.character(contracts$award_description))
 
-
-
 contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, "_cleaned_contracts.csv")))
-
-
