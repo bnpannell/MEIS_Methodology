@@ -13,7 +13,7 @@
 
 8. NAICS crosswalk that includes 2007, 2002 and 2012 codes figured out, document how this data is obtained including lookup website for NAICS
 
-9. Deal with Construction NAICS codes- using the justification that if we don't find 'maintenance words' we assume is newer construction and we put it in a bin that seems correct based on the multipliers used by IMPLAN in the 'enter 1 million $ test' and split the difference. 
+9. Deal with Construction NAICS codes- using the justification that if we don't find 'maintenance words' we assume is newer construction and we put it in a bin that seems correct based on the multipliers used by IMPLAN in the 'enter 1 million $ test' and split the difference.
 
 10. Error check Grants: Need a crosswalk to fix grant errors where no district is assigned (but there are few so yay)
 

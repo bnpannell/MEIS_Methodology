@@ -67,7 +67,6 @@ contracts$implan_code[startsWith(as.character(contracts$naics_code), "236118")] 
 #Define the indices of contract entries based on error type - contracts but no district, construction contracts, etc.
 no_dist_ind <- which(is.na(contracts$recipient_congressional_district) & !(substr(contracts$naics_code,1,2) == "23") & !(is.na(contracts$implan_code)))
 constr_ind <- which(substr(contracts$naics_code,1,2) == "23" & is.na(contracts$implan_code))
-#no_implan_rem_ind <- which(is.na(contracts$implan_code)) # DO WE NEED THIS ONE? ALSO NOTE - IF WE RUN/USE THIS, WE NEED TO FIRST PULL OUT THE INDEXED ENTRIES FROM THE 2 ABOVE
 
 #Pull out construction contracts into its own dataframe, and drop from the main contracts dataframe
 construction_contracts <- contracts[constr_ind,]
@@ -93,20 +92,7 @@ contracts$award_description <-gsub('"',"", as.character(contracts$award_descript
 
 contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, "_cleaned_contracts.csv")))
 
-
-#TEST - run after line 94, then repeat line 94. 8 entries should be dropped from contracts, and written to CSV file
-contracts_33 <- contracts %>%
-  filter(naics_code == 339111)
-contracts_33$implan_code <- 61
-
-contracts_ind <- which(contracts$naics_code == 339111)
-contracts <- contracts[-contracts_ind,]
-
-contracts <- rbind(contracts, contracts_33)
-
-rm(contracts_33)
-
-
+write.csv(contracts, "contract_errors.csv")
 
 ##GRANTS DATA - read in CSV
 grants <- read.csv(file.path(temp_path, paste0(f_year, g_out_name)))
@@ -120,9 +106,7 @@ va_benefits <- grants %>%
 grants <- grants %>%
   filter(!(grants$assistance_type_code == 10 | grants$assistance_type_code == 6))
 
-write.csv(va_benefits, file.path(temp_path, paste0(f_year, "_cleaned_va_benefits.csv")))
-
-# start first crosswalk error check of grants data to IMPLAN codes
+#start first crosswalk error check of grants data to IMPLAN codes
 
 grants <- merge(grants, btype2implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE)
 
@@ -131,12 +115,6 @@ grants$award_description <-gsub("/","", as.character(grants$award_description))
 grants$award_description <-gsub(",","", as.character(grants$award_description))
 
 grants <- t1_check(grants, file.path(temp_path, paste0(f_year, "_cleaned_grants.csv")))
-
-
-#We need to figure out how to pull the "90s" districts from grants if we want to use the t1_check function 
-#Also need to figure out what to do with the VA benefits - do we write into clean file or leave as dataframe? fix now or later?
-
-
 
 
 ##NOTE: DOUBLE CHECK THE ERRORS FOUND IN THE 2 PREVIOUS LINES OF CODE TO DETERMINE WHAT/HOW TO FIX VIA NEXT 2 LINES OF CODE
