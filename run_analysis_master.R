@@ -19,7 +19,7 @@ source("parameters.R")
 source("src/filter_usaspending.R")
 source("src/contract_check.R")
 #source("src/file_check.R")
-source("src/t1_contracts_error_check.R")
+source("src/t1_error_check.R")
 #source("src/t2_contracts_error_check.R")
 #source("src/t3_contracts_error_check.R")
 source("src/concatenate_usaspending.R")
@@ -64,25 +64,37 @@ contracts <- merge(contracts, naics2implan, by = ("naics_code"), all.x = TRUE, a
 contracts$implan_code[startsWith(as.character(contracts$naics_code), "92")] <- "528"
 contracts$implan_code[startsWith(as.character(contracts$naics_code), "236118")] <- "61"
 
-#Define the indices of contract entries based on error type - contracts but no district, construction contracts, etc.
-no_dist_ind <- which(is.na(contracts$recipient_congressional_district) & !(substr(contracts$naics_code,1,2) == "23") & !(is.na(contracts$implan_code)))
-constr_ind <- which(substr(contracts$naics_code,1,2) == "23" & is.na(contracts$implan_code))
+#Define index for construction contracts entries with NAICS 237310 - they need to be specifically fixed before moving forward
+constr_ind_237310 <- which(contracts$naics_code == "237310" & is.na(contracts$implan_code))
 
-#Pull out construction contracts into its own dataframe, and drop from the main contracts dataframe
+#Pull out construction contracts with NAICS code 237310 and apply their specific fix using 2 word searches with contract_check function
+construction_contracts_237310 <- contracts[constr_ind_237310,]
+contracts <- contracts[-constr_ind_237310,]
+
+construction_contracts_test1 <- construction_contracts_237310[contract_check(patterns = repair_implan_60, data = construction_contracts_237310$award_description),]
+construction_contracts_237310 <- construction_contracts_237310[!(contract_check(patterns = repair_implan_60, data = construction_contracts_237310$award_description)),]
+
+construction_contracts_test2 <- construction_contracts_test1[contract_check(patterns = aircraft_implan_60, data = construction_contracts_test1$award_description),]
+construction_contracts_test2$implan_code <- 60
+construction_contracts_test1 <- construction_contracts_test1[!(contract_check(patterns = aircraft_implan_60, data = construction_contracts_test1$award_description)),]
+construction_contracts_test1$implan_code <- 62
+
+#Pull out the remaining construction contracts into its own dataframe, and drop from the main contracts dataframe
+constr_ind <- which(substr(contracts$naics_code,1,2) == "23" & is.na(contracts$implan_code))
 construction_contracts <- contracts[constr_ind,]
 contracts <- contracts[-constr_ind,]
 
 #Run the IMPLAN code 60 word search on the construction contracts - this will assign IMPLAN code 60 to contracts based on their award description
-implan_60_contracts <- construction_contracts[contract_check(patterns = implan_60, data = construction_contracts$award_description),]
+implan_60_contracts <- construction_contracts[contract_check(patterns = repair_implan_60, data = construction_contracts$award_description),]
 implan_60_contracts$implan_code <- 60
 
-construction_contracts <- construction_contracts[!(contract_check(patterns = implan_60, data = construction_contracts$award_description)),]
+construction_contracts <- construction_contracts[!(contract_check(patterns = repair_implan_60, data = construction_contracts$award_description)),]
 
-#Bring back these 2 dataframes into the main contracts dataframe, and then drop both separate dataframes from environment
-contracts_list <- list(contracts, implan_60_contracts, construction_contracts)
+#Bring back all these dataframes into the main contracts dataframe, and then drop the separate dataframes from environment
+contracts_list <- list(contracts, construction_contracts_237310, construction_contracts_test1, construction_contracts_test2, implan_60_contracts, construction_contracts)
 contracts <- Reduce(function(x,y) merge(x, y, all=TRUE), contracts_list)
 
-rm(implan_60_contracts, construction_contracts, contracts_list)
+rm(construction_contracts_237310, construction_contracts_test1, construction_contracts_test2, implan_60_contracts, construction_contracts, contracts_list)
 
 #Fix issues with special characters in contracts' award description column, and then run the tier 1 check function on contracts
 contracts$award_description <-gsub("/","", as.character(contracts$award_description))
@@ -90,9 +102,10 @@ contracts$award_description <-gsub(",","", as.character(contracts$award_descript
 contracts$award_description <-gsub(r"(\\)","", as.character(contracts$award_description))
 contracts$award_description <-gsub('"',"", as.character(contracts$award_description))
 
+contracts$recipient_county_name[contracts$recipient_county_name == ""] <- NA
+
 contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, "_cleaned_contracts.csv")))
 
-write.csv(contracts, "contract_errors.csv")
 
 ##GRANTS DATA - read in CSV
 grants <- read.csv(file.path(temp_path, paste0(f_year, g_out_name)))

@@ -58,11 +58,13 @@ g_out_name = "_all_grant_spending.csv"
 
 
 ##contract_check variables##
-implan_60 <- c("repair", "rpr", "maint", "renovat", "replac", "inspect", "install", "restor", "reroof", "re-roof", "reshingle", "re-shingle", 
+repair_implan_60 <- c("repair", "rpr", "maint", "renovat", "replac", "inspect", "install", "restor", "reroof", "re-roof", "reshingle", "re-shingle", 
                "service", "upgrade", "retrofit", "remov", "ratif", "relocat", "modif", "modern", "clean", "convert", "change", "alter", "repaint",
                "re-paint", "remediat", "repav", "re-pav", "abate", "adjust", "annual", "test", "rehab", "realign", "remodel", "improv", "broke", "expans",
                "revis", "restrip", "substit", "patch", "dredg", "resurfac", "outdat", "reconfig", "refurb", "rerout", "replen", "troubleshoot",
                "correct", "updat", "treatment")
+
+aircraft_implan_60 <- c("aircraft", "carrier", "airplane", "airfield", "taxiway", "runway")
 
 
 ##error_check_contracts variables##
