@@ -1,8 +1,8 @@
-# This code checks grant data for errors and where possible, fixes them
+##GRANTS DATA - read in CSV
+grants <- read.csv(file.path(temp_path, paste0(f_year, g_out_name)))
 
-# Load in grants data and grants-related implan crosswalk
-grants <- read.csv(file.path(getwd(), "data", "temp", paste0(f_year, g_out_name)))
-btype2implan <- read.csv(file = "data/raw/business_type_to_implan546_crosswalk.csv", fileEncoding="UTF-8-BOM")
+#Now read in the business type to IMPLAN crosswalk - this will help us assign IMPLAN codes to grants
+btype2implan <- read.csv(file.path(raw_path, paste0(btype_crosswalk)), fileEncoding="UTF-8-BOM")
 
 #Prior to running crosswalk - pull out the VA direct payments/benefits data - this does not get matched with an IMPLAN code - and write into CSV file
 va_benefits <- grants %>%
@@ -10,19 +10,10 @@ va_benefits <- grants %>%
 grants <- grants %>%
   filter(!(grants$assistance_type_code == 10 | grants$assistance_type_code == 6))
 
-write.csv(va_benefits, file.path(getwd(), "data", "temp", paste0(f_year, "_cleaned_usaspending_va_benefit_data.csv")))
-
-# start first crosswalk error check of grants data to IMPLAN codes
+#start first crosswalk error check of grants data to IMPLAN codes
 
 grants <- merge(grants, btype2implan, by = ("business_types_description"), all.x = TRUE, all.y = FALSE)
 
-#Now pull out grants' errors that did not get matched with an IMPLAN code
-
-grants_no_implan <- grants[is.na(grants$implan_code),]
-grants <- grants[!(is.na(grants$implan_code)),]
-
-#Save the grants' errors to "Output" folder - named "grants_no_implan_code" - and the grants data to "temp" folder
-
-write.csv(grants_no_implan, paste("output/grants_no_implan_code.csv", sep = '')) 
-
-write.csv(grants, file.path(getwd(), "data", "temp", paste0(year, "_cleaned_usaspending_grant_data.csv")))
+#Fix issues with special characters in grants' award description column, and then run the tier 1 check function on grants
+grants$award_description <- gsub("/","",
+                                 gsub(",","", as.character(grants$award_description)))

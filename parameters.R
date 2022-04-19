@@ -53,8 +53,8 @@ grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding
 c_label <- "Contracts"
 g_label <- "Assistance" 
 
-c_out_name = "_all_contract_spending.csv"
-g_out_name = "_all_grant_spending.csv"
+all_c_data = "_all_contract_spending.csv"
+all_g_data = "_all_grant_spending.csv"
 
 
 ##contract_check variables##
@@ -62,9 +62,11 @@ repair_implan_60 <- c("repair", "rpr", "maint", "renovat", "replac", "inspect", 
                "service", "upgrade", "retrofit", "remov", "ratif", "relocat", "modif", "modern", "clean", "convert", "change", "alter", "repaint",
                "re-paint", "remediat", "repav", "re-pav", "abate", "adjust", "annual", "test", "rehab", "realign", "remodel", "improv", "broke", "expans",
                "revis", "restrip", "substit", "patch", "dredg", "resurfac", "outdat", "reconfig", "refurb", "rerout", "replen", "troubleshoot",
-               "correct", "updat", "treatment")
+               "correct", "updat", "treatment", "quarterly", "yearly")
 
 aircraft_implan_60 <- c("aircraft", "carrier", "airplane", "airfield", "taxiway", "runway")
+
+new_implan_56 <- c("construct", "rebuild")
 
 
 ##error_check_contracts variables##
@@ -75,6 +77,11 @@ contr_dist_crosswalk <- "contract_industry_district_crosswalk.csv"
 
 ##error_check_grants variables##
 btype_crosswalk <- "business_type_to_implan546_crosswalk.csv"
+
+
+##repair_and_weight variables##
+clean_c_data = "_cleaned_contracts.csv"
+clean_g_data = "_cleaned_grants.csv"
 
 
 ##concatenate_usaspending variables##
