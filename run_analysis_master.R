@@ -44,19 +44,9 @@ filter_usaspending(gfile_name, state, grant_columns, paste0(f_year, all_g_data))
 ##Run error check on USAspending data##
 #CONTRACTS
 source("src/error_check_contracts.R")
-contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, clean_c_data)))
 
-#Run if else statement to apply contract recipient-congressional district crosswalk
-if(is.character(patterns)){
-  for(i in 1:length(patterns)){
-    val <- val | grepl(patterns[i], data, ignore.case = TRUE)
-  }
-} else {
-  stop('pattern must be a character vector')
-}
-return(val)
-}
-
+#STOP - BE SURE TO HAVE USED NO DISTRICT CONTRACT ERROR FILE IN OUTPUT TO CREATE DISTRICT CROSSWALK IN RAW DATA FOLDER
+na_district_repair()
 
 
 cd_crosswalk <- read.csv(file.path(raw_path, contr_dist_crosswalk), fileEncoding="UTF-8-BOM")
@@ -65,6 +55,8 @@ contracts_test <- merge(contracts, cd_crosswalk, by = "recipient_name")
 contracts_test <- contracts_test %>%
   filter(!is.na(recipient_county_name) & !is.na(recipient_congressional_district.y) & !is.na(implan_code))
 
+#Run tier 1 check on contracts data to pull out cleaned contracts entries into file
+contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, clean_c_data)))
 
 #Final step for error checking contracts - write remaining errors to file in output folder
 write.csv(contracts, file.path(output_path, paste0(f_year, "_contract_errors.csv")), row.names = FALSE)

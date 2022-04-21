@@ -1,5 +1,5 @@
 ##CONTRACTS DATA - read in CSV
-contracts <- read.csv(file.path(temp_path, paste0(f_year, c_out_name)))
+contracts <- read.csv(file.path(temp_path, paste0(f_year, all_c_data)))
 
 #Then read in the NAICS to NAICS crosswalk and rewrite the 2007 NAICS codes in the contracts dataframe by matching it to those in the 2007 to 2017 NAICS crosswalk dataframe
 naics2naics <- read.xlsx(file.path(raw_path, naics_crosswalk))
