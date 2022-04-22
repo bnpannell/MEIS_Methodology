@@ -6,9 +6,10 @@ na_district_repair <- function(file_path, dataframe) {
     val <- read.csv(file_path, fileEncoding="UTF-8-BOM")
     for (i in 1:nrow(val)) {
       dataframe$recipient_congressional_district[grep(val$recipient_name[i],dataframe$recipient_name)] <- val$recipient_congressional_district[i]
-    }
+    }#There is something weird in the above line and you need to assign the output to the 'val' variable 
   } else {
+    val <- dataframe
     stop("Create contract-district crosswalk using no district contract errors file in Output folder")
     }
-  return(dataframe)
+  return(val)
 }
