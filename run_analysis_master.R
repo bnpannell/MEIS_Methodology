@@ -45,8 +45,15 @@ filter_usaspending(gfile_name, state, grant_columns, paste0(f_year, all_g_data))
 #CONTRACTS
 source("src/error_check_contracts.R")
 
-#STOP - BE SURE TO HAVE USED NO DISTRICT CONTRACT ERROR FILE IN OUTPUT TO CREATE DISTRICT CROSSWALK IN RAW DATA FOLDER
-na_district_repair()
+##STOP - BE SURE TO HAVE USED NO DISTRICT CONTRACT ERROR FILE IN OUTPUT TO CREATE DISTRICT CROSSWALK IN RAW DATA FOLDER##
+
+#Run the na_district_repair function on the contracts dataframe
+contracts <- na_district_repair(file.path(raw_path, paste0(f_year, contr_dist_crosswalk)), contracts)
+
+contracts_test <- contracts %>%
+  filter(!is.na(recipient_county_name) & !is.na(recipient_congressional_district) & !is.na(implan_code))
+rm(contracts_test)
+
 
 
 cd_crosswalk <- read.csv(file.path(raw_path, contr_dist_crosswalk), fileEncoding="UTF-8-BOM")

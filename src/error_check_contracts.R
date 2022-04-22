@@ -73,3 +73,5 @@ contracts_no_dist <- contracts %>%
   filter(!is.na(implan_code) & !is.na(recipient_county_name) & is.na(recipient_congressional_district))
 
 write.csv(contracts_no_dist, file.path(output_path, "no_dist_contract_errors.csv"), row.names = FALSE)
+
+rm(contracts_no_dist)
