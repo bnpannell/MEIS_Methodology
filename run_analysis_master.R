@@ -45,43 +45,44 @@ filter_usaspending(gfile_name, state, grant_columns, paste0(f_year, all_g_data))
 #CONTRACTS
 source("src/error_check_contracts.R")
 
+#Run tier 1 check on contracts data to pull out cleaned contracts entries into file
+contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, clean_c_data)), file.path(output_path, paste0(f_year, contract_errors)))
+
 ##STOP - BE SURE TO HAVE USED NO DISTRICT CONTRACT ERROR FILE IN OUTPUT TO CREATE DISTRICT CROSSWALK IN RAW DATA FOLDER##
 
-#Run the na_district_repair function on the contracts dataframe
-contracts <- na_district_repair(file.path(raw_path, paste0(f_year, contr_dist_crosswalk)), contracts)
+#Run the na_district_repair function on the contracts dataframe, and then run the t1_check again
+contracts <- na_district_repair(file.path(raw_path, paste0(contr_dist_crosswalk)), contracts)
 
-contracts_test <- contracts %>%
-  filter(!is.na(recipient_county_name) & !is.na(recipient_congressional_district) & !is.na(implan_code))
-rm(contracts_test)
-
-
-
-cd_crosswalk <- read.csv(file.path(raw_path, contr_dist_crosswalk), fileEncoding="UTF-8-BOM")
-
-contracts_test <- merge(contracts, cd_crosswalk, by = "recipient_name")
-contracts_test <- contracts_test %>%
-  filter(!is.na(recipient_county_name) & !is.na(recipient_congressional_district.y) & !is.na(implan_code))
-
-#Run tier 1 check on contracts data to pull out cleaned contracts entries into file
-contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, clean_c_data)))
-
-#Final step for error checking contracts - write remaining errors to file in output folder
-write.csv(contracts, file.path(output_path, paste0(f_year, "_contract_errors.csv")), row.names = FALSE)
+contracts <- t1_check(contracts, file.path(temp_path, paste0(f_year, clean_c_data)), file.path(output_path, paste0(f_year, contract_errors)))
 
 
 #GRANTS
 source("src/error_check_grants.R")
-grants <- t1_check(grants, file.path(temp_path, paste0(f_year, "_cleaned_grants.csv")))
+grants <- t1_check(grants, file.path(temp_path, paste0(f_year, clean_g_data)), file.path(output_path, paste0(f_year, grant_errors)))
 
-#Final step for error checking contracts - write remaining errors to file in output folder
-write.csv(grants, file.path(output_path, paste0(f_year, "_grant_errors.csv")), row.names = FALSE)
-
-
-##NOTE: DOUBLE CHECK THE ERRORS FOUND IN THE 2 PREVIOUS LINES OF CODE TO DETERMINE WHAT/HOW TO FIX VIA NEXT 2 LINES OF CODE
 
 ##Repair and weight contracts, grants, and direct payment data##
+#CONTRACTS
+##FIRST GO THROUGH THE CONTRACT ERRORS FILE, AND MANUALLY FIX THROUGH IT. THEN RUN IT THROUGH T1 CHECK ONCE AGAIN.
+#YOU CAN REPEAT THESE 2 LINES OF CODE OVER AND OVER AGAIN TO REPAIR ERRORS AS YOU LIKE
+manual_fixes_c <- read.csv(file.path(output_path, paste0(f_year, contract_errors)))
+contracts <- t1_check(manual_fixes_c, file.path(temp_path, paste0(f_year, clean_c_data)), file.path(output_path, paste0(f_year, contract_errors)))
+
+#Run script to fix and weigh contracts
 source("src/repair_and_weight_contracts.R")
+
+
+#GRANTS
+##FIRST GO THROUGH THE GRANTS ERRORS FILE, AND MANUALLY FIX THROUGH IT. THEN RUN IT THROUGH T1 CHECK ONCE AGAIN.
+#YOU CAN RUN THIS OVER AND OVER AGAIN TO REPAIR ERRORS AS YOU LIKE
+manual_fixes_g <- read.csv(file.path(output_path, paste0(f_year, grant_errors)))
+grants <- t1_check(manual_fixes_g, file.path(temp_path, paste0(f_year, clean_g_data)), file.path(output_path, paste0(f_year, grant_errors)))
+
+#Run script to fix and weigh grants
 source("src/repair_and_weight_grants.R")
+
+
+#VA DIRECT PAYMENTS
 source("src/repair_and_weight_direct_payments.R")
 
 ##Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
@@ -89,7 +90,7 @@ concat_files <- concat_usaspending(pattern = paste0(year, "_cleaned.+\\.csv"))
 write.csv(concat_files, file.path(temp_path, paste0(f_year, u_out_name)), row.names = FALSE) 
 
 ##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending##
-ufile_name <- list.files(path = file.path(temp_path), pattern = paste0(f_year, u_out_name))
+ufile_name <- list.files(path = temp_path, pattern = paste0(f_year, u_out_name))
 
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)

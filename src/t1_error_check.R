@@ -7,14 +7,15 @@
 #if file exists, then append. If not, then make file. Subsequently, deletes that written data from the contracts dataframe.
 
 ##Call file_check within the t1_check function##
-t1_check <- function(df1, file_path) {
+t1_check <- function(df1, clean_path, error_path) {
   t1_ind <- which(!is.na(df1$recipient_county_name) & !is.na(df1$recipient_congressional_district) & !(df1$recipient_congressional_district == 90) & !is.na(df1$implan_code))
   if(length(t1_ind)>0) {
-    write.table(df1[t1_ind,], file_path, append = file.exists(file_path), col.names = !file.exists(file_path), row.names = FALSE, sep = ",")
+    write.table(df1[t1_ind,], clean_path, append = file.exists(clean_path), col.names = !file.exists(clean_path), row.names = FALSE, sep = ",")
     val <- (df1[-t1_ind,])
     } 
   else {
     val <- df1
   }
+  write.csv(val, file.path(error_path), row.names = FALSE)
   return(val)
 }

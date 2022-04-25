@@ -71,14 +71,14 @@ naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
 implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
 contr_dist_crosswalk <- "contract_industry_district_crosswalk.csv"
 
+clean_c_data = "_cleaned_contracts.csv"
+contract_errors <- "_contract_errors.csv"
 
 ##error_check_grants variables##
 btype_crosswalk <- "business_type_to_implan546_crosswalk.csv"
 
-
-##repair_and_weight variables##
-clean_c_data = "_cleaned_contracts.csv"
 clean_g_data = "_cleaned_grants.csv"
+grant_errors <- "_grant_errors.csv"
 
 
 ##concatenate_usaspending variables##
