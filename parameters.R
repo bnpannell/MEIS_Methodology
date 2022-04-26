@@ -43,6 +43,10 @@ dist_list = "01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,2
 state_fips = "06" 
 
 
+##make_va_benefits_cw variables##
+vet_crosswalk <- "_va_apportioning.csv"
+
+
 ##filter_usaspending variables##
 contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "naics_code")
 grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_code", "recipient_county_name", "recipient_congressional_district", "recipient_zip_code", "recipient_zip_last_4_code", "assistance_type_code", "business_types_description")
@@ -79,6 +83,10 @@ btype_crosswalk <- "business_type_to_implan546_crosswalk.csv"
 
 clean_g_data = "_cleaned_grants.csv"
 grant_errors <- "_grant_errors.csv"
+
+
+##repair_and_weight_direct_payments variable
+clean_v_data = "_cleaned_va_benefits.csv"
 
 
 ##concatenate_usaspending variables##
