@@ -73,29 +73,25 @@ new_implan_56 <- c("construct", "rebuild")
 ##error_check_contracts variables##
 naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
 implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
-contr_dist_crosswalk <- "contract_industry_district_crosswalk.csv"
-
 clean_c_data = "_cleaned_contracts.csv"
 contract_errors <- "_contract_errors.csv"
 
 ##error_check_grants variables##
 btype_crosswalk <- "business_type_to_implan546_crosswalk.csv"
-
 clean_g_data = "_cleaned_grants.csv"
 grant_errors <- "_grant_errors.csv"
 
+##na_dist_repair function variables## 
+contr_dist_crosswalk <- "contract_industry_district_crosswalk.csv"
 
 ##repair_and_weight_direct_payments variable
 clean_v_data = "_cleaned_va_benefits.csv"
 
-
 ##concatenate_usaspending variables##
 u_out_name = "_concatenated_usaspending.csv"
 
-
 ##split_usaspending variables##
 doe = "DEPARTMENT OF ENERGY (DOE)"
-
 
 ##natsec_doe variables##
 doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE FORCE",
@@ -106,11 +102,9 @@ doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE F
                 "NNSA OFFICE OF THE ADMIN FUNDS", "NNSA OTHER FUNDS", "NNSA WEAPONS ACTIVITIES FUNDS",
                 "NNSA-DEFENSE NUCLEAR NONPRO FUNDS", "OFFICE OF NAVAL RESEARCH")
 
-
 ##aggregate_usaspending variables##
 u_state_outname = "_aggregated_usaspending_statewide.csv"
 doe_state_outname = "_aggregated_doespending_statewide.csv"
-
 
 ##generate_employment_dataframe Variables##
 res_mult = 0.1825
@@ -119,7 +113,6 @@ sus_dhs_mult = .142
 acs = "2019_acs.xlsx"
 dod_shares = "dod_county_shares.xlsx"
 fed_prop = "fed_prop_2021.csv" 
-
 
 ##Parameters for wrangle_opm_foia.R##
 opm_foia_file <- "Copy of Select Agencies by Locations FY 2019 - FY 2021.xlsx"
