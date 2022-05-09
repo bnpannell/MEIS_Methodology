@@ -11,7 +11,7 @@ opm_emp$total <- as.numeric(opm_emp$total)
 
 #Filter for the most recent year of FOIA data, and Aggregate the "total" employees column based on agency and file_date. 
 opm_emp_counties <- opm_emp %>%
-  filter(file_date == 202109) %>%
+  filter(file_date == 202009) %>%
   group_by(agency, county) %>%
   summarise(employees = sum(total))
 
@@ -28,7 +28,13 @@ opm_emp_counties <- opm_emp_counties %>%
 
 opm_emp_counties[is.na(opm_emp_counties)] = 0
 
+#Combine this dataframe with counties_pop dataframe for regression analysis. Write into file
+#dhs_va_emp <- full_join(opm_emp_counties, counties_armedforces, by = "county")
+#dhs_va_emp[is.na(dhs_va_emp)] = 0
+
+#write.csv(dhs_va_emp, "dhs_va_emp_armedforces_comparison.csv", row.names = FALSE)
+
 #Create 2 new columns that calculates the percentage that each county represents the statewide total for DHS and VA employment
-opm_emp_counties <- opm_emp_counties %>%
-  mutate(dhs_emp_perc = dhs_emp / sum(dhs_emp),
-         va_emp_perc = va_emp / sum(va_emp))
+#opm_emp_counties <- opm_emp_counties %>%
+#  mutate(dhs_emp_perc = dhs_emp / sum(dhs_emp),
+#         va_emp_perc = va_emp / sum(va_emp))
