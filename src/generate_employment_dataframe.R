@@ -13,30 +13,29 @@ civilian_emp = dod_emp + dhs_emp + va_emp
 doe_emp = state_emp[1,9] * doe_ns_adjustment
 
 ##Begin apportioning military and civilian employment by county and district, sectioning off based on employment type##
-##Start out with military employment - use ACS data. First clean up the ACS dataframe to format entries as needed.
+##Start out with military employment - use districts_armedforces and counties_armedforces dataframes from Census API call
 
-acs_data <- read_excel(file.path(getwd(), "data", "temp", acs)) %>%
-  select(geography, armed_forces_employed)
+#COUNTY
+counties_armedforces <- counties_armedforces[c("NAME", "B23025_006E")]
+colnames(counties_armedforces) <- c("county", "armed_forces")
+counties_armedforces$county <- gsub(' County, California', "", counties_armedforces$county)
+counties_armedforces$county <- toupper(counties_armedforces$county)
 
-acs_data$geography <- gsub(pattern = " County, California", replacement = "", acs_data$geography)
-acs_data$geography <- gsub(pattern = "Congressional District ([0-9]+) \\(116th Congress\\), California",
-                           replacement = "\\1", acs_data$geography)
-acs_data$geography = toupper(acs_data$geography)
+mili_county <- counties_armedforces %>%
+  mutate(af_perc = counties_armedforces$armed_forces / sum(counties_armedforces$armed_forces),
+         mili_emp = mili_emp * af_perc) %>%
+  select(county, mili_emp)
 
-#Calculate armed_forces_percent by dividing each geography's armed_forces_employed by the statewide total. Then multiply that percent by mili_emp to get military employees for each local geography.
-acs_data <- acs_data %>% mutate(armed_forces_percent = (acs_data$armed_forces_employed / acs_data$armed_forces_employed[112]),
-                      military_personnel = mili_emp * armed_forces_percent) %>%
-  select(geography, military_personnel)
+#DISTRICT
+districts_armedforces <- districts_armedforces[c("congressional_district", "B23025_006E")]
+districts_armedforces$congressional_district <- as.numeric(districts_armedforces$congressional_district)
+districts_armedforces <- aggregate(districts_armedforces$B23025_006E, by = list(districts_armedforces$congressional_district), FUN = sum)
+colnames(districts_armedforces) <- c("district", "armed_forces")
 
-#Separate county military personnel and district military personnel into 2 dataframes. Localized military personnel is done.
-mili_county <- acs_data %>% filter(is.na(as.numeric(acs_data$geography))) %>%
-  filter(!(geography == "CALIFORNIA"))
-mili_county <- mili_county %>%
-  rename(county = geography, mili_emp = military_personnel)
-
-mili_district <- acs_data %>% filter(!is.na(as.numeric(acs_data$geography)))
-mili_district <- mili_district %>%
-  rename(district = geography, mili_emp = military_personnel)
+mili_district <- districts_armedforces %>%
+  mutate(af_perc = districts_armedforces$armed_forces / sum(districts_armedforces$armed_forces),
+         mili_emp = mili_emp * af_perc) %>%
+  select(district, mili_emp)
 
 
 ##Next is DOD civilian employment - use DOD County Shares Excel file##

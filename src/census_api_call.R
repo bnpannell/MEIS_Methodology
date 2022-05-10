@@ -34,7 +34,9 @@ counties_armedforces <- getCensus(
   region = "county:*", 
   regionin = state_call)
 
-counties_armedforces <- counties_armedforces[c("NAME", "B23025_006E")]
-colnames(counties_armedforces) <- c("county", "armed_forces")
-counties_armedforces$county <- gsub(' County, California', "", counties_armedforces$county)
-counties_armedforces$county <- toupper(counties_armedforces$county)
+districts_armedforces <- getCensus(
+  name = "acs/acs5",
+  vintage = YEAR, 
+  vars = c("NAME", "B23025_006E"), 
+  region = "county (or part):*", 
+  regionin = regionin_call)
