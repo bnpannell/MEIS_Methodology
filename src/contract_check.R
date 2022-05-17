@@ -1,10 +1,4 @@
-#Scratch file for parsing thru construction NAICs codes and parsing them out by keywords
-
-#Load in contracts_errors dataframe
-#Load in list- from parameters file?
-#Use grepl(pattern, string, ignore.case=FALSE) to match patterns- returns true if pattern is found in the string 
-
-#Loop thru line by line, if true put record in dataframe A, if false record to dataframe B? 
+#Define function "contract_check" for parsing through construction NAICS codes and parsing them out by keywords
 
 contract_check <- function(patterns, data){
   val <- rep(FALSE, length(data))

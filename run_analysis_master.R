@@ -60,35 +60,35 @@ source("src/error_check_grants.R")
 grants <- t1_check(grants, file.path(temp_path, paste0(f_year, clean_g_data)), file.path(output_path, paste0(f_year, grant_errors)))
 rm(grants)
 
-
 ##Repair and weight contracts, grants, and direct payment data##
 #CONTRACTS
-##FIRST GO THROUGH THE CONTRACT ERRORS FILE, AND MANUALLY FIX THROUGH IT. THEN RUN IT THROUGH T1 CHECK ONCE AGAIN.
-#YOU CAN REPEAT THESE 2 LINES OF CODE OVER AND OVER AGAIN TO REPAIR ERRORS AS YOU LIKE
+##First go through and manually fix contract errors file, and then run it through the T1 check again.
 manual_fixes_c <- read.csv(file.path(output_path, paste0(f_year, contract_errors)))
 rem_contracts <- t1_check(manual_fixes_c, file.path(temp_path, paste0(f_year, clean_c_data)), file.path(output_path, paste0(f_year, contract_errors)))
+
+#YOU CAN REPEAT THE 2 LINES OF CODE ABOVE OVER AND OVER AGAIN TO REPAIR AS MANY ERRORS AS YOU LIKE
 
 #Run script to fix and weigh contracts
 source("src/repair_and_weight_contracts.R")
 
 
 #GRANTS
-##FIRST GO THROUGH THE GRANTS ERRORS FILE, AND MANUALLY FIX THROUGH IT. THEN RUN IT THROUGH T1 CHECK ONCE AGAIN.
-#YOU CAN RUN THIS OVER AND OVER AGAIN TO REPAIR ERRORS AS YOU LIKE
+##First go through and manually fix grant errors file, and then run it through the T1 check again.
 manual_fixes_g <- read.csv(file.path(output_path, paste0(f_year, grant_errors)))
 rem_grants <- t1_check(manual_fixes_g, file.path(temp_path, paste0(f_year, clean_g_data)), file.path(output_path, paste0(f_year, grant_errors)))
+
+#YOU CAN REPEAT THE 2 LINES OF CODE ABOVE OVER AND OVER AGAIN TO REPAIR AS MANY ERRORS AS YOU LIKE
 
 
 #VA DIRECT PAYMENTS
 source("src/repair_and_weight_direct_payments.R")
 
-
 ##Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
 concat_files <- concat_usaspending(pattern = paste0(year, "_cleaned.+\\.csv"))
-write.csv(concat_files, file.path(temp_path, paste0(f_year, u_out_name)), row.names = FALSE)
+write.csv(concat_files, file.path(temp_path, paste0(f_year, concat_u_data)), row.names = FALSE)
 
 ##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending##
-ufile_name <- list.files(path = temp_path, pattern = paste0(f_year, u_out_name))
+ufile_name <- list.files(path = temp_path, pattern = paste0(f_year, concat_u_data))
 
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)
@@ -96,19 +96,19 @@ doespending <- split_usaspending(ufile_name, TRUE)
 ##Load an R script that filters the DOE spending to only national security-related data##
 source("src/natsec_doe.R")
 
-##Aggregate the DOD/DHS/VA usaspending, DOE usaspending, and VA benefits for statewide numbers## 
-#this gives you all the spending info for the statewide usaspending IMPLAN activity sheet and the statewide DOE IMPLAN activity sheet, as well as the VA benefits at the state, county, and district level (for the Household Spending tab in the IMPLAN activity sheet)
-statewide_aggregate(usaspending, (paste0(f_year, u_state_outname)))
-statewide_aggregate(doe_ns_spending, (paste0(f_year, doe_state_outname)))
+##Aggregate the DOD/DHS/VA USAspending, DOE spending, and VA benefits## 
+#this gives you all the statewide spending info for the  DHS/DOD/VA IMPLAN activity sheet and the DOE IMPLAN activity sheet, as well as VA benefits at the state, county, and district level (for the Household Spending tab in the IMPLAN activity sheet)
+statewide_aggregate(usaspending, (paste0(f_year, agg_state_u_data)))
+statewide_aggregate(doe_ns_spending, (paste0(f_year, agg_state_doe_data)))
 
 va_benefits_stateagg <- sum(va_benefits$spending)
-va_benefits_countiesagg <- aggregate(va_benefits$spending, by=list(va_benefits$recipient_county_name), FUN=sum)
-va_benefits_districtsagg <- aggregate(va_benefits$spending, by=list(va_benefits$congressional_district), FUN=sum)
+va_benefits_countiesagg <- aggregate(va_benefits$spending, by=list(va_benefits$recipient_county_name), FUN = sum)
+va_benefits_districtsagg <- aggregate(va_benefits$spending, by=list(va_benefits$congressional_district), FUN = sum)
 
 ##Load R script that provides employment calculations at statewide, county, and congressional district levels##
 source("src/generate_employment_dataframe.R")
 
 ##Run for loop code to get IMPLAN activity sheets generated for counties and districts##
-source("src/deprecated/DEPRECATED_create_implan_sheets.R")
+source("src/create_implan_sheets.R")
 
 ##Don't forget to insert code to empty temp folder except for "/data/temp/placeholderfortemp.txt"##

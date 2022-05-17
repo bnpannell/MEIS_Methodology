@@ -1,18 +1,18 @@
 ##Code for generating county and district IMPLAN activity sheets
 
 #These are the blank sheets from the activity sheet - they'll be combined with the aggregated data to create a multi-sheet excel doc for IMPLAN
-CommodityOutput2 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "CommodityOutput2.xlsx")))
-LaborIncomeChange3 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "LaborIncomeChange3.xlsx")))
-HouseholdSpendingChange4 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "HouseholdSpendingChange4.xlsx")))
-IndustrySpendingPattern5 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "IndustrySpendingPattern5.xlsx")))
-InstitutionSpendingPattern6 <- read_excel(path = (file.path(getwd(), "data", "raw", "Blank_Sheets_for_R", "InstitutionSpendingPattern6.xlsx")))
+CommodityOutput2 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "CommodityOutput2.xlsx")))
+LaborIncomeChange3 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "LaborIncomeChange3.xlsx")))
+HouseholdSpendingChange4 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "HouseholdSpendingChange4.xlsx")))
+IndustrySpendingPattern5 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "IndustrySpendingPattern5.xlsx")))
+InstitutionSpendingPattern6 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "InstitutionSpendingPattern6.xlsx")))
 
 ##Create a list of unique counties and districts to read into the for loop
 countynames <- unique(usaspending[,4])
-countynames <- countynames[countynames!=""] 
+countynames <- countynames[countynames != ""]
 
 congressid <- as.character(unique(usaspending[,5]))
-congressid <- congressid[congressid!=90] 
+congressid <- congressid[congressid != 90]
 congressid <- congressid[!(is.na(congressid))]
 
 ##LOOP FOR "NORMAL" AND INVERSE IMPLAN ACTIVITY SHEETS PER COUNTY

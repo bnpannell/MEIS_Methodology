@@ -1,5 +1,5 @@
-#Creates a function to check if there is a district crosswalk file, and if so, to apply it to contracts.
-#If not, say an error to create a district crosswalk
+#Define function "na_district_repair" to check if there is a district crosswalk file, and if so, to apply it to contracts.
+#If not, return an error noting to create a district crosswalk
 
 na_district_repair <- function(file_path, dataframe) {
   if(file.exists(file_path)) {

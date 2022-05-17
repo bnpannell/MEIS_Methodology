@@ -1,17 +1,17 @@
-##If we went the route of the census API R package...
-
-# Add key to .Renviron
+#Add key to .Renviron
 Sys.setenv(CENSUS_KEY= c_key)
-# Reload .Renviron
+
+#Reload .Renviron
 readRenviron("~/.Renviron")
-# Check to see that the expected key is output in your R console
+
+#Check to see that the expected key is output in your R console
 Sys.getenv("CENSUS_KEY")
 
 state_call = paste0("state:", state_fips) 
 regionin_call = paste0(state_call, "+congressional district:", dist_list)
 YEAR = as.integer(f_year)
 
-# API Call - this is for apportioning VA direct benefits
+#API Call - this is for apportioning VA direct benefits
 districts_vets <- getCensus(
   name = "acs/acs5",
   vintage = YEAR, 

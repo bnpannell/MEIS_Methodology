@@ -1,4 +1,4 @@
-# Build framework for mandatory filters first
+#Build framework for mandatory filters first
 body = list(
   filters = list(
     agencies = data.frame(
@@ -12,15 +12,17 @@ body = list(
   ),
   file_format = "csv" 
 )
-# Check for Optional Filters, add to framework if found
+
+#Check for Optional Filters, add to framework if found
 if(exists("awards")){
   body$filters[["prime_award_types"]] <- awards
 }
+
 #Check and add location filters
-if(length(ls(pattern="recipient_locations"))>0){
-  location_list <- vector(mode="list", length = 0)
+if(length(ls(pattern = "recipient_locations"))>0){
+  location_list <- vector(mode = "list", length = 0)
   
-  for(locations in ls(pattern="recipient_locations")){
+  for(locations in ls(pattern = "recipient_locations")){
     location_list[[gsub("recipient_locations_", "", locations)]] <- get(locations)
   }
   
@@ -38,6 +40,7 @@ request <- POST(
   encode = "json",
   verbose()
 )
+
 #Wait for file download to be prepared by site
 Sys.sleep(5)
 if(request$status_code == 200){
@@ -57,8 +60,9 @@ download_path = file.path(temp_path, content(request)$file_name)
 
 #Download file to download file path
 download.file(file_url, destfile = download_path)
+
 #Unzip file for use
 unzip(download_path, exdir = temp_path)   
+
 #Delete un-necessary files after completion
 unlink(download_path)
-

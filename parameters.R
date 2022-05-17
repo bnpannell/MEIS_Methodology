@@ -26,7 +26,7 @@ date_type = "action_date"
 date_range_start = "2019-10-01"
 date_range_end = "2020-09-30"
 
-##The following filters are OPTIONAL- comment out the line if you do not require a filter
+##The following filters are OPTIONAL - comment out the line if you do not require a filter
 #select award types to apply to filter
 awards = c("A", "B", "C", "D", "02", "03", "04", "05", "06", "10") 
 
@@ -52,7 +52,7 @@ contract_columns = c("federal_action_obligation", "awarding_agency_name", "award
 grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_code", "recipient_county_name", "recipient_congressional_district", "recipient_zip_code", "recipient_zip_last_4_code", "assistance_type_code", "business_types_description")
 
 c_label <- "Contracts"
-g_label <- "Assistance" 
+g_label <- "Assistance"
 
 all_c_data = "_all_contract_spending.csv"
 all_g_data = "_all_grant_spending.csv"
@@ -73,25 +73,33 @@ new_implan_56 <- c("construct", "rebuild")
 ##error_check_contracts variables##
 naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
 implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
+no_district_errors <- "no_dist_contract_errors.csv"
+
 clean_c_data = "_cleaned_contracts.csv"
 contract_errors <- "_contract_errors.csv"
+
+
+##na_dist_repair function variables## 
+contr_dist_crosswalk <- "contract_industry_district_crosswalk.csv"
+
 
 ##error_check_grants variables##
 btype_crosswalk <- "business_type_to_implan546_crosswalk.csv"
 clean_g_data = "_cleaned_grants.csv"
 grant_errors <- "_grant_errors.csv"
 
-##na_dist_repair function variables## 
-contr_dist_crosswalk <- "contract_industry_district_crosswalk.csv"
 
 ##repair_and_weight_direct_payments variable
 clean_v_data = "_cleaned_va_benefits.csv"
 
+
 ##concatenate_usaspending variables##
-u_out_name = "_concatenated_usaspending.csv"
+concat_u_data = "_concatenated_usaspending.csv"
+
 
 ##split_usaspending variables##
 doe = "DEPARTMENT OF ENERGY (DOE)"
+
 
 ##natsec_doe variables##
 doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE FORCE",
@@ -102,9 +110,11 @@ doe_offices = c("526 ICBMSW", "ACCTG DISB STA NR 503000", "COMMANDER SUBMARINE F
                 "NNSA OFFICE OF THE ADMIN FUNDS", "NNSA OTHER FUNDS", "NNSA WEAPONS ACTIVITIES FUNDS",
                 "NNSA-DEFENSE NUCLEAR NONPRO FUNDS", "OFFICE OF NAVAL RESEARCH")
 
+
 ##aggregate_usaspending variables##
-u_state_outname = "_aggregated_usaspending_statewide.csv"
-doe_state_outname = "_aggregated_doespending_statewide.csv"
+agg_state_u_data = "_aggregated_usaspending_statewide.csv"
+agg_state_doe_data = "_aggregated_doespending_statewide.csv"
+
 
 ##generate_employment_dataframe Variables##
 res_mult = 0.1825
@@ -113,6 +123,3 @@ sus_dhs_mult = .142
 acs = "2019_acs.xlsx"
 dod_shares = "dod_county_shares.xlsx"
 fed_prop = "fed_prop_2021.csv" 
-
-##Parameters for wrangle_opm_foia.R##
-opm_foia_file <- "Copy of Select Agencies by Locations FY 2019 - FY 2021.xlsx"

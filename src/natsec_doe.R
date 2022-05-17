@@ -1,4 +1,4 @@
-##Code to get DOE data to national security-related entries##
+##Code to filter down DOE data to national security-related entries##
 
 #Define a new dataframe that only holds national security-related DOE spending - this new spending dataframe should be used for IMPLAN.
 doe_ns_spending <- doespending %>%
