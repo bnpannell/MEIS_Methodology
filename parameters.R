@@ -120,6 +120,6 @@ agg_state_doe_data = "_aggregated_doespending_statewide.csv"
 res_mult = 0.1825
 national_sus_dhs = 155282
 sus_dhs_mult = .142
-acs = "2019_acs.xlsx"
+
 dod_shares = "dod_county_shares.xlsx"
-fed_prop = "fed_prop_2021.csv" 
+dha_va_foia_data = "dhs_va_foia_emp.xlsx"

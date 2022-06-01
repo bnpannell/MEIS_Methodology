@@ -26,7 +26,7 @@ source("src/aggregate_usaspending.R")
 
 ##Load API obtaining data scripts##
 #source("src/obtain_usaspending.R")
-#source("src/census_api_call.R")
+source("src/census_api_call.R")
 
 ##Make VA Apportioning File##
 #source("src/make_va_benefits_cw.R")
