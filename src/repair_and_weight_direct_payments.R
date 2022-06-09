@@ -1,7 +1,7 @@
 ##Code to repair VA benefits where the entries have a district value of 90##
 
 #Read in VA crosswalk generated from lines 29 and 32 of master code
-vet_cw <- read.csv(file.path(getwd(), "data", "raw", paste0(f_year, vet_crosswalk)))
+vet_cw <- read.csv(file.path(raw_path, paste0(f_year, vet_crosswalk)))
 
 #Merge the crosswalk to the va_benefits dataframe
 va_benefits <- merge(va_benefits, vet_cw, by.x = "recipient_county_code", by.y = "county_or_part")

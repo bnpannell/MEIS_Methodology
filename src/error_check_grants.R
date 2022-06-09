@@ -16,4 +16,6 @@ grants <- merge(grants, btype2implan, by = ("business_types_description"), all.x
 
 #Fix issues with special characters in grants' award description column, and then run the tier 1 check function on grants
 grants$award_description <- gsub("/","",
-                                 gsub(",","", as.character(grants$award_description)))
+                                 gsub(",","",
+                                      gsub(r"(\\)","",
+                                           gsub('"',"", as.character(grants$award_description)))))

@@ -4,7 +4,6 @@
 rm(list = ls(all.names = TRUE))
 
 ##Load Libraries##
-library(dplyr)
 library(httr)
 library(jsonlite)
 library(openxlsx)
@@ -79,12 +78,15 @@ rem_grants <- t1_check(manual_fixes_g, file.path(temp_path, paste0(f_year, clean
 
 #YOU CAN REPEAT THE 2 LINES OF CODE ABOVE OVER AND OVER AGAIN TO REPAIR AS MANY ERRORS AS YOU LIKE
 
+#Run script to fix and weigh contracts
+source("src/repair_and_weight_grants.R")
+
 
 #VA DIRECT PAYMENTS
 source("src/repair_and_weight_direct_payments.R")
 
 ##Run concatenate function to combine usaspending contracts and grants data into one dataframe, and write into CSV##
-concat_files <- concat_usaspending(pattern = paste0(year, "_cleaned.+\\.csv"))
+concat_files <- concat_usaspending(pattern = paste0(f_year, "_cleaned.+\\.csv"))
 write.csv(concat_files, file.path(temp_path, paste0(f_year, concat_u_data)), row.names = FALSE)
 
 ##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending##

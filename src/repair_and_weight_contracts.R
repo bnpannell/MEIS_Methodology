@@ -12,7 +12,6 @@ clean_contracts <- clean_contracts %>%
 #Drop unneeded columns from dataframe and write to file
 clean_contracts <- clean_contracts %>%
   rename(spending = fao_weighted) %>%
-  select("spending", "awarding_agency_name", "funding_office_name", "recipient_county_name",
-                "recipient_congressional_district", "implan_code")
+  select(all_of(final_cols))
 
 write.csv(clean_contracts, file.path(temp_path, paste0(f_year, clean_c_data)), row.names = FALSE)
