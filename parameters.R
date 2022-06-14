@@ -128,3 +128,7 @@ sus_dhs_mult = .142
 
 dod_shares = "dod_county_shares.xlsx"
 dha_va_foia_data = "dhs_va_foia_emp.xlsx"
+
+
+##create_implan_sheets variables##
+blank_sheets = "Blank_Sheets_for_R"

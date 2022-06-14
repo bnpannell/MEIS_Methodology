@@ -7,4 +7,4 @@ doe_ns_spending <- doespending %>%
 #Divide the sum of the national security-related DOE spending by the total statewide DOE spending to get a "DOE National Security proportion."
 #This proportion will be used to apportion the total statewide DOE employment and statewide DOE SmartPay
 
-doe_ns_adjustment = sum(doe_ns_spending$federal_action_obligation) / sum(doespending$federal_action_obligation)
+doe_ns_adjustment = sum(doe_ns_spending$spending) / sum(doespending$spending)

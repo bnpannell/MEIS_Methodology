@@ -2,7 +2,7 @@
 
 ##Read in CSV file that contains statewide employment numbers, and define the values for statewide military, civilian, and DOE employees
 #NOTE: Be sure to go into this file and appropriately edit the numbers for your state of interest
-##NOTE 2: be sure that you have ran line 29 - the census API call. otherwise, military employment proportion will not work
+##NOTE 2: be sure that you have ran line 28 - the census API call. otherwise, military employment proportion will not work
 
 state_emp <- read.csv(file.path(raw_path, paste0(state,"_emp.csv")), fileEncoding="UTF-8-BOM")
 
@@ -68,7 +68,7 @@ dhs_va_county <- read.xlsx(file.path(raw_path, dha_va_foia_data), sheet = 1)
 dhs_va_district <- read.xlsx(file.path(raw_path, dha_va_foia_data), sheet = 2)
 
 
-##Merge the county employee dataframes into one dataframe, and the district employees dataframes into a second dataframe. Make sure all values are numeric, and replace NAs with 0s.
+##Merge the county employee dataframes into one dataframe, and the district employee dataframes into a second dataframe. Make sure all values are numeric, and replace NAs with 0s.
 county_emp <- Reduce(function(x,y) merge(x = x, y = y, by = "county", all = TRUE), list(dhs_va_county, dod_county, mili_county))
 county_emp[is.na(county_emp)] <- 0
 
@@ -76,7 +76,7 @@ district_emp <- Reduce(function(x,y) merge(x = x, y = y, by = "district", all = 
 district_emp[is.na(district_emp)] <- 0
 
 
-##Final step: mutate dataframes to get columns needed in the for loop code to generate activity sheets##
+##Final step: add columns needed in the for loop code to generate activity sheets##
 county_emp <- county_emp %>%
   mutate(implan_545 = mili_emp,
          implan_546 = (dhs_emp+va_emp+dod_emp),

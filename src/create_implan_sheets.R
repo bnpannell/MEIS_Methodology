@@ -1,15 +1,17 @@
 ##Code for generating county and district IMPLAN activity sheets
 
 #These are the blank sheets from the activity sheet - they'll be combined with the aggregated data to create a multi-sheet excel doc for IMPLAN
-CommodityOutput2 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "CommodityOutput2.xlsx")))
-LaborIncomeChange3 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "LaborIncomeChange3.xlsx")))
-HouseholdSpendingChange4 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "HouseholdSpendingChange4.xlsx")))
-IndustrySpendingPattern5 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "IndustrySpendingPattern5.xlsx")))
-InstitutionSpendingPattern6 <- read_excel(path = (file.path(raw_path, "Blank_Sheets_for_R", "InstitutionSpendingPattern6.xlsx")))
+commodity_output2 <- read_excel(path = (file.path(raw_path, blank_sheets, "CommodityOutput2.xlsx")))
+labor_income_change3 <- read_excel(path = (file.path(raw_path, blank_sheets, "LaborIncomeChange3.xlsx")))
+household_spending_change4 <- read_excel(path = (file.path(raw_path, blank_sheets, "HouseholdSpendingChange4.xlsx")))
+industry_spending_pattern5 <- read_excel(path = (file.path(raw_path, blank_sheets, "IndustrySpendingPattern5.xlsx")))
+institution_spending_pattern6 <- read_excel(path = (file.path(raw_path, blank_sheets, "InstitutionSpendingPattern6.xlsx")))
 
 ##Create a list of unique counties and districts to read into the for loop
 countynames <- unique(usaspending[,4])
 countynames <- countynames[countynames != ""]
+
+sort(countynames)
 
 congressid <- as.character(unique(usaspending[,5]))
 congressid <- congressid[congressid != 90]
@@ -23,7 +25,7 @@ va_benefits_countiesagg$x[is.na(va_benefits_countiesagg$x)] <- 0
 for (county in countynames){
     j <- which(usaspending[4] == county)
     temp <- usaspending[j,]
-  temp <- aggregate(temp$federal_action_obligation, by=list(temp$implan_code), FUN=sum) #this line aggregates the data by sector
+  temp <- aggregate(temp$spending, by=list(temp$implan_code), FUN=sum) #this line aggregates the data by sector
   colnames(temp) <- c("Sector", "Event_value") #change the column names to match activity sheet
   county_emp$totalemployment <- 0 #create new employment column
   m <- which(county_emp$county == county)
@@ -42,22 +44,22 @@ for (county in countynames){
                 c("","","","","","","",""),
                 c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                 temp)
-  HouseholdSpendingChange4[5,2] <- as.character(va_benefits_countiesagg[which(va_benefits_countiesagg$Group.1 == county), 2]) #update household spending by county
+  household_spending_change4[5,2] <- as.character(va_benefits_countiesagg[which(va_benefits_countiesagg$Group.1 == county), 2]) #update household spending by county
   temp <- rbind(temp, c("temp", "0", "0")) #add fake 0s to make the line below work
   temp <- temp[-(which(temp[,2]=="0" | temp[,3]=="0")),] #delete 0s
   #put sheets into a list. This list will turn into the excel file.
-  templist <- list("Industry Change" = temp, "Commodity Output" = CommodityOutput2, 
-                   "Labor Income Change" = LaborIncomeChange3, "Household Spending Change" = HouseholdSpendingChange4,
-                   "Industry Spending Pattern" = IndustrySpendingPattern5, 
-                   "Institution Spending Pattern" = InstitutionSpendingPattern6) 
+  templist <- list("Industry Change" = temp, "Commodity Output" = commodity_output2, 
+                   "Labor Income Change" = labor_income_change3, "Household Spending Change" = household_spending_change4,
+                   "Industry Spending Pattern" = industry_spending_pattern5, 
+                   "Institution Spending Pattern" = institution_spending_pattern6) 
   #write into multi-sheet excel file
-  output_dep_c <- file.path("output", paste0("DEPRECATED_IMPLAN_", year, "_counties//"))
+  output_dep_c <- file.path(output_path, paste0("DEPRECATED_IMPLAN_", year, "_counties//"))
   if(!dir.exists(output_dep_c)){dir.create(output_dep_c)}
   write.xlsx(templist, paste0(output_dep_c, county, ".xlsx"), colNames = FALSE)
   print(paste(county, ":", (length(templist[["Industry Change"]][["Sector"]])-4)))
   #tempooc is the INVERSE sheet
   tempooc <- usaspending
-  tempooc <- aggregate(tempooc$federal_action_obligation, by=list(tempooc$implan_code), FUN=sum) #this line aggregates the data by sector
+  tempooc <- aggregate(tempooc$spending, by=list(tempooc$implan_code), FUN=sum) #this line aggregates the data by sector
   temp <- temp[-(1:4),]
   for (i in 1:nrow(temp)){
     n <- which(tempooc$Group.1 == temp$Sector[i])
@@ -79,14 +81,14 @@ for (county in countynames){
                    c("","","","","","","",""),
                    c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                    tempooc)
-  HouseholdSpendingChange4[5,2] <- as.character(va_benefits_stateagg - va_benefits_countiesagg[which(va_benefits_countiesagg$Group.1 == county), 2]) #update household spending by county (in)
+  household_spending_change4[5,2] <- as.character(va_benefits_stateagg - va_benefits_countiesagg[which(va_benefits_countiesagg$Group.1 == county), 2]) #update household spending by county (in)
   tempooc <- rbind(tempooc, c("temp", "0", "0"))
   tempooc <- tempooc[-(which(tempooc[,2]=="0" | tempooc[,3]=="0")),]
   #put all sheets into one list
-  tempooclist <- list("Industry Change" = tempooc, "Commodity Output" = CommodityOutput2, 
-                      "Labor Income Change" = LaborIncomeChange3, "Household Spending Change" = HouseholdSpendingChange4,
-                      "Industry Spending Pattern" = IndustrySpendingPattern5, 
-                      "Institution Spending Pattern" = InstitutionSpendingPattern6)
+  tempooclist <- list("Industry Change" = tempooc, "Commodity Output" = commodity_output2, 
+                      "Labor Income Change" = labor_income_change3, "Household Spending Change" = household_spending_change4,
+                      "Industry Spending Pattern" = industry_spending_pattern5, 
+                      "Institution Spending Pattern" = institution_spending_pattern6)
   #write into multi-sheet excel file
   write.xlsx(tempooclist, paste0(output_dep_c, county, "in.xlsx"), colNames = FALSE)
   print(paste(county, "(in) :", (length(tempooclist[["Industry Change"]][["Group.1"]])-4)))
@@ -101,7 +103,7 @@ for (district in congressid){
   #print(paste(district, class(district)))
   k <- which(usaspending[5] == district)
   temp2 <- usaspending[k,]
-  temp2 <- aggregate(temp2$federal_action_obligation, by=list(temp2$implan_code), FUN=sum) #this line aggregates the data by sector
+  temp2 <- aggregate(temp2$spending, by=list(temp2$implan_code), FUN=sum) #this line aggregates the data by sector
   colnames(temp2) <- c("Sector", "Event_value") #change the column names to match activity sheet
   district_emp$totalemployment <- 0 #create new employment column
   n <- which(district_emp$district == district)
@@ -120,16 +122,16 @@ for (district in congressid){
                 c("","","","","","","",""),
                 c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                 temp2)
-  HouseholdSpendingChange4[5,2] <- as.character(va_benefits_districtsagg[which(va_benefits_districtsagg$Group.1 == district), 2]) #update household spending by district
+  household_spending_change4[5,2] <- as.character(va_benefits_districtsagg[which(va_benefits_districtsagg$Group.1 == district), 2]) #update household spending by district
   temp2 <- rbind(temp2, c("temp2", "0", "0")) #add fake 0s to make the line below work
   temp2 <- temp2[-(which(temp2[,2]=="0" | temp2[,3]=="0")),] #delete 0s
   #put sheets into a list. This list will turn into the excel file.
-  temp2list <- list("Industry Change" = temp2, "Commodity Output" = CommodityOutput2,
-                   "Labor Income Change" = LaborIncomeChange3, "Household Spending Change" = HouseholdSpendingChange4,
-                   "Industry Spending Pattern" = IndustrySpendingPattern5,
-                   "Institution Spending Pattern" = InstitutionSpendingPattern6)
+  temp2list <- list("Industry Change" = temp2, "Commodity Output" = commodity_output2,
+                   "Labor Income Change" = labor_income_change3, "Household Spending Change" = household_spending_change4,
+                   "Industry Spending Pattern" = industry_spending_pattern5,
+                   "Institution Spending Pattern" = institution_spending_pattern6)
   #write into multi-sheet excel file
-  output_dep_d <- file.path("output", paste0("DEPRECATED_IMPLAN_", year, "_districts//"))
+  output_dep_d <- file.path(output_path, paste0("DEPRECATED_IMPLAN_", year, "_districts//"))
   if(!dir.exists(output_dep_d)){dir.create(output_dep_d)}
   write.xlsx(temp2list, paste0(output_dep_d, "CA-", district, ".xlsx"), colNames = FALSE)
   print(paste(district, ":", (length(temp2list[["Industry Change"]][["Sector"]])-4)))
