@@ -20,7 +20,7 @@ Update the parameters file to your desired specifications in order to prepare cu
   - Accepted values: The target state of the study, in upper case wrapped in double quotes  
     -Example: "CALIFORNIA"
     
-#General Paths to Folders
+###General Paths to Folders
 - output_path: 
   - Accepted values: A file path to the repository's output folder. 
     - Example: file.path("output")
@@ -108,7 +108,7 @@ For complete documentation of award types permitted in the filter, see:
 - https://fedspendingtransparency.github.io/whitepapers/types/ and
 - https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md
 
-##obtain_vet_census Parameters##
+###obtain_vet_census Parameters##
 - c_key:
   - Accepted values: A valid API Key. This repository DOES NOT provide an API Key. Obtain a valid API Key by signing up at this website: https://api.census.gov/data/key_signup.html Please do not share your API Key with anyone else. 
 - dist_list:
@@ -141,8 +141,9 @@ This function is designed to filter the USASpending.gov download based on user s
 - all_g_data: 
   - Accepted values: any output name with a ".csv" file extension. It is recommended to follow a naming convention when entering this variable
     - Example: "_all_grant_spending.csv"
+###Error Checking Parameters
 
-##contract_check variables##
+####contract_check variables##
 Please note: care should be taken to choose words (or when available- word stems that allow for the matching of multiple words), that are unique to the category you seek to sort and long enough that it is providing meaningful category specific matches. 
 - repair_implan_60: 
   - Accepted values: A list of word and word fragments that refer to repair or maintenance activities, used to filter construction NAICs codes into the correct IMPLAN category. 
@@ -154,7 +155,7 @@ Please note: care should be taken to choose words (or when available- word stems
   - Accepted values: A list of word and word fragments that refer to new construction, used to filter construction NAICs codes into the correct IMPLAN category. 
     - Example: c("construct", "rebuild")
 
-##error_check_contracts variables##
+####error_check_contracts variables##
 - naics_crosswalk:
     - Accepted values: The full name (including file extension) of the NAICs to NAICs crosswalk used to fix outdated NAICs codes.
       - Example: "2007_to_2017_NAICS.xlsx"
@@ -168,7 +169,7 @@ Please note: care should be taken to choose words (or when available- word stems
   - Accepted values: The desired file name of the contract data containing errors, including file extension. This name should start with an underscore if you wish to add a prefix. 
     - Example: "_contract_errors.csv"
 
-##error_check_grants variables##
+####error_check_grants variables##
 - btype_crosswalk:
   - Accepted values: The name of the file provided in the raw data folder containing the business type to implan crosswalk, including file type.
     - Example: "business_type_to_implan546_crosswalk.csv"
@@ -179,12 +180,14 @@ Please note: care should be taken to choose words (or when available- word stems
   - Accepted values: The desired file name of the grants data containing errors, including file extension. This name should start with an underscore if you wish to add a prefix.
     - Example: "_grant_errors.csv"
 
-##na_dist_repair function variables## 
+###Repair Variables 
+
+####na_dist_repair function variables## 
 - contr_dist_crosswalk:
   - Accepted values: The full name (including file extension) of the user made district/ recipient repair file for contract data 
     - Example: "contract_industry_district_crosswalk.csv"
 
-##repair_and_weight_direct_payments variable
+####repair_and_weight_direct_payments variable
 clean_v_data = "_cleaned_va_benefits.csv"
 
 
@@ -198,7 +201,7 @@ This function is designed to concatenate the cleaned USASpending.gov spending co
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable 
     - Example: "_concatenated_usaspending.csv"
     
-##split_usaspending variables##
+###split_usaspending variables##
 doe = "DEPARTMENT OF ENERGY (DOE)"
 
 ### natsec_doe.R Parameters   
@@ -218,7 +221,7 @@ This function is designed to aggregate the concatenated USASpending and DOE spen
   - Accepted values: any output name with a ".csv" file type ending. It is recommended to follow a naming convention when entering this variable
     -Example: "_aggregated_doespending_statewide.csv"
     
-##generate_employment_dataframe Variables##
+###generate_employment_dataframe Variables##
 res_mult = 0.1825
 national_sus_dhs = 155282
 sus_dhs_mult = .142
@@ -226,5 +229,5 @@ acs = "2019_acs.xlsx"
 dod_shares = "dod_county_shares.xlsx"
 fed_prop = "fed_prop_2021.csv" 
 
-##Parameters for wrangle_opm_foia.R##
+###Parameters for wrangle_opm_foia.R##
 opm_foia_file <- "Copy of Select Agencies by Locations FY 2019 - FY 2021.xlsx"
