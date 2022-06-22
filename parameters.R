@@ -3,8 +3,8 @@
 #For specific instructions on how to use this file, see README.md
 
 ##General Global Variables##
-f_year = "2020" #Fiscal year of target data 
-year = "2021" #report output year
+f_year = "2021" #Fiscal year of target data 
+year = "2022" #report output year
 state = "CALIFORNIA" #Target state for report, used for naming conventions
 
 #General Paths to Folders
@@ -23,8 +23,8 @@ agency_name = c("Department of Homeland Security", "Department of Defense", "Dep
 
 date_type = "action_date"
 
-date_range_start = "2019-10-01"
-date_range_end = "2020-09-30"
+date_range_start = "2020-10-01"
+date_range_end = "2021-09-30"
 
 ##The following filters are OPTIONAL - comment out the line if you do not require a filter
 #select award types to apply to filter
