@@ -41,6 +41,7 @@ recipient_locations_state = c("CA")
 c_key = "8df2ad0b1d54d9a4a19c1d97bed2e94e44995571" #DELETE BEFORE POSTING TO GITHUB!!!
 state_fips = "06" 
 dist_list = "01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53" 
+c_year = 2020
 
 
 ##make_va_benefits_cw variables##
