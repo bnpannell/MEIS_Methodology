@@ -62,7 +62,7 @@ download_path = file.path(temp_path, content(request)$file_name)
 download.file(file_url, destfile = download_path)
 
 #Unzip file for use
-unzip(download_path, exdir = paste0(temp_path, "/nationwide"))  
+unzip(download_path, exdir = temp_path)
 
 #Delete un-necessary files after completion
 unlink(download_path)
