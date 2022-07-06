@@ -74,7 +74,7 @@ new_implan_56 <- c("construct", "rebuild")
 ##error_check_contracts variables##
 naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
 implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
-no_district_errors <- "no_dist_contract_errors.csv"
+no_district_errors <- "_no_dist_contract_errors.csv"
 
 clean_c_data = "_cleaned_contracts.csv"
 contract_errors <- "_contract_errors.csv"

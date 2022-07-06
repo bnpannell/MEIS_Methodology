@@ -74,6 +74,6 @@ contracts$recipient_county_name[contracts$recipient_county_name == ""] <- NA
 contracts_no_dist <- contracts %>%
   filter(!is.na(implan_code) & !is.na(recipient_county_name) & is.na(recipient_congressional_district))
 
-write.csv(contracts_no_dist, file.path(output_path, no_district_errors), row.names = FALSE)
+write.csv(contracts_no_dist, file.path(output_path, paste0(f_year, no_district_errors), row.names = FALSE))
 
 rm(contracts_no_dist)
