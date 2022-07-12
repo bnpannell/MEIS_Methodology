@@ -69,11 +69,3 @@ contracts$award_description <- gsub("/","",
 contracts$recipient_name <- gsub("[()]", "", as.character(contracts$recipient_name))
 
 contracts$recipient_county_name[contracts$recipient_county_name == ""] <- NA
-
-#Write out contract entries with all info except a district into a file - TO BE USED TO CREATE CROSSWALK
-contracts_no_dist <- contracts %>%
-  filter(!is.na(implan_code) & !is.na(recipient_county_name) & is.na(recipient_congressional_district))
-
-write.csv(contracts_no_dist, file.path(output_path, paste0(f_year, no_district_errors), row.names = FALSE))
-
-rm(contracts_no_dist)

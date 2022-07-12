@@ -74,14 +74,14 @@ new_implan_56 <- c("construct", "rebuild")
 ##error_check_contracts variables##
 naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
 implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
-no_district_errors <- "_no_dist_contract_errors.csv"
 
 clean_c_data = "_cleaned_contracts.csv"
 contract_errors <- "_contract_errors.csv"
 
 
-##na_dist_repair function variables## 
-contr_dist_crosswalk <- "contract_industry_district_crosswalk.csv"
+##check_contract_district_part2 variables## 
+ziplook_url = "https://ziplook.house.gov/htbin/ziplook_find?"
+zip_dist_crosswalk = "_zip_code_to_district_crosswalk.csv"
 
 
 ##error_check_grants variables##
