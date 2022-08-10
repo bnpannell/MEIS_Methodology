@@ -99,6 +99,8 @@ ufile_name <- list.files(path = temp_path, pattern = paste0(f_year, concat_u_dat
 usaspending <- split_usaspending(ufile_name, FALSE)
 doespending <- split_usaspending(ufile_name, TRUE)
 
+sum(usaspending$spending)
+
 ##Load an R script that filters the DOE spending to only national security-related data##
 source("src/natsec_doe.R")
 

@@ -64,8 +64,8 @@ dod_county <- dod_county %>%
 
 ##Last employment data to localize is VA and DHS employment - read in dhs_va_foia_emp.csv file##
 ##REFER TO DOCUMENTATION FOR GUIDANCE ON HOW TO LOCALIZE THIS DATA##
-dhs_va_county <- read.xlsx(file.path(raw_path, dha_va_foia_data), sheet = 1)
-dhs_va_district <- read.xlsx(file.path(raw_path, dha_va_foia_data), sheet = 2)
+dhs_va_county <- read.xlsx(file.path(raw_path, paste0(f_year, dhs_va_foia_data)), sheet = 1)
+dhs_va_district <- read.xlsx(file.path(raw_path, paste0(f_year, dhs_va_foia_data)), sheet = 2)
 
 
 ##Merge the county employee dataframes into one dataframe, and the district employee dataframes into a second dataframe. Make sure all values are numeric, and replace NAs with 0s.

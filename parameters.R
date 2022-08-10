@@ -124,11 +124,11 @@ agg_state_doe_data = "_aggregated_doespending_statewide.csv"
 
 ##generate_employment_dataframe Variables##
 res_mult = 0.1825
-national_sus_dhs = 155282
+national_sus_dhs = 155032
 sus_dhs_mult = .142
 
 dod_shares = "dod_county_shares.xlsx"
-dha_va_foia_data = "dhs_va_foia_emp.xlsx"
+dhs_va_foia_data = "_dhs_va_foia_emp.xlsx"
 
 
 ##create_implan_sheets variables##

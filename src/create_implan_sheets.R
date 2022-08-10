@@ -53,7 +53,7 @@ for (county in countynames){
                    "Industry Spending Pattern" = industry_spending_pattern5, 
                    "Institution Spending Pattern" = institution_spending_pattern6) 
   #write into multi-sheet excel file
-  output_dep_c <- file.path(output_path, paste0("DEPRECATED_IMPLAN_", year, "_counties//"))
+  output_dep_c <- file.path(output_path, paste0("IMPLAN_", year, "_counties//"))
   if(!dir.exists(output_dep_c)){dir.create(output_dep_c)}
   write.xlsx(templist, paste0(output_dep_c, county, ".xlsx"), colNames = FALSE)
   print(paste(county, ":", (length(templist[["Industry Change"]][["Sector"]])-4)))
@@ -131,7 +131,7 @@ for (district in congressid){
                    "Industry Spending Pattern" = industry_spending_pattern5,
                    "Institution Spending Pattern" = institution_spending_pattern6)
   #write into multi-sheet excel file
-  output_dep_d <- file.path(output_path, paste0("DEPRECATED_IMPLAN_", year, "_districts//"))
+  output_dep_d <- file.path(output_path, paste0("IMPLAN_", year, "_districts//"))
   if(!dir.exists(output_dep_d)){dir.create(output_dep_d)}
   write.xlsx(temp2list, paste0(output_dep_d, "CA-", district, ".xlsx"), colNames = FALSE)
   print(paste(district, ":", (length(temp2list[["Industry Change"]][["Sector"]])-4)))
