@@ -77,7 +77,7 @@ for (county in countynames){
   tempooc$Local_Direct_Purchase <- "100%"  
   #add four additional rows to top of spreadsheet to match needed formatting 
   tempooc <- rbind(c("Activity Type", "Activity Name",    "Activity Level","",    "Activity Year","","",""),    
-                   c("Industry Change", "Industry Purchases",    "1","",    "2020","","",""),
+                   c("Industry Change", "Industry Purchases",    "1","",    "2021","","",""),
                    c("","","","","","","",""),
                    c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                    tempooc)
@@ -118,7 +118,7 @@ for (district in congressid){
   temp2$Local_Direct_Purchase <- "100%"
   #add rows to top of sheet to match needed formatting
   temp2 <- rbind(c("Activity Type", "Activity Name",    "Activity Level","",    "Activity Year","","",""),
-                c("Industry Change", "Industry Purchases",    "1","",    "2020","","",""),
+                c("Industry Change", "Industry Purchases",    "1","",    "2021","","",""),
                 c("","","","","","","",""),
                 c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                 temp2)
