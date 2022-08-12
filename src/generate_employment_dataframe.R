@@ -8,7 +8,7 @@ state_emp <- read.csv(file.path(raw_path, paste0(state,"_emp.csv")), fileEncodin
 
 mili_emp = state_emp[1,1] + (state_emp[1,2] * res_mult)
 dod_emp = sum(state_emp[1,5:8])
-dhs_emp = state_emp[1,3] + (national_sus_dhs * sus_dhs_mult)
+dhs_emp = state_emp[1,3] + ca_dhs_sup
 va_emp = state_emp[1,4]
 civilian_emp = dod_emp + dhs_emp + va_emp
 doe_emp = state_emp[1,9] * doe_ns_adjustment
@@ -66,6 +66,26 @@ dod_county <- dod_county %>%
 ##REFER TO DOCUMENTATION FOR GUIDANCE ON HOW TO LOCALIZE THIS DATA##
 dhs_va_county <- read.xlsx(file.path(raw_path, paste0(f_year, dhs_va_foia_data)), sheet = 1)
 dhs_va_district <- read.xlsx(file.path(raw_path, paste0(f_year, dhs_va_foia_data)), sheet = 2)
+
+#Add in the suppressed DHS employees - first get the percentage of DHS employees in each county/district within the state
+dhs_va_county <- dhs_va_county %>%
+  mutate(dhs_perc = dhs_emp / sum(dhs_emp))
+dhs_va_district <- dhs_va_district %>%
+  mutate(dhs_perc = dhs_emp / sum(dhs_emp))
+
+#Now multiply the total state suppressed DHS employees by dhs_perc to get suppressed employees per county/district
+dhs_va_county <- dhs_va_county %>%
+  mutate(dhs_sup = dhs_perc * ca_dhs_sup)
+dhs_va_district <- dhs_va_district %>%
+  mutate(dhs_sup = dhs_perc * ca_dhs_sup)
+
+#Last, add the suppressed employees to dhs_emp to get the total DHS employees for each county and district. Drop unneeded columns
+dhs_va_county <- dhs_va_county %>%
+  mutate(dhs_emp = dhs_emp + dhs_sup) %>%
+  select(county, dhs_emp, va_emp)
+dhs_va_district <- dhs_va_district %>%
+  mutate(dhs_emp = dhs_emp + dhs_sup) %>%
+  select(district, dhs_emp, va_emp)
 
 
 ##Merge the county employee dataframes into one dataframe, and the district employee dataframes into a second dataframe. Make sure all values are numeric, and replace NAs with 0s.

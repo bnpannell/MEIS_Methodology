@@ -40,7 +40,7 @@ for (county in countynames){
   temp$Local_Direct_Purchase <- "100%"
   #add rows to top of sheet to match needed formatting 
   temp <- rbind(c("Activity Type", "Activity Name",    "Activity Level","",    "Activity Year","","",""),    
-                c("Industry Change", "Industry Purchases",    "1","",    "2020","","",""),
+                c("Industry Change", "Industry Purchases",    "1","",    "2021","","",""),
                 c("","","","","","","",""),
                 c("Sector", "Event value", "Employment", "Employee Compensation", "Proprieter Income", "Event Year", "Retail", "Local Direct Purchase"),
                 temp)
