@@ -23,8 +23,8 @@ agency_name = c("Department of Homeland Security", "Department of Defense", "Dep
 
 date_type = "action_date"
 
-date_range_start = "2020-10-01"
-date_range_end = "2021-09-30"
+date_range_start = "2021-10-01"
+date_range_end = "2022-09-30"
 
 ##The following filters are OPTIONAL - comment out the line if you do not require a filter
 #select award types to apply to filter
@@ -72,8 +72,9 @@ new_implan_56 <- c("construct", "rebuild")
 
 
 ##error_check_contracts variables##
-naics_crosswalk <- "2007_to_2017_NAICS.xlsx"
-implan_crosswalk <- "2012_2017_NAICS_to_IMPLAN.xlsx"
+naics_crosswalk07 <- "2007_to_2022_NAICS.xlsx"
+naics_crosswalk17 <- "2017_to_2022_NAICS.xlsx"
+implan_crosswalk <- "2022_NAICS_to_IMPLAN.xlsx"
 
 clean_c_data = "_cleaned_contracts.csv"
 contract_errors <- "_contract_errors.csv"

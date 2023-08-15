@@ -1,11 +1,17 @@
 ##CONTRACTS DATA - read in CSV
 contracts <- read.csv(file.path(temp_path, paste0(f_year, all_c_data)))
 
-#Then read in the NAICS to NAICS crosswalk and rewrite the 2007 NAICS codes in the contracts dataframe by matching it to those in the 2007 to 2017 NAICS crosswalk dataframe
-naics2naics <- read.xlsx(file.path(raw_path, naics_crosswalk))
+#Read in the NAICS to NAICS crosswalks that update 2007 and 2017 NAICS for 2022
+naics2naics07 <- read.xlsx(file.path(raw_path, naics_crosswalk07))
+naics2naics17 <- read.xlsx(file.path(raw_path, naics_crosswalk17))
 
-for (i in 1:nrow(naics2naics)) {
-  contracts$naics_code[grep(naics2naics$`2007_NAICS`[i],contracts$naics_code)] <- naics2naics$`2017_NAICS`[i]
+#Rewrite the 2007 and 2017 NAICS codes in the contracts dataframe by matching it to those in the crosswalk dataframes
+for (i in 1:nrow(naics2naics07)) {
+  contracts$naics_code[grep(naics2naics07$`2007_NAICS`[i],contracts$naics_code)] <- naics2naics07$`2022_NAICS`[i]
+}
+
+for (i in 1:nrow(naics2naics17)) {
+  contracts$naics_code[grep(naics2naics17$`2017_NAICS`[i],contracts$naics_code)] <- naics2naics17$`2022_NAICS`[i]
 }
 
 #Now load in the NAICS to IMPLAN crosswalk and merge to contracts - this will assign contracts entries to their appropriate IMPLAN code based on 2012 and 2017 NAICS codes
