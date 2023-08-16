@@ -49,8 +49,8 @@ vet_crosswalk <- "_va_apportioning.csv"
 
 
 ##filter_usaspending variables##
-contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_name", "recipient_congressional_district", "recipient_zip_4_code", "naics_code")
-grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "award_description", "funding_office_name", "recipient_name", "recipient_county_code", "recipient_county_name", "recipient_congressional_district", "recipient_zip_code", "recipient_zip_last_4_code", "assistance_type_code", "business_types_description")
+contract_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "transaction_description", "funding_office_name", "recipient_name", "recipient_county_name", "prime_award_transaction_recipient_cd_current", "recipient_zip_4_code", "naics_code")
+grant_columns = c("federal_action_obligation", "awarding_agency_name", "awarding_sub_agency_name", "transaction_description", "funding_office_name", "recipient_name", "prime_award_transaction_recipient_county_fips_code", "recipient_county_name", "prime_award_transaction_recipient_cd_current", "recipient_zip_code", "recipient_zip_last_4_code", "assistance_type_code", "business_types_description")
 
 c_label <- "Contracts"
 g_label <- "Assistance"
