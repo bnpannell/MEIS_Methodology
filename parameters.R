@@ -3,8 +3,8 @@
 #For specific instructions on how to use this file, see README.md
 
 ##General Global Variables##
-f_year = "2021" #Fiscal year of target data 
-year = "2022" #report output year
+f_year = "2022" #Fiscal year of target data 
+year = "2023" #report output year
 state = "CALIFORNIA" #Target state for report, used for naming conventions
 
 #General Paths to Folders
@@ -125,7 +125,7 @@ agg_state_doe_data = "_aggregated_doespending_statewide.csv"
 
 ##generate_employment_dataframe Variables##
 res_mult = 0.1825
-national_sus_dhs = 155032
+national_sus_dhs = 144862
 sus_dhs_mult = .142
 ca_dhs_sup = national_sus_dhs * sus_dhs_mult
 
