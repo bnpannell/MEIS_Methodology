@@ -33,12 +33,12 @@ constr_ind_237310 <- which(contracts$naics_code == "237310" & is.na(contracts$im
 construction_contracts_237310 <- contracts[constr_ind_237310,]
 contracts <- contracts[-constr_ind_237310,]
 
-construction_contracts_test1 <- construction_contracts_237310[contract_check(patterns = repair_implan_60, data = construction_contracts_237310$award_description),]
-construction_contracts_237310 <- construction_contracts_237310[!(contract_check(patterns = repair_implan_60, data = construction_contracts_237310$award_description)),]
+construction_contracts_test1 <- construction_contracts_237310[contract_check(patterns = repair_implan_60, data = construction_contracts_237310$transaction_description),]
+construction_contracts_237310 <- construction_contracts_237310[!(contract_check(patterns = repair_implan_60, data = construction_contracts_237310$transaction_description)),]
 
-construction_contracts_test2 <- construction_contracts_test1[contract_check(patterns = aircraft_implan_60, data = construction_contracts_test1$award_description),]
+construction_contracts_test2 <- construction_contracts_test1[contract_check(patterns = aircraft_implan_60, data = construction_contracts_test1$transaction_description),]
 construction_contracts_test2$implan_code <- 60
-construction_contracts_test1 <- construction_contracts_test1[!(contract_check(patterns = aircraft_implan_60, data = construction_contracts_test1$award_description)),]
+construction_contracts_test1 <- construction_contracts_test1[!(contract_check(patterns = aircraft_implan_60, data = construction_contracts_test1$transaction_description)),]
 construction_contracts_test1$implan_code <- 62
 
 #Pull out the remaining construction contracts into its own dataframe, and drop from the main contracts dataframe
@@ -47,16 +47,16 @@ construction_contracts <- contracts[constr_ind,]
 contracts <- contracts[-constr_ind,]
 
 #Run the IMPLAN code 60 word search on the construction contracts - this will assign IMPLAN code 60 to contracts based on their award description
-implan_60_contracts <- construction_contracts[contract_check(patterns = repair_implan_60, data = construction_contracts$award_description),]
+implan_60_contracts <- construction_contracts[contract_check(patterns = repair_implan_60, data = construction_contracts$transaction_description),]
 implan_60_contracts$implan_code <- 60
 
-construction_contracts <- construction_contracts[!(contract_check(patterns = repair_implan_60, data = construction_contracts$award_description)),]
+construction_contracts <- construction_contracts[!(contract_check(patterns = repair_implan_60, data = construction_contracts$transaction_description)),]
 
 #Run one more word search to identify construction contracts that are deemed new and set to IMPLAN code 56
-implan_56_contracts <- construction_contracts[contract_check(patterns = new_implan_56, data = construction_contracts$award_description),]
+implan_56_contracts <- construction_contracts[contract_check(patterns = new_implan_56, data = construction_contracts$transaction_description),]
 implan_56_contracts$implan_code <- 56
 
-construction_contracts <- construction_contracts[!(contract_check(patterns = new_implan_56, data = construction_contracts$award_description)),]
+construction_contracts <- construction_contracts[!(contract_check(patterns = new_implan_56, data = construction_contracts$transaction_description)),]
 
 #Bring back all these dataframes into the main contracts dataframe, and then drop the separate dataframes from environment
 contracts_list <- list(contracts, construction_contracts_237310, construction_contracts_test1, construction_contracts_test2,
@@ -67,11 +67,17 @@ rm(construction_contracts_237310, construction_contracts_test1, construction_con
    implan_56_contracts, construction_contracts, contracts_list)
 
 #Fix issues with special characters in contracts' award description column, and then run the tier 1 check function on contracts
-contracts$award_description <- gsub("/","",
+contracts$transaction_description <- gsub("/","",
                                     gsub(",","",
                                          gsub(r"(\\)","",
-                                              gsub('"',"", as.character(contracts$award_description)))))
+                                              gsub('"',"", as.character(contracts$transaction_description)))))
 
 contracts$recipient_name <- gsub("[()]", "", as.character(contracts$recipient_name))
 
 contracts$recipient_county_name[contracts$recipient_county_name == ""] <- NA
+
+contracts$prime_award_transaction_recipient_cd_current <- gsub("CA-", "", contracts$prime_award_transaction_recipient_cd_current) %>%
+  as.numeric(contracts$prime_award_transaction_recipient_cd_current)
+
+contracts <- contracts %>%
+  rename("recipient_congressional_district" = prime_award_transaction_recipient_cd_current)
