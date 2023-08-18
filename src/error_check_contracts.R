@@ -70,7 +70,8 @@ rm(construction_contracts_237310, construction_contracts_test1, construction_con
 contracts$transaction_description <- gsub("/","",
                                     gsub(",","",
                                          gsub(r"(\\)","",
-                                              gsub('"',"", as.character(contracts$transaction_description)))))
+                                              gsub("\"","",
+                                                   gsub('"',"", as.character(contracts$transaction_description))))))
 
 contracts$recipient_name <- gsub("[()]", "", as.character(contracts$recipient_name))
 
