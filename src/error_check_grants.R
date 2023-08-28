@@ -1,4 +1,4 @@
-##GRANTS DATA - read in CSV and fix up congressional district and county columns
+##GRANTS DATA - read in CSV and fix up congressional district and county fips code columns
 grants <- read.csv(file.path(temp_path, paste0(f_year, all_g_data)))
 
 grants <- grants %>%
