@@ -1,11 +1,14 @@
-##GRANTS DATA - read in CSV and fix up congressional district column
+##GRANTS DATA - read in CSV and fix up congressional district and county columns
 grants <- read.csv(file.path(temp_path, paste0(f_year, all_g_data)))
 
-grants$prime_award_transaction_recipient_cd_current <- gsub("CA-", "", grants$prime_award_transaction_recipient_cd_current) %>%
-  as.numeric(grants$prime_award_transaction_recipient_cd_current)
-
 grants <- grants %>%
-  rename("recipient_congressional_district" = prime_award_transaction_recipient_cd_current)
+  rename("recipient_congressional_district" = prime_award_transaction_recipient_cd_current,
+         "recipient_county_code" = prime_award_transaction_recipient_county_fips_code)
+
+grants$recipient_congressional_district <- gsub("CA-", "", grants$recipient_congressional_district) %>%
+  as.numeric(grants$recipient_congressional_district)
+
+grants$recipient_county_code <- as.numeric(substring(grants$recipient_county_code, 2))
 
 #Now read in the business type to IMPLAN crosswalk - this will help us assign IMPLAN codes to grants
 btype2implan <- read.csv(file.path(raw_path, paste0(btype_crosswalk)), fileEncoding="UTF-8-BOM")
