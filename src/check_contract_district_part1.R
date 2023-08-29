@@ -20,20 +20,3 @@ for(i in 1:nrow(error_cont_biz)) {
     error_contracts$recipient_congressional_district[k] <- district[1]
   }
 }
-
-
-#clean_unique_contracts <- clean_contracts %>%
-#  distinct(recipient_name, recipient_zip_4_code, recipient_congressional_district)
-#for (i in 1:nrow(clean_unique_contracts)) {
-#  error_contracts$recipient_congressional_district[grepl(clean_unique_contracts$recipient_name[i],error_contracts$recipient_name) &
-#                                                     grepl(clean_unique_contracts$recipient_zip_4_code[i],error_contracts$recipient_zip_4_code)] <- clean_unique_contracts$recipient_congressional_district[i]
-#}
-
-#index <- which(error_contracts$recipient_name %in% clean_unique_contracts$recipient_name &
-#                 error_contracts$recipient_zip_4_code %in% clean_unique_contracts$recipient_zip_4_code)
-#index2 <- which(clean_unique_contracts$recipient_name %in% error_contracts$recipient_name &
-#                  clean_unique_contracts$recipient_zip_4_code %in% error_contracts$recipient_zip_4_code)
-#error_contracts[index,] <- clean_unique_contracts[]
-#error_contracts2 <- error_contracts[index,]
-
-
