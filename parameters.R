@@ -105,7 +105,7 @@ concat_u_data = "_concatenated_usaspending.csv"
 
 
 ##split_usaspending variables##
-doe = "DEPARTMENT OF ENERGY (DOE)"
+doe = "Department of Energy"
 
 
 ##natsec_doe variables##
