@@ -29,6 +29,8 @@ for (county in countynames){
     temp <- usaspending[j,]
   temp <- aggregate(temp$spending, by=list(temp$implan_code), FUN=sum) #this line aggregates the data by Specification
   colnames(temp) <- c("Specification", "Output") #change the column names to match activity sheet
+  temp <- temp %>%
+    filter(temp$Output != 0) #Take out rows where there is no spending
   county_emp$totalemployment <- 0 #create new employment column
   m <- which(county_emp$county == county)
   temp$Employment <- ""
@@ -64,6 +66,8 @@ for (county in countynames){
     tempooc$x[n] <- tempooc$x[n] - as.numeric(temp$Output[i]) #subtract each event value from total CA spending
   }
   colnames(tempooc) <- c("Specification", "Output") #change the column names to match activity sheet
+  tempooc <- tempooc %>%
+    filter(tempooc$Output != 0) #Take out rows where there is no spending
   #add inverse employment data to tempooc
   tempooc$Employment <- ""
   tempooc <- rbind(tempooc, c(545, "", county_emp$inverse_545[which(county_emp$county == county)]))
@@ -100,6 +104,8 @@ for (district in congressid){
   temp2 <- usaspending[k,]
   temp2 <- aggregate(temp2$spending, by=list(temp2$implan_code), FUN=sum) #this line aggregates the data by Specification
   colnames(temp2) <- c("Specification", "Output") #change the column names to match activity sheet
+  temp2 <- temp2 %>%
+    filter(temp2$Output != 0) #Take out rows where there is no spending
   district_emp$totalemployment <- 0 #create new employment column
   n <- which(district_emp$district == district)
   temp2$Employment <- ""
