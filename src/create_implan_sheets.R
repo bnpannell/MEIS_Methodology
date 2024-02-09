@@ -36,6 +36,8 @@ for (county in countynames){
   temp$Employment <- ""
   temp <- rbind(temp, c(545, "", county_emp$implan_545[which(county_emp$county == county)])) #add employment to temp for 545
   temp <- rbind(temp, c(546, "", county_emp$implan_546[which(county_emp$county == county)])) #add employment to temp for 546
+  temp <- temp %>%
+    mutate_at(c(1:3), as.numeric) #Make columns numeric
   #create extra columns for the first sheet (temp)
   temp$'Event Name' <- paste0("ind", temp$Specification)
   temp$'Employee Compensation' <- ""
@@ -72,10 +74,12 @@ for (county in countynames){
   colnames(tempooc) <- c("Specification", "Output") #change the column names to match activity sheet
   tempooc <- tempooc %>%
     filter(tempooc$Output != 0) #Take out rows where there is no spending
-  #add inverse employment data to tempooc
+  #add inverse employment data to tempooc and make columns numeric
   tempooc$Employment <- ""
   tempooc <- rbind(tempooc, c(545, "", county_emp$inverse_545[which(county_emp$county == county)]))
   tempooc <- rbind(tempooc, c(546, "", county_emp$inverse_546[which(county_emp$county == county)]))
+  tempooc <- tempooc %>%
+    mutate_at(c(1:3), as.numeric)
   #add extra sheets to tempooc
   tempooc$'Event Name' <- paste0("ind", tempooc$Specification)
   tempooc$'Employee Compensation' <- ""
@@ -119,6 +123,8 @@ for (district in congressid){
   temp2$Employment <- ""
   temp2 <- rbind(temp2, c(545, "", district_emp$implan_545[which(district_emp$district == district)])) #add employment to temp for 545
   temp2 <- rbind(temp2, c(546, "", district_emp$implan_546[which(district_emp$district == district)])) #add employment to temp for 546
+  temp2 <- temp2 %>%
+    mutate_at(c(1:3), as.numeric) #Make columns numeric
   #create extra columns for the first sheet (temp2)
   temp2$'Event Name' <- paste0("ind", temp2$Specification)
   temp2$'Employee Compensation' <- ""
