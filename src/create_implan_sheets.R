@@ -48,6 +48,10 @@ for (county in countynames){
   household_income7[1,1] <- "va_benefits"
   household_income7[1,2] <- 10001
   household_income7[1,3] <- as.numeric(va_benefits_countiesagg[which(va_benefits_countiesagg$Group.1 == county), 2]) #update household spending by county
+  #input notation for SmartPay into the institutional spending pattern sheet
+  institution_spend9[1,1] <- "SmartPay"
+  institution_spend9[1,2] <- "11002"
+  institution_spend9[1,3] <- "2022"
   #put sheets into a list. This list will turn into the excel file.
   templist <- list("Industry" = temp, "IIA (Detailed)" = iia2, "Industry Contribution Analysis" = ica3,
                    "Commodity" = commodity4, "Marginable Commodities" = marg_commodity5, "Labor Income" = labor_income6,
@@ -84,6 +88,10 @@ for (county in countynames){
   household_income7[1,1] <- "va_benefits"
   household_income7[1,2] <- 10001
   household_income7[1,3] <- as.numeric(va_benefits_stateagg - va_benefits_countiesagg[which(va_benefits_countiesagg$Group.1 == county), 2]) #update household spending by county (in)
+  #input notation for SmartPay into the institutional spending pattern sheet
+  institution_spend9[1,1] <- "SmartPay"
+  institution_spend9[1,2] <- "11002"
+  institution_spend9[1,3] <- "2022"
   #put all sheets into one list
   tempooclist <- list("Industry" = tempooc, "IIA (Detailed)" = iia2, "Industry Contribution Analysis" = ica3,
                       "Commodity" = commodity4, "Marginable Commodities" = marg_commodity5, "Labor Income" = labor_income6,
@@ -123,6 +131,10 @@ for (district in congressid){
   household_income7[1,1] <- "va_benefits"
   household_income7[1,2] <- 10001
   household_income7[1,3] <- as.numeric(va_benefits_districtsagg[which(va_benefits_districtsagg$Group.1 == district), 2]) #update household spending by district
+  #input notation for SmartPay into the institutional spending pattern sheet
+  institution_spend9[1,1] <- "SmartPay"
+  institution_spend9[1,2] <- "11002"
+  institution_spend9[1,3] <- "2022"
   #put sheets into a list. This list will turn into the excel file.
   temp2list <- list("Industry" = temp2, "IIA (Detailed)" = iia2, "Industry Contribution Analysis" = ica3,
                     "Commodity" = commodity4, "Marginable Commodities" = marg_commodity5, "Labor Income" = labor_income6,
