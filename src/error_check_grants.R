@@ -15,7 +15,8 @@ btype2implan <- read.csv(file.path(raw_path, paste0(btype_crosswalk)), fileEncod
 
 #Prior to running crosswalk - pull out the VA direct payments/benefits data - this does not get matched with an IMPLAN code - and write into CSV file
 va_benefits <- grants %>%
-  filter(grants$assistance_type_code == 10 | grants$assistance_type_code == 6)
+  filter(grants$assistance_type_code == 10 | grants$assistance_type_code == 6,
+         grants$awarding_agency_name == "Department of Veterans Affairs")
 grants <- grants %>%
   filter(!(grants$assistance_type_code == 10 | grants$assistance_type_code == 6))
 
