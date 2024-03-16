@@ -93,6 +93,10 @@ rm(vet_cw)
 concat_files <- concat_usaspending(pattern = paste0(f_year, "_cleaned.+\\.csv"))
 write.csv(concat_files, file.path(temp_path, paste0(f_year, concat_u_data)), row.names = FALSE)
 
+
+## PLACEHOLDER: RUN CODE TO FIX IMPLAN CODE ERRORS FOUND VIA RUNNING IMPLAN MODELS ##
+
+
 ##Load in concatenated spending file from temp folder as variable for splitting out DOE from DOD/DHS/VA concatenated usaspending##
 ufile_name <- list.files(path = temp_path, pattern = paste0(f_year, concat_u_data))
 
